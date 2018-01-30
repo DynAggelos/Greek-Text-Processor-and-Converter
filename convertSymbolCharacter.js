@@ -1,4 +1,4 @@
-function convertSymbolCharacter(readIndex, betaCodeType, betaCodeAccents, symbol3)
+function convertSymbolCharacter(readIndex, inputBetaCodeType, betaCodeAccents, symbol3)
 {
    if (workingText[readIndex] == symbol3[0]
    || workingText[readIndex] == symbol3[1]

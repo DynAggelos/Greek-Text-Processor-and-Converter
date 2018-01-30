@@ -1,4 +1,4 @@
-function convertParagraphs(readIndex, betaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, currentChapter, currentVerse)
+function convertParagraphs(readIndex, inputBetaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, currentChapter, currentVerse)
 {
    var paragraphReturnArray = testParagraphCharacters(readIndex, symbol1);
    readIndex++;
@@ -11,11 +11,11 @@ function convertParagraphs(readIndex, betaCodeType, betaCodeAccents, symbol1, in
          { // if verse numbers somewhere
             newText += "\n";
             var calledDirect = false;
-            var indexesArray = convertChapterVerse(readIndex, betaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse); // Error? Due to declaration within condition?
+            var indexesArray = convertChapterVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse); // Error? Due to declaration within condition?
             readIndex = indexesArray[0];
             currentChapter = indexesArray[1];
             currentVerse = indexesArray[2];
-            if (outputTextType == "unicode")
+            if (outputTextType == "Unicode")
             {
                newText += "¶";
             } else {
@@ -24,7 +24,7 @@ function convertParagraphs(readIndex, betaCodeType, betaCodeAccents, symbol1, in
             newText += " ";
          } else { // if no verse
             newText += " "; // No paragraph break, just a space from the rest of the content
-            if (outputTextType == "unicode")
+            if (outputTextType == "Unicode")
             {
                newText += "¶";
             } else {
@@ -37,7 +37,7 @@ function convertParagraphs(readIndex, betaCodeType, betaCodeAccents, symbol1, in
          if (paragraphReturnArray[1] == 1)
          { // if verse numbers somewhere
             calledDirect = false;
-            indexesArray = convertChapterVerse(readIndex, betaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
+            indexesArray = convertChapterVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
             readIndex = indexesArray[0];
             currentChapter = indexesArray[1];
             currentVerse = indexesArray[2];
@@ -52,7 +52,7 @@ function convertParagraphs(readIndex, betaCodeType, betaCodeAccents, symbol1, in
             if (paragraphReturnArray[1] == 1)
             { // if verse numbers somewhere
                calledDirect = false;
-               indexesArray = convertChapterVerse(readIndex, betaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
+               indexesArray = convertChapterVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
                readIndex = indexesArray[0];
                currentChapter = indexesArray[1];
                currentVerse = indexesArray[2];
@@ -62,7 +62,7 @@ function convertParagraphs(readIndex, betaCodeType, betaCodeAccents, symbol1, in
             { // if verse numbers somewhere
                newText += " ";
                calledDirect = false;
-               indexesArray = convertChapterVerse(readIndex, betaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
+               indexesArray = convertChapterVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
                readIndex = indexesArray[0]
                currentChapter = indexesArray[1]
                currentVerse = indexesArray[2]
@@ -75,12 +75,12 @@ function convertParagraphs(readIndex, betaCodeType, betaCodeAccents, symbol1, in
             if (paragraphReturnArray[1] == 1)
             { // if verse numbers somewhere
                calledDirect = false;
-               indexesArray = convertChapterVerse(readIndex, betaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
+               indexesArray = convertChapterVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
                readIndex = indexesArray[0];
                currentChapter = indexesArray[1];
                currentVerse = indexesArray[2];
             }
-            if (outputTextType == "unicode")
+            if (outputTextType == "Unicode")
             {
                newText += "¶";
             } else {
@@ -91,7 +91,7 @@ function convertParagraphs(readIndex, betaCodeType, betaCodeAccents, symbol1, in
             if (paragraphReturnArray[1] == 1)
             { // if verse numbers somewhere
                calledDirect = false;
-               indexesArray = convertChapterVerse(readIndex, betaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
+               indexesArray = convertChapterVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
                readIndex = indexesArray[0];
                currentChapter = indexesArray[1];
                currentVerse = indexesArray[2];

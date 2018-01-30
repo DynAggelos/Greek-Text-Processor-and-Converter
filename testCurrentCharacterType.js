@@ -1,4 +1,4 @@
-function testCurrentCharacterType(readIndex, betaCodeType, betaCodeAccents, symbols)
+function testCurrentCharacterType(readIndex, inputBetaCodeType, betaCodeAccents, symbols)
 {
    var result = new String;
    if (workingText[readIndex] >= '0'
@@ -95,7 +95,7 @@ function testCurrentCharacterType(readIndex, betaCodeType, betaCodeAccents, symb
                         {
                            result = "letter";
                         } else {
-                           if (betaCodeType == "normal")
+                           if (inputBetaCodeType == "normal")
                             {
                               if (workingText[readIndex] == betaCodeAccents[0]
                               || workingText[readIndex] == betaCodeAccents[1]
@@ -110,7 +110,7 @@ function testCurrentCharacterType(readIndex, betaCodeType, betaCodeAccents, symb
                                  result = "miscellaneous";
                               }
                            } else {
-                              if (betaCodeType == "advanced")
+                              if (inputBetaCodeType == "advanced")
                               {
                                  if (workingText[readIndex] == betaCodeAccents[0]
                                  || workingText[readIndex] == betaCodeAccents[1]
