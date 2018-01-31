@@ -1,10 +1,10 @@
-function convertChapterVerse(readIndex, betaCodeType, betaCodeAccents, symbol2, inputTextType, outputTextType, inputParagraphType, outputParagraphType, directlyCalled, currentChapter, currentVerse, chaptCount2, verseDisplayOption)
+function convertChapterVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol2, inputTextType, outputTextType, inputParagraphType, outputParagraphType, directlyCalled, currentChapter, currentVerse, chaptCount2, verseDisplayOption)
 {
    if (directlyCalled == true)
    {
       if (outputParagraphType == "paragraph")
       {
-         var testChapterVerseArray = testChapterAndVerse(readIndex, betaCodeType, betaCodeAccents, symbol2); // Error? Due to declaration within condition?
+         var testChapterVerseArray = testChapterAndVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol2); // Error? Due to declaration within condition?
          var referenceSymbolPosition = testChapterVerseArray[0];
          var endOfChapterAndVerse = testChapterVerseArray[1];
          var isSpaceAfterChapterAndVerse = testCharacterAfterChapterVerse(endOfChapterAndVerse);
@@ -13,7 +13,7 @@ function convertChapterVerse(readIndex, betaCodeType, betaCodeAccents, symbol2, 
          return chapterVerseArray;
       } else { // output = "verse break"
          newText += "\n";
-         testChapterVerseArray = testChapterAndVerse(readIndex, betaCodeType, betaCodeAccents, symbol2);
+         testChapterVerseArray = testChapterAndVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol2);
          referenceSymbolPosition = testChapterVerseArray[0];
          endOfChapterAndVerse = testChapterVerseArray[1];
          isSpaceAfterChapterAndVerse = testCharacterAfterChapterVerse(endOfChapterAndVerse);
@@ -22,7 +22,7 @@ function convertChapterVerse(readIndex, betaCodeType, betaCodeAccents, symbol2, 
          return chapterVerseArray;
       }
    } else { // directlyCalled = false
-      testChapterVerseArray = testChapterAndVerse(readIndex, betaCodeType, betaCodeAccents, symbol2);
+      testChapterVerseArray = testChapterAndVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol2);
       referenceSymbolPosition = testChapterVerseArray[0];
       endOfChapterAndVerse = testChapterVerseArray[1];
       isSpaceAfterChapterAndVerse = testCharacterAfterChapterVerse(endOfChapterAndVerse);
@@ -32,24 +32,24 @@ function convertChapterVerse(readIndex, betaCodeType, betaCodeAccents, symbol2, 
    }
 }
 
-function testChapterAndVerse(readIndex, betaCodeType, betaCodeAccents, symbol2A)
+function testChapterAndVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol2A)
 {
    var separationCharPosition;
    var chVrseEnd;
    if (workingText[readIndex + 1] == symbol2A[9])
    {
       separationCharPosition = readIndex + 1;
-      var testForChVrse = testCurrentCharacterType(readIndex + 2, betaCodeType, betaCodeAccents, symbol2A); // Error? Due to declaration within condition?
+      var testForChVrse = testCurrentCharacterType(readIndex + 2, inputBetaCodeType, betaCodeAccents, symbol2A); // Error? Due to declaration within condition?
       if (testForChVrse != "chapter or verse")
       {
          chVrseEnd = readIndex + 1;
       } else {
-         testForChVrse = testCurrentCharacterType(readIndex + 3, betaCodeType, betaCodeAccents, symbol2A);
+         testForChVrse = testCurrentCharacterType(readIndex + 3, inputBetaCodeType, betaCodeAccents, symbol2A);
          if (testForChVrse != "chapter or verse")
          {
             chVrseEnd = readIndex + 2;
          } else {
-            testForChVrse = testCurrentCharacterType(readIndex + 4, betaCodeType, betaCodeAccents, symbol2A);
+            testForChVrse = testCurrentCharacterType(readIndex + 4, inputBetaCodeType, betaCodeAccents, symbol2A);
             if (testForChVrse != "chapter or verse")
             {
                chVrseEnd = readIndex + 3;
@@ -62,17 +62,17 @@ function testChapterAndVerse(readIndex, betaCodeType, betaCodeAccents, symbol2A)
       if (workingText[readIndex + 2] == symbol2A[9])
       {
          separationCharPosition = readIndex + 2;
-         testForChVrse = testCurrentCharacterType(readIndex + 3, betaCodeType, betaCodeAccents, symbol2A);
+         testForChVrse = testCurrentCharacterType(readIndex + 3, inputBetaCodeType, betaCodeAccents, symbol2A);
          if (testForChVrse != "chapter or verse")
          {
             chVrseEnd = readIndex + 2;
          } else {
-            testForChVrse = testCurrentCharacterType(readIndex + 4, betaCodeType, betaCodeAccents, symbol2A);
+            testForChVrse = testCurrentCharacterType(readIndex + 4, inputBetaCodeType, betaCodeAccents, symbol2A);
             if (testForChVrse != "chapter or verse")
             {
                chVrseEnd = readIndex + 3;
             } else {
-               testForChVrse = testCurrentCharacterType(readIndex + 5, betaCodeType, betaCodeAccents, symbol2A);
+               testForChVrse = testCurrentCharacterType(readIndex + 5, inputBetaCodeType, betaCodeAccents, symbol2A);
                if (testForChVrse != "chapter or verse")
                {
                   chVrseEnd = readIndex + 4;
@@ -83,17 +83,17 @@ function testChapterAndVerse(readIndex, betaCodeType, betaCodeAccents, symbol2A)
          }
       } else {
          separationCharPosition = null;
-         testForChVrse = testCurrentCharacterType(readIndex + 1, betaCodeType, betaCodeAccents, symbol2A);
+         testForChVrse = testCurrentCharacterType(readIndex + 1, inputBetaCodeType, betaCodeAccents, symbol2A);
          if (testForChVrse != "chapter or verse")
          {
             chVrseEnd = readIndex;
          } else {
-            testForChVrse = testCurrentCharacterType(readIndex + 2, betaCodeType, betaCodeAccents, symbol2A);
+            testForChVrse = testCurrentCharacterType(readIndex + 2, inputBetaCodeType, betaCodeAccents, symbol2A);
             if (testForChVrse != "chapter or verse")
             {
                chVrseEnd = readIndex + 1;
             } else {
-               testForChVrse = testCurrentCharacterType(readIndex + 3, betaCodeType, betaCodeAccents, symbol2A);
+               testForChVrse = testCurrentCharacterType(readIndex + 3, inputBetaCodeType, betaCodeAccents, symbol2A);
                if (testForChVrse != "chapter or verse")
                {
                   chVrseEnd = readIndex + 2;
