@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+	function main() {
+		workingText = document.getElementById("original").value;
+		textPre_Processing();
+		document.getElementById("new").innerHTML = workingText;
+	}
+</script>
+
+<script src="textPreProcessing.js"></script>
+
+<textarea id="original"></textarea>
+
+<textarea id="new"></textarea>
+
+<button id="submit" onclick="main();">Process</button>
+
+</body>
+</html>
