@@ -1,0 +1,957 @@
+// Add skip array processing for each while loop so the user can skip any
+// preprocessing for certain characters also.
+
+// Notes: Global Variables -- workingText
+
+/* Module: textPre_Processing *******************************************
+ * Prepares input for further processing by correcting bad character
+ * usage, bad character combinations, and bad repetition in the input
+ * text. The module does this in three separate phases.
+ *************************************************************************/
+MODULE textPre_Processing()
+BEGIN
+   correctBadCharacters()
+   replaceBadCombinations()
+   removeBadRepetition()
+END MODULE
+
+/* Module: correctBadCharacters *****************************************
+ * Replaces variant characters which shouldn't be in the input text
+ * with acceptable characters.
+ *************************************************************************/
+MODULE correctBadCharacters()
+BEGIN
+   // Variable Initialization
+   DEFINE newTextA as string()
+   DEFINE index = 0
+   
+   // Processing
+   WHILE workingText[index] != null
+   DO
+      
+      // Replace Bad Greek Characters
+      IF workingText[index] = 'ά'
+      THEN
+         newTextA += "ά"
+      END IF
+      ELSE IF workingText[index] = 'έ'
+      THEN
+         newTextA += "έ"
+      END IF
+      ELSE IF workingText[index] = 'ή'
+      THEN
+         newTextA += "ή"
+      END IF
+      ELSE IF workingText[index] = 'ί'
+      THEN
+         newTextA += "ί"
+      END IF
+      ELSE IF workingText[index] = 'ό'
+      THEN
+         newTextA += "ό"
+      END IF
+      ELSE IF workingText[index] = 'ύ'
+      THEN
+         newTextA += "ύ"
+      END IF
+      ELSE IF workingText[index] = 'ώ'
+      THEN
+         newTextA += "ώ"
+      END IF
+      ELSE IF workingText[index] = 'ΐ'
+      THEN
+         newTextA += "ΐ"
+      END IF
+      ELSE IF workingText[index] = 'ΰ'
+      THEN
+         newTextA += "ΰ"
+      END IF
+      ELSE IF workingText[index] = 'Ά'
+      THEN
+         newTextA += "Ά"
+      END IF
+      ELSE IF workingText[index] = 'Έ'
+      THEN
+         newTextA += "Έ"
+      END IF
+      ELSE IF workingText[index] = 'Ή'
+      THEN
+         newTextA += "Ή"
+      END IF
+      ELSE IF workingText[index] = 'Ί'
+      THEN
+         newTextA += "Ί"
+      END IF
+      ELSE IF workingText[index] = 'Ό'
+      THEN
+         newTextA += "Ό"
+      END IF
+      ELSE IF workingText[index] = 'Ύ'
+      THEN
+         newTextA += "Ύ"
+      END IF
+      ELSE IF workingText[index] = 'Ώ'
+      THEN
+         newTextA += "Ώ"
+      END IF
+      
+      // Replace Bad Spaces
+      ELSE IF
+         workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = '​'
+         OR workingText[index] = ' '
+         OR workingText[index] = ' '
+         OR workingText[index] = '⁠'
+         OR workingText[index] = '⠀'
+         OR workingText[index] = '　'
+         OR workingText[index] = '﻿'
+      THEN
+         newTextA += " "
+      END IF
+      
+      // Replace Bad Commas
+      ELSE IF
+         workingText[index] = '‚'
+         OR workingText[index] = '՝'
+         OR workingText[index] = '，'
+         OR workingText[index] = '、'
+         OR workingText[index] = '،'
+         OR workingText[index] = '߸'
+         OR workingText[index] = '፣'
+         OR workingText[index] = '﹐'
+      THEN
+         newTextA += ","
+      END IF
+      
+      // Replace Bad Semi-Colons
+      ELSE IF
+         workingText[index] = ';'
+         OR workingText[index] = '؛'
+         OR workingText[index] = '⁏'
+      THEN
+         newTextA += ";"
+      END IF
+      
+      // Replace Bad Periods
+      ELSE IF
+         workingText[index] = '․'
+         OR workingText[index] = '﹒'
+         OR workingText[index] = '．'
+      THEN
+         newTextA += "."
+      END IF
+      
+      // Replace Bad Question Marks
+      ELSE IF
+         workingText[index] = '⁇'
+         OR workingText[index] = '❓'
+         OR workingText[index] = '⁇'
+         OR workingText[index] = '⸮'
+         OR workingText[index] = '︖'
+         OR workingText[index] = '？'
+         OR workingText[index] = '¿'
+         OR workingText[index] = '՞'
+         OR workingText[index] = '؟'
+         OR workingText[index] = '፧'
+      THEN
+         newTextA += "?"
+      END IF
+      
+      // Replace Bad Colons
+      ELSE IF
+         workingText[index] = '։'
+         OR workingText[index] = '׃'
+         OR workingText[index] = '∶'
+         OR workingText[index] = '꞉'
+      THEN
+         newTextA += ":"
+      END IF
+      
+      // Replace Bad Middle Dots
+      ELSE IF
+         workingText[index] = '·'
+         OR workingText[index] = '᛫'
+         OR workingText[index] = '⋅'
+         OR workingText[index] = '⸱'
+         OR workingText[index] = '‧'
+         OR workingText[index] = '・'
+      THEN
+         newTextA += "·"
+      END IF
+      
+      // Replace Bad Exclamation Marks
+      ELSE IF
+         workingText[index] = '¡'
+         OR workingText[index] = 'ǃ'
+         OR workingText[index] = '‼'
+         OR workingText[index] = '❕'
+         OR workingText[index] = '❗'
+         OR workingText[index] = '❢'
+         OR workingText[index] = '❣'
+         OR workingText[index] = '︕'
+         OR workingText[index] = '！'
+         OR workingText[index] = '՜'
+         OR workingText[index] = '߹'
+         OR workingText[index] = '႟'
+         OR workingText[index] = '᥄'
+      THEN
+         newTextA += "!"
+      END IF
+      
+      // Replace Bad Dashes
+      ELSE IF
+         workingText[index] = '‐'
+         OR workingText[index] = '‑'
+         OR workingText[index] = '—'
+         OR workingText[index] = '‒'
+         OR workingText[index] = '–'
+         OR workingText[index] = '―'
+         OR workingText[index] = '­'
+      THEN
+         newTextA += "-"
+      END IF
+      
+      // Replace Bad Quotation Marks
+      ELSE IF workingText[index] = '\"'
+      THEN
+         newTextA += "“"
+      END IF
+      
+      // Replace Bad Single Quotation Marks/Apostraphes
+      ELSE IF
+         workingText[index] = '\''
+         OR workingText[index] = '＇'
+      THEN
+         newTextA += "’"
+      END IF
+      
+      // Replace Bad Forward Slashes
+      ELSE IF
+         workingText[index] = '⁄'
+         OR workingText[index] = '∕'
+         OR workingText[index] = '／'
+      THEN
+         newTextA += "/"
+      END IF
+      
+      // Replace Bad Backslashes
+      ELSE IF
+         workingText[index] = '∖'
+         OR workingText[index] = '⧵'
+         OR workingText[index] = '﹨'
+         OR workingText[index] = '＼'
+      THEN
+         newTextA += "\\"
+      END IF
+      
+      // Replace Bad Pipes
+      ELSE IF
+         workingText[index] = '׀'
+         OR workingText[index] = '∣'
+         OR workingText[index] = '❘'
+         OR workingText[index] = '｜'
+      THEN
+         newTextA += "|"
+      END IF
+      
+      // Replace Bad Equals Signs
+      ELSE IF
+         workingText[index] = '⁼'
+         OR workingText[index] = '₌'
+         OR workingText[index] = '゠'
+         OR workingText[index] = '꞊'
+         OR workingText[index] = '﹦'
+         OR workingText[index] = '＝'
+      THEN
+         newTextA += "="
+      END IF
+      
+      // Replace Bad Exponent Signs
+      ELSE IF
+         workingText[index] = '˄'
+         OR workingText[index] = 'ˆ'
+         OR workingText[index] = '⌃'
+         OR workingText[index] = '＾'
+      THEN
+         newTextA += "^"
+      END IF
+      
+      // Replace Bad Plus Signs
+      ELSE IF
+         workingText[index] = '⁺'
+         OR workingText[index] = '₊'
+         OR workingText[index] = '➕'
+         OR workingText[index] = '﹢'
+         OR workingText[index] = '＋'
+      THEN
+         newTextA += "+"
+      END IF
+      
+      // Replace Bad Asterisks
+      ELSE IF
+         workingText[index] = '⁎'
+         OR workingText[index] = '∗'
+         OR workingText[index] = '﹡'
+         OR workingText[index] = '＊'
+      THEN
+         newTextA += "*"
+      END IF
+      
+      // Replace Bad Tabs
+      ELSE IF workingText[index] = '\t'
+      THEN
+         // Do nothing
+      END IF
+      
+      // Just Copy the Rest
+      ELSE
+      THEN
+         newTextA += workingText[index]
+      END IF
+      
+      // Iterate Through Input String
+      index++
+   END DO
+   
+   // Replace Old String with Updated String
+   workingText = newTextA
+END MODULE
+
+/* Module: replaceBadCombinations ***************************************
+ * Replaces two-letter combinations which should not exist in the input
+ * text with: a single character, a more appropriate combination of
+ * characters, or nothing (removing the character combination from the
+ * input string altogether).
+ *************************************************************************/
+MODULE replaceBadCombinations()
+BEGIN
+   // Variable Initialization
+   DEFINE newTextB  as string()
+   DEFINE indexRead = 0
+   
+   // Processing
+   WHILE workingText[indexRead] != null
+   DO
+      
+      // Replace Bad Combinations with Better Alternatives
+      // Space + Something
+      IF workingText[indexRead] = ' '
+      THEN
+         IF workingText[indexRead + 1] = ' '
+         THEN
+            newTextB += " "
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ';'
+         THEN
+            newTextB += ";"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '·'
+         THEN
+            newTextB += "·"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '\n'
+         THEN
+            newTextB += "\n"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '?'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF
+            workingText[indexRead + 1] = '-'
+               AND workingText[indexRead - 1] != '>'
+               AND workingText[indexRead + 2] = ' '
+               AND workingText[indexRead + 3] != '}'
+         THEN
+            newTextB += "—"
+            indexRead += 2
+         END IF
+         ELSE IF
+            workingText[indexRead + 1] = '-'
+               AND workingText[indexRead - 1] != '>'
+               AND workingText[indexRead + 2] = '}'
+         THEN
+            newTextB += "—"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '*'
+         THEN
+            newTextB += "*"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '!'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '0'
+         THEN
+            newTextB += " "
+            indexRead++
+         END IF
+         ELSE
+         THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Comma + Something
+      ELSE IF workingText[indexRead] = ','
+      THEN
+         IF workingText[indexRead + 1] = ','
+         THEN
+            newTextB += ","
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '.'
+         THEN
+            newTextB += "."
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ':'
+         THEN
+            newTextB += ":"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ';'
+         THEN
+            newTextB += ";"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '·'
+         THEN
+            newTextB += "·"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '?'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF
+            workingText[indexRead + 1] = '-'
+               AND workingText[indexRead + 2] = ' '
+         THEN
+            newTextB += "—"
+            indexRead += 2
+         END IF
+         ELSE IF workingText[indexRead + 1] = '-'
+         THEN
+            newTextB += "—"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '!'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF ELSE THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Period + Something
+      ELSE IF workingText[indexRead] = '.'
+      THEN
+         IF workingText[indexRead + 1] = '.'
+         THEN
+            newTextB += "."
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ','
+         THEN
+            newTextB += "."
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '·'
+         THEN
+            newTextB += "."
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ':'
+         THEN
+            newTextB += "."
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ';'
+         THEN
+            newTextB += "."
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '?'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF
+            workingText[indexRead + 1] = '-'
+               AND workingText[indexRead + 2] = ' '
+         THEN
+            newTextB += "—"
+            indexRead += 2
+         END IF
+         ELSE IF workingText[indexRead + 1] = '-'
+         THEN
+            newTextB += "—"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '!'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Colon + Something
+      ELSE IF workingText[indexRead] = ':'
+      THEN
+         IF workingText[indexRead + 1] = ':'
+         THEN
+            newTextB += ":"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ','
+         THEN
+            newTextB += ","
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '.'
+         THEN
+            newTextB += "."
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ';'
+         THEN
+            newTextB += ";"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '·'
+         THEN
+            newTextB += "·"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '?'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF
+            workingText[indexRead + 1] = '-'
+               AND workingText[indexRead + 2] = ' '
+         THEN
+            newTextB += ":—"
+            indexRead += 2
+         END IF
+         ELSE IF workingText[indexRead + 1] = '-'
+         THEN
+            newTextB += ":—"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '!'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE
+         THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Semi-Colon + Something
+      ELSE IF workingText[indexRead] = ';'
+      THEN
+         IF workingText[indexRead + 1] = ';'
+         THEN
+            newTextB += ";"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ','
+         THEN
+            newTextB += ";"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '.'
+         THEN
+            newTextB += "."
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ':'
+         THEN
+            newTextB += ";"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '·'
+         THEN
+            newTextB += "·"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '?'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF
+            workingText[indexRead + 1] = '-'
+               AND workingText[indexRead + 2] = ' '
+         THEN
+            newTextB += "—"
+            indexRead += 2
+         END IF
+         ELSE IF workingText[indexRead + 1] = '-'
+         THEN
+            newTextB += "—"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '!'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE
+         THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Greek Semi-Colon + Something
+      ELSE IF workingText[indexRead] = '·'
+      THEN
+         IF workingText[indexRead + 1] = '·'
+         THEN
+            newTextB += "·"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ','
+         THEN
+            newTextB += "·"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '.'
+         THEN
+            newTextB += "."
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ':'
+         THEN
+            newTextB += "·"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ';'
+         THEN
+            newTextB += "·"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '?'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF
+            workingText[indexRead + 1] = '-'
+               AND workingText[indexRead + 2] = ' '
+         THEN
+            newTextB += "·—"
+            indexRead += 2
+         END IF
+         ELSE IF workingText[indexRead + 1] = '-'
+         THEN
+            newTextB += "·—"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '!'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE
+         THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Paragraph Break + Something
+      ELSE IF workingText[indexRead] = '\n'
+      THEN
+         IF workingText[indexRead] = ' '
+         THEN
+            newTextB += "\n"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ','
+         THEN
+            newTextB += "\n"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '.'
+         THEN
+            newTextB += "\n"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ':'
+         THEN
+            newTextB += "\n"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ';'
+         THEN
+            newTextB += "\n"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '?'
+         THEN
+            newTextB += "\n"
+            indexRead++
+         END IF
+         ELSE IF
+            workingText[indexRead + 1] = '-'
+               AND workingText[indexRead + 2] = ' '
+         THEN
+            newTextB += "\n"
+            indexRead += 2
+         END IF
+         ELSE IF workingText[indexRead + 1] = '-'
+         THEN
+            newTextB += "\n"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '*'
+         THEN
+            newTextB += "\n"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '!'
+         THEN
+            newTextB += "\n"
+            indexRead++
+         END IF
+         ELSE
+         THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Question Mark + Something
+      ELSE IF workingText[indexRead] = '?'
+      THEN
+         IF workingText[indexRead + 1] = '?'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ','
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '.'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ':'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ';'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '·'
+         THEN
+            newTextB += "?"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '!'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE
+         THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Apostrophe + Something
+      ELSE IF workingText[indexRead] = '’'
+      THEN
+         IF
+            workingText[indexRead - 1] = ' '
+            OR workingText[indexRead - 1] = '\n'
+            OR workingText[indexRead - 1] = null
+         THEN
+            newTextB += "‘"
+         END IF
+         ELSE
+         THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Quotation Marks + Something
+      ELSE IF workingText[indexRead] = '“'
+      THEN
+         IF
+            workingText[indexRead + 1] = ' '
+            OR workingText[indexRead + 1] = '\n'
+            OR workingText[indexRead + 1] = null
+         THEN
+            newTextB += "”"
+         END IF
+         ELSE
+         THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Asterisks + Something
+      ELSE IF workingText[indexRead] = '*'
+      THEN
+         IF workingText[indexRead + 1] = '*'
+         THEN
+            newTextB += "*"
+            indexRead++
+         END IF
+         ELSE
+         THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+
+      // Exclamation Mark + Something
+      ELSE IF workingText[indexRead] = '!'
+      THEN
+         IF workingText[indexRead + 1] = '!'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ','
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '.'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ':'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = ';'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '·'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE IF workingText[indexRead + 1] = '?'
+         THEN
+            newTextB += "!"
+            indexRead++
+         END IF
+         ELSE
+         THEN
+            newTextB += workingText[indexRead]
+         END IF
+      END IF
+      
+      // Just Copy the Rest
+      ELSE
+      THEN
+         newTextB += workingText[indexRead]
+      END IF
+      
+      // Iterate Through Input String
+      indexRead++
+   END DO
+   
+   // Replace Old String with Updated String
+   workingText = newTextB
+END MODULE
+
+/* Module: removeBadRepetition *****************************************
+ * Replaces a substring of certain repeating characters with a single
+ * one of those characters.
+ *************************************************************************/
+MODULE removeBadRepetition()
+BEGIN
+   // Variable Initialization
+   DEFINE newTextC as string()
+   DEFINE indexReading = 0
+   DEFINE repetitionCount = 0
+   DEFINE indexJump = 0
+   
+   // Processing
+   WHILE workingText[indexReading] != null
+   THEN
+      
+      // Repeating Spaces
+      IF workingText[indexReading] = ' '
+      THEN
+         repetitionCount = 1
+         
+         WHILE workingText[indexReading + repetitionCount] = ' '
+         THEN
+            repetitionCount++
+         END IF
+         
+         newTextC += " "
+         indexJump = (repetitionCount - 1)
+         indexReading += indexJump
+      END IF
+      
+      // Repeating Periods
+      ELSE IF workingText[indexReading] = '.'
+      THEN
+         repetitionCount = 1
+         
+         WHILE workingText[indexReading + repetitionCount] = '.'
+         THEN
+            repetitionCount++
+         END IF
+         
+         newTextC += "."
+         indexJump = (repetitionCount - 1)
+         indexReading += indexJump
+      END IF
+      
+      // Just Copy the Rest
+      ELSE
+      THEN
+         newTextC += workingText[indexReading]
+      END IF
+      
+      // Iterate Through String
+      indexReading++
+   END IF
+   
+   // Replace Old String with Updated String
+   workingText = newTextC
+END MODULE

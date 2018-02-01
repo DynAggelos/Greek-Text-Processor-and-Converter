@@ -1,0 +1,6494 @@
+/* Function: convertLetter ************************************************
+ * Handles the conversion of unicode and beta code letters from and to
+ * each other. It determines whether the input and output text should be
+ * unicode or betacode, and then passes the work to a function which will
+ * take the proper action.
+ *************************************************************************/
+function convertLetter(
+   readIndex,
+   betaCodeType,
+   betaCodeLetters,
+   betaCodeAccents,
+   inputTextType,
+   outputTextType)
+{
+   /* Processing *********************************************************/
+   // Unicode Only
+   if (inputTextType == "unicode" && outputTextType == "unicode")
+   {
+      copyMiscellaneousCharacter(readIndex);
+   }
+
+   // Unicode to Beta Code
+   else if (inputTextType == "unicode" && outputTextType == "beta code")
+   {
+      // Basic Beta Code
+      if (betaCodeType == "normal")
+      {
+         unicodeToBetaCode(
+            readIndex,
+            betaCodeLetters,
+            betaCodeAccents);
+      }
+
+      // Advanced Beta Code
+      else if (betaCodeType == "advanced")
+      {
+         unicodeToAdvancedBetaCode(
+            readIndex,
+            betaCodeLetters,
+            betaCodeAccents);
+      }
+
+      // Error Handling
+      else
+      {
+         newText += ">>ERROR! COULD NOT DETERMINE BETA CODE TYPE.<<";
+      }
+   }
+
+   // Beta Code Only
+   else if (
+      inputTextType == "beta code"
+      && outputTextType == "beta code")
+   {
+      copyMiscellaneousCharacter(readIndex);
+   }
+
+   // Beta Code to Unicode
+   else if (inputTextType == "beta code" && outputTextType == "unicode")
+   {
+      // Basic Beta Code
+      if (betaCodeType == "normal")
+      {
+         readIndex = betaCodeToUnicode(
+            readIndex,
+            betaCodeType,
+            betaCodeLetters,
+            betaCodeAccents);
+      }
+
+      // Advanced Beta Code
+      else if (betaCodeType == "advanced")
+      {
+         readIndex = advancedBetaCodeToUnicode(
+            readIndex,
+            betaCodeType,
+            betaCodeLetters,
+            betaCodeAccents);
+      }
+
+      // Error Handling
+      else
+      {
+         newText += ">>ERROR! COULD NOT DETERMINE BETA CODE TYPE.<<";
+      }
+   }
+
+   // Error Handling
+   else
+   {
+      newText += (
+         ">>ERROR! COULD NOT DETERMINE"
+         + "INPUT/OUTPUT TEXT TYPES.<<");
+   }
+
+   /* Return *************************************************************/
+   return readIndex;
+}
+
+/* Function: unicodeToBetaCode ********************************************
+ * Handles the conversion from unicode to beta code Greek. It determines
+ * which category of character is being converted this iteration, and
+ * passes the work off to a function which will do the conversion for that
+ * category.
+ * 
+ * Character categories are organized according to likely-hood of
+ * encountering them, for efficiency.
+ * 
+ * Character Categories: 5 Lowercase -- 5 Uppercase
+ * 1. Plain letters
+ * 2. Letters with only acutes and graves
+ * 3. Letters specifically with breathing marks and circumflexes
+ * 4. Letters specifically with iota subscript
+ * 5. Letters specifically with diereses
+ *************************************************************************/
+function unicodeToBetaCode(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   /* Lowercase Letters **************************************************/
+   // Plain Lowercase Letters
+   if (workingText[readIndex] >= 'α' && workingText[readIndex] <= 'ω')
+   {
+      unicodeToBetaCodePlainLowercase(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Lowercase Letters with Only Acutes and Graves
+   else if (
+      workingText[readIndex] >= 'ὰ'
+      && workingText[readIndex] <= 'ώ')
+   {
+      unicodeToBetaCodeLowerAcuteGrave(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Lowercase Letters Specifically with Breathing Marks and Circumflexes
+   else if (
+      workingText[readIndex] >= 'ἀ'
+         && workingText[readIndex] <= 'ἇ'
+      || workingText[readIndex] >= 'ἐ'
+         && workingText[readIndex] <= 'ἕ'
+      || workingText[readIndex] >= 'ἠ'
+         && workingText[readIndex] <= 'ἧ'
+      || workingText[readIndex] >= 'ἰ'
+         && workingText[readIndex] <= 'ἷ'
+      || workingText[readIndex] >= 'ὀ'
+         && workingText[readIndex] <= 'ὅ'
+      || workingText[readIndex] >= 'ὐ'
+         && workingText[readIndex] <= 'ὗ'
+      || workingText[readIndex] >= 'ὠ'
+         && workingText[readIndex] <= 'ὧ'
+      || workingText[readIndex] == 'ᾶ'
+      || workingText[readIndex] == 'ῆ'
+      || workingText[readIndex] == 'ῖ'
+      || workingText[readIndex] == 'ῤ'
+      || workingText[readIndex] == 'ῥ'
+      || workingText[readIndex] == 'ῦ'
+      || workingText[readIndex] == 'ῶ')
+   {
+      unicodeToBetaCodeLowerBreathersCircumflex(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Lowercase Letters Specifically with Iota-Subcript
+   else if (
+      workingText[readIndex] >= 'ᾀ'
+         && workingText[readIndex] <= 'ᾇ'
+      || workingText[readIndex] >= 'ᾐ'
+         && workingText[readIndex] <= 'ᾗ'
+      || workingText[readIndex] >= 'ᾠ'
+         && workingText[readIndex] <= 'ᾧ'
+      || workingText[readIndex] >= 'ᾲ'
+         && workingText[readIndex] <= 'ᾴ'
+      || workingText[readIndex] == 'ᾷ'
+      || workingText[readIndex] >= 'ῂ'
+         && workingText[readIndex] <= 'ῄ'
+      || workingText[readIndex] == 'ῇ'
+      || workingText[readIndex] >= 'ῲ'
+         && workingText[readIndex] <= 'ῴ'
+      || workingText[readIndex] == 'ῷ')
+   {
+      unicodeToBetaCodeLowerSubscript(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+   
+   // Lowercase Letters Specifically with Diereses
+   else if (
+      workingText[readIndex] == 'ϊ'
+      || workingText[readIndex] == 'ϋ'
+      || workingText[readIndex] == 'ῒ'
+      || workingText[readIndex] == 'ΐ'
+      || workingText[readIndex] == 'ῗ'
+      || workingText[readIndex] == 'ῢ'
+      || workingText[readIndex] == 'ΰ'
+      || workingText[readIndex] == 'ῧ')
+   {
+      unicodeToBetaCodeLowerDieresis(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   /* Uppercase Letters **************************************************/
+   // Plain Uppercase Letters
+   else if (
+      workingText[readIndex] >= 'Α'
+      && workingText[readIndex] <= 'Ω')
+   {
+      unicodeToBetaCodePlainUppercase(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Uppercase Letters with Only Acutes and Graves
+   else if (
+      workingText[readIndex] == 'Ὰ'
+      || workingText[readIndex] == 'Ά'
+      || workingText[readIndex] >= 'Ὲ'
+         && workingText[readIndex] <= 'Ή'
+      || workingText[readIndex] == 'Ὶ'
+      || workingText[readIndex] == 'Ί'
+      || workingText[readIndex] == 'Ὺ'
+      || workingText[readIndex] == 'Ύ'
+      || workingText[readIndex] >= 'Ὸ'
+         && workingText[readIndex] <= 'Ώ')
+   {
+      unicodeToBetaCodeUpperAcuteGrave(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Uppercase Letters Specifically with Breathing Marks and Circumflexes
+   else if (
+      workingText[readIndex] >= 'Ἀ'
+         && workingText[readIndex] <= 'Ἇ'
+      || workingText[readIndex] >= 'Ἐ'
+         && workingText[readIndex] <= 'Ἕ'
+      || workingText[readIndex] >= 'Ἠ'
+         && workingText[readIndex] <= 'Ἧ'
+      || workingText[readIndex] >= 'Ἰ'
+         && workingText[readIndex] <= 'Ἷ'
+      || workingText[readIndex] >= 'Ὀ'
+         && workingText[readIndex] <= 'Ὅ'
+      || workingText[readIndex] >= 'Ὑ'
+         && workingText[readIndex] <= 'Ὗ'
+      || workingText[readIndex] >= 'Ὠ'
+         && workingText[readIndex] <= 'Ὧ'
+      || workingText[readIndex] == 'Ῥ')
+   {
+      unicodeToBetaCodeUpperBreathersCircumflex(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Uppercase Letters Specifically with Iota-Adscript
+   else if (
+      workingText[readIndex] >= 'ᾈ'
+         && workingText[readIndex] <= 'ᾏ'
+      || workingText[readIndex] >= 'ᾘ'
+         && workingText[readIndex] <= 'ᾟ'
+      || workingText[readIndex] >= 'ᾨ'
+         && workingText[readIndex] <= 'ᾯ'
+      || workingText[readIndex] == 'ᾼ'
+      || workingText[readIndex] == 'ῌ'
+      || workingText[readIndex] == 'ῼ')
+   {
+      unicodeToBetaCodeUpperAdscript(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Uppercase Letters Specifically with Diereses
+   else if (
+      workingText[readIndex] == 'Ϊ'
+      || workingText[readIndex] == 'Ϋ')
+   {
+      unicodeToBetaCodeUpperDieresis(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR (CATEGORY)! COULD NOT PROCESS CHARACTER \"";
+      newText += betaCodeCharacter4B;
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodePlainLowercase ******************************
+ * Changes all plain lowercase unicode characters to beta code.
+ * 
+ * Letters are grouped as vowels or consonants, with vowels tested first,
+ * for a higher efficiency.
+ *************************************************************************/
+function unicodeToBetaCodePlainLowercase(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Vowels
+   if (workingText[readIndex] == 'α')
+   {
+      newText += betaCodeLetters[0];
+   }
+   else if (workingText[readIndex] == 'ε')
+   {
+      newText += betaCodeLetters[4];
+   }
+   else if (workingText[readIndex] == 'η')
+   {
+      newText += betaCodeLetters[6];
+   }
+   else if (workingText[readIndex] == 'ι')
+   {
+      newText += betaCodeLetters[8];
+   }
+   else if (workingText[readIndex] == 'ο')
+   {
+      newText += betaCodeLetters[14];
+   }
+   else if (workingText[readIndex] == 'υ')
+   {
+      newText += betaCodeLetters[20];
+   }
+   else if (workingText[readIndex] == 'ω')
+   {
+      newText += betaCodeLetters[24];
+   }
+
+   // Consonants
+   else if (workingText[readIndex] == 'β')
+   {
+      newText += betaCodeLetters[1];
+   }
+   else if (workingText[readIndex] == 'γ')
+   {
+      newText += betaCodeLetters[2];
+   }
+   else if (workingText[readIndex] == 'δ')
+   {
+      newText += betaCodeLetters[3];
+   }
+   else if (workingText[readIndex] == 'ζ')
+   {
+      newText += betaCodeLetters[5];
+   }
+   else if (workingText[readIndex] == 'θ')
+   {
+      newText += betaCodeLetters[7];
+   }
+   else if (workingText[readIndex] == 'κ')
+   {
+      newText += betaCodeLetters[9];
+   }
+   else if (workingText[readIndex] == 'λ')
+   {
+      newText += betaCodeLetters[10];
+   }
+   else if (workingText[readIndex] == 'μ')
+   {
+      newText += betaCodeLetters[11];
+   }
+   else if (workingText[readIndex] == 'ν')
+   {
+      newText += betaCodeLetters[12];
+   }
+   else if (workingText[readIndex] == 'ξ')
+   {
+      newText += betaCodeLetters[13];
+   }
+   else if (workingText[readIndex] == 'π')
+   {
+      newText += betaCodeLetters[15];
+   }
+   else if (workingText[readIndex] == 'ρ')
+   {
+      newText += betaCodeLetters[16];
+   }
+   else if (workingText[readIndex] == 'σ')
+   {
+      newText += betaCodeLetters[17];
+   }
+   else if (workingText[readIndex] == 'ς')
+   {
+      newText += betaCodeLetters[18];
+   }
+   else if (workingText[readIndex] == 'τ')
+   {
+      newText += betaCodeLetters[19];
+   }
+   else if (workingText[readIndex] == 'φ')
+   {
+      newText += betaCodeLetters[21];
+   }
+   else if (workingText[readIndex] == 'χ')
+   {
+      newText += betaCodeLetters[22];
+   }
+   else if (workingText[readIndex] == 'ψ')
+   {
+      newText += betaCodeLetters[23];
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodeLowerAcuteGrave *****************************
+ * Changes all lowercase unicode characters which have acute and grave,
+ * but not breathers, circumflex, or iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToBetaCodeLowerAcuteGrave(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Acute
+   if (workingText[readIndex] == 'ά')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'έ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ή')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ί')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ό')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ύ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ώ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[2]);
+   }
+
+   // Grave
+   else if (workingText[readIndex] == 'ὰ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὲ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[23]);
+   }
+   else if (workingText[readIndex] == 'ὴ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὶ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὸ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὺ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὼ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[3]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodeLowerBreathersCircumflex ********************
+ * Changes all lowercase unicode characters which have breathers and
+ * circumflex, but not iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToBetaCodeLowerBreathersCircumflex(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Smooth Breather (No Rho)
+   if (workingText[readIndex] == 'ἀ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ἐ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ἠ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ἰ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ὀ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ὐ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ὠ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[0]);
+   }
+
+   // Circumflex
+   else if (workingText[readIndex] == 'ᾶ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ῆ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ῖ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ῦ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ῶ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[4]);
+   }
+
+   // Rough Breather (No Rho)
+   else if (workingText[readIndex] == 'ἁ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ἑ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ἡ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ἱ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ὁ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ὑ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ὡ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[1]);
+   }
+
+   // Smooth Breather, Acute
+   else if (workingText[readIndex] == 'ἄ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ἔ')
+   {
+      newText += (
+         betaCodeLetters[4]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ἤ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ἴ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ὄ')
+   {
+      newText += (
+         betaCodeLetters[14]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ὔ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ὤ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+
+   // Rough Breather, Acute
+   else if (workingText[readIndex] == 'ἅ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ἕ')
+   {
+      newText += (
+         betaCodeLetters[4]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ἥ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ἵ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ὅ')
+   {
+      newText += (
+         betaCodeLetters[14]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ὕ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ὥ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+
+   // Smooth Breather, Circumflex
+   else if (workingText[readIndex] == 'ἆ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ἦ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ἶ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ὖ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ὦ')
+   {
+      newText += (
+      betaCodeLetters[24]
+      + betaCodeAccents[0]
+      + betaCodeAccents[4]);
+   }
+
+   // Smooth Breather, Grave
+   else if (workingText[readIndex] == 'ἂ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ἒ')
+   {
+      newText += (
+         betaCodeLetters[4]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ἢ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ἲ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὂ')
+   {
+      newText += (
+         betaCodeLetters[14]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὒ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὢ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+
+   // Rough Breather, Circumflex
+   else if (workingText[readIndex] == 'ἇ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ἧ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ἷ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ὗ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ὧ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+
+   // Rough Breather, Grave
+   else if (workingText[readIndex] == 'ἃ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ἓ')
+   {
+      newText += (
+         betaCodeLetters[4]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ἣ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ἳ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὃ')
+   {
+      newText += (
+         betaCodeLetters[14]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὓ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὣ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+
+   // Rho's (Smooth and Rough Breathers)
+   else if (workingText[readIndex] == 'ῤ')
+   {
+      newText += (betaCodeLetters[16] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ῥ')
+   {
+      newText += (betaCodeLetters[16] + betaCodeAccents[1]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodeLowerSubscript ******************************
+ * Changes all lowercase unicode characters which have iota subscript to
+ * beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToBetaCodeLowerSubscript(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Circumflex, Iota Subscript
+   if (workingText[readIndex] == 'ᾷ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῇ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῷ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+
+   // Iota Subscript
+   else if (workingText[readIndex] == 'ᾳ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῃ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῳ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[5]);
+   }
+
+   // Acute, Iota Subscript
+   else if (workingText[readIndex] == 'ᾴ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῄ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῴ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   
+   // Smooth Breather, Circumflex, Iota Subscript
+   else if (workingText[readIndex] == 'ᾆ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾖ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾦ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Circumflex, Iota Subscript
+   else if (workingText[readIndex] == 'ᾇ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾗ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾧ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Iota Subscript
+   else if (workingText[readIndex] == 'ᾀ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾐ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾠ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Acute, Iota Subscript
+   else if (workingText[readIndex] == 'ᾄ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾔ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾤ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Acute, Iota Subscript
+   else if (workingText[readIndex] == 'ᾅ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾕ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾥ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Iota Subscript
+   else if (workingText[readIndex] == 'ᾁ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾑ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾡ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+
+   // Grave, Iota Subscript
+   else if (workingText[readIndex] == 'ᾲ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῂ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῲ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Grave, Iota Subscript
+   else if (workingText[readIndex] == 'ᾂ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾒ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾢ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Grave, Iota Subscript
+   else if (workingText[readIndex] == 'ᾃ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾓ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾣ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodeLowerDieresis *******************************
+ * Changes all lowercase unicode characters which have diereses to beta
+ * code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToBetaCodeLowerDieresis(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Dieresis
+   if (workingText[readIndex] == 'ϊ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[6]);
+   }
+   else if (workingText[readIndex] == 'ϋ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[6]);
+   }
+
+   // Dieresis, Acute
+   else if (workingText[readIndex] == 'ΐ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[6]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ΰ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[6]
+         + betaCodeAccents[2]);
+   }
+
+   // Dieresis, Grave
+   else if (workingText[readIndex] == 'ῒ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[6]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ῢ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[6]
+         + betaCodeAccents[3]);
+   }
+
+   // Dieresis, Circumflex
+   else if (workingText[readIndex] == 'ῗ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[6]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ῧ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[6]
+         + betaCodeAccents[4]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodePlainUppercase ******************************
+ * Changes all plain uppercase unicode characters to beta code.
+ * 
+ * Letters are grouped as vowels or consonants, with vowels tested first,
+ * for a higher efficiency.
+ *************************************************************************/
+function unicodeToBetaCodePlainUppercase(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Vowels
+   if (workingText[readIndex] == 'Α')
+   {
+      newText += betaCodeLetters[25];
+   }
+   else if (workingText[readIndex] == 'Ε')
+   {
+      newText += betaCodeLetters[29];
+   }
+   else if (workingText[readIndex] == 'Η')
+   {
+      newText += betaCodeLetters[31];
+   }
+   else if (workingText[readIndex] == 'Ι')
+   {
+      newText += betaCodeLetters[33];
+   }
+   else if (workingText[readIndex] == 'Ο')
+   {
+      newText += betaCodeLetters[39];
+   }
+   else if (workingText[readIndex] == 'Υ')
+   {
+      newText += betaCodeLetters[44];
+   }
+   else if (workingText[readIndex] == 'Ω')
+   {
+      newText += betaCodeLetters[48];
+   }
+
+   // Consonants
+   else if (workingText[readIndex] == 'Β')
+   {
+      newText += betaCodeLetters[26];
+   }
+   else if (workingText[readIndex] == 'Γ')
+   {
+      newText += betaCodeLetters[27];
+   }
+   else if (workingText[readIndex] == 'Δ')
+   {
+      newText += betaCodeLetters[28];
+   }
+   else if (workingText[readIndex] == 'Ζ')
+   {
+      newText += betaCodeLetters[30];
+   }
+   else if (workingText[readIndex] == 'Θ')
+   {
+      newText += betaCodeLetters[32];
+   }
+   else if (workingText[readIndex] == 'Κ')
+   {
+      newText += betaCodeLetters[34];
+   }
+   else if (workingText[readIndex] == 'Λ')
+   {
+      newText += betaCodeLetters[35];
+   }
+   else if (workingText[readIndex] == 'Μ')
+   {
+      newText += betaCodeLetters[36];
+   }
+   else if (workingText[readIndex] == 'Ν')
+   {
+      newText += betaCodeLetters[37];
+   }
+   else if (workingText[readIndex] == 'Ξ')
+   {
+      newText += betaCodeLetters[38];
+   }
+   else if (workingText[readIndex] == 'Π')
+   {
+      newText += betaCodeLetters[40];
+   }
+   else if (workingText[readIndex] == 'Ρ')
+   {
+      newText += betaCodeLetters[41];
+   }
+   else if (workingText[readIndex] == 'Σ')
+   {
+      newText += betaCodeLetters[42];
+   }
+   else if (workingText[readIndex] == 'Τ')
+   {
+      newText += betaCodeLetters[43];
+   }
+   else if (workingText[readIndex] == 'Φ')
+   {
+      newText += betaCodeLetters[45];
+   }
+   else if (workingText[readIndex] == 'Χ')
+   {
+      newText += betaCodeLetters[46];
+   }
+   else if (workingText[readIndex] == 'Ψ')
+   {
+      newText += betaCodeLetters[47];
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodeUpperAcuteGrave *****************************
+ * Changes all uppercase unicode characters which have acute and grave,
+ * but not breathers, circumflex, or iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToBetaCodeUpperAcuteGrave(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Acute
+   if (workingText[readIndex] == 'Ά')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Έ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ή')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ί')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ό')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ύ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ώ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[2]);
+   }
+
+   // Grave
+   else if (workingText[readIndex] == 'Ὰ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὲ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[23]);
+   }
+   else if (workingText[readIndex] == 'Ὴ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὶ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὸ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὺ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὼ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[3]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodeUpperBreathersCircumflex ********************
+ * Changes all uppercase unicode characters which have breathers and
+ * circumflex, but not iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToBetaCodeUpperBreathersCircumflex(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Smooth Breather (No Rho)
+   if (workingText[readIndex] == 'Ἀ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'Ἐ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'Ἠ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'Ἰ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'Ὀ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'Ὠ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[0]);
+   }
+
+   // Rough Breather (No Rho)
+   else if (workingText[readIndex] == 'Ἁ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ἑ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ἡ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ἱ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ὁ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ὑ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ὡ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[1]);
+   }
+
+   // Smooth Breather, Acute
+   else if (workingText[readIndex] == 'Ἄ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ἔ')
+   {
+      newText += (
+         betaCodeLetters[29]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ἤ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ἴ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ὄ')
+   {
+      newText += (
+         betaCodeLetters[39]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ὤ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+
+   // Rough Breather, Acute
+   else if (workingText[readIndex] == 'Ἅ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ἕ')
+   {
+      newText += (
+         betaCodeLetters[29]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ἥ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ἵ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ὅ')
+   {
+      newText += (
+         betaCodeLetters[39]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ὕ')
+   {
+      newText += (
+         betaCodeLetters[44]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ὥ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+
+   // Smooth Breather, Circumflex
+   else if (workingText[readIndex] == 'Ἆ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'Ἦ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'Ἶ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'Ὦ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+
+   // Smooth Breather, Grave
+   else if (workingText[readIndex] == 'Ἂ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ἒ')
+   {
+      newText += (
+         betaCodeLetters[29]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ἢ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ἲ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὂ')
+   {
+      newText += (
+         betaCodeLetters[39]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὢ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+
+   // Rough Breather, Circumflex
+   else if (workingText[readIndex] == 'Ἇ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'Ἧ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'Ἷ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'Ὗ')
+   {
+      newText += (
+         betaCodeLetters[44]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'Ὧ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+
+   // Rough Breather, Grave
+   else if (workingText[readIndex] == 'Ἃ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ἓ')
+   {
+      newText += (
+         betaCodeLetters[29]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ἣ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ἳ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὃ')
+   {
+      newText += (
+         betaCodeLetters[39]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὓ')
+   {
+      newText += (
+         betaCodeLetters[44]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὣ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+
+   // Rho's (Smooth and Rough Breathers)
+   else if (workingText[readIndex] == 'Ῥ')
+   {
+      newText += (betaCodeLetters[16] + betaCodeAccents[1]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodeUpperSubscript ******************************
+ * Changes all uppercase unicode characters which have iota subscript to
+ * beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToBetaCodeUpperSubscript(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Iota Subscript
+   if (workingText[readIndex] == 'ᾼ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῌ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῼ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Circumflex, Iota Subscript
+   else if (workingText[readIndex] == 'ᾎ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾞ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾮ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Circumflex, Iota Subscript
+   else if (workingText[readIndex] == 'ᾏ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾟ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾯ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Iota Subscript
+   else if (workingText[readIndex] == 'ᾈ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾘ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾨ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Acute, Iota Subscript
+   else if (workingText[readIndex] == 'ᾌ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾜ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾬ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Acute, Iota Subscript
+   else if (workingText[readIndex] == 'ᾍ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾝ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾭ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Iota Subscript
+   else if (workingText[readIndex] == 'ᾉ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾙ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾩ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Grave, Iota Subscript
+   else if (workingText[readIndex] == 'ᾊ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾚ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾪ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Grave, Iota Subscript
+   else if (workingText[readIndex] == 'ᾋ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾛ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ᾫ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodeUpperDieresis *******************************
+ * Changes all uppercase unicode characters which have diereses to beta
+ * code.
+ *************************************************************************/
+function unicodeToBetaCodeUpperDieresis(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   if (workingText[readIndex] == 'Ϊ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[6]);
+   }
+   else if (workingText[readIndex] == 'Ϋ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[6]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCode ************************************
+ * Handles the conversion from unicode to advanced beta code Greek. It
+ * determines which category of character is being converted this
+ * iteration, and passes the work off to a function which will do the
+ * conversion for that category.
+ * 
+ * Character categories are organized according to likely-hood of
+ * encountering them, for efficiency.
+ * 
+ * Character Categories: 5 Lowercase -- 5 Uppercase
+ * 1. Plain letters
+ * 2. Letters with only acutes and graves
+ * 3. Letters specifically with breathing marks and circumflexes
+ * 4. Letters specifically with iota subscript
+ * 5. Letters specifically with diereses
+ *************************************************************************/
+function unicodeToAdvancedBetaCode(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   /* Lowercase Letters **************************************************/
+   // Plain Lowercase Letters
+   if (workingText[readIndex] >= 'α' && workingText[readIndex] <= 'ω')
+   {
+      unicodeToAdvancedBetaCodePlainLowercase(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Lowercase Letters with Only Acutes and Graves
+   else if (
+      workingText[readIndex] >= 'ὰ'
+      && workingText[readIndex] <= 'ώ')
+   {
+      unicodeToAdvancedBetaCodeLowerAcuteGrave(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Lowercase Letters Specifically with Breathing Marks and Circumflexes
+   else if (
+      workingText[readIndex] >= 'ἀ'
+         && workingText[readIndex] <= 'ἇ'
+      || workingText[readIndex] >= 'ἐ'
+         && workingText[readIndex] <= 'ἕ'
+      || workingText[readIndex] >= 'ἠ'
+         && workingText[readIndex] <= 'ἧ'
+      || workingText[readIndex] >= 'ἰ'
+         && workingText[readIndex] <= 'ἷ'
+      || workingText[readIndex] >= 'ὀ'
+         && workingText[readIndex] <= 'ὅ'
+      || workingText[readIndex] >= 'ὐ'
+         && workingText[readIndex] <= 'ὗ'
+      || workingText[readIndex] >= 'ὠ'
+         && workingText[readIndex] <= 'ὧ'
+      || workingText[readIndex] == 'ᾶ'
+      || workingText[readIndex] == 'ῆ'
+      || workingText[readIndex] == 'ῖ'
+      || workingText[readIndex] == 'ῤ'
+      || workingText[readIndex] == 'ῥ'
+      || workingText[readIndex] == 'ῦ'
+      || workingText[readIndex] == 'ῶ')
+   {
+      unicodeToAdvancedBetaCodeLowerBreathersCircumflex(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Lowercase Letters Specifically with Iota-Subcript
+   else if (
+      workingText[readIndex] >= 'ᾀ'
+         && workingText[readIndex] <= 'ᾇ'
+      || workingText[readIndex] >= 'ᾐ'
+         && workingText[readIndex] <= 'ᾗ'
+      || workingText[readIndex] >= 'ᾠ'
+         && workingText[readIndex] <= 'ᾧ'
+      || workingText[readIndex] >= 'ᾲ'
+         && workingText[readIndex] <= 'ᾴ'
+      || workingText[readIndex] == 'ᾷ'
+      || workingText[readIndex] >= 'ῂ'
+         && workingText[readIndex] <= 'ῄ'
+      || workingText[readIndex] == 'ῇ'
+      || workingText[readIndex] >= 'ῲ'
+         && workingText[readIndex] <= 'ῴ'
+      || workingText[readIndex] == 'ῷ')
+   {
+      unicodeToAdvancedBetaCodeLowerSubscript(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+   
+   // Lowercase Letters Specifically with Diereses
+   else if (
+      workingText[readIndex] == 'ϊ'
+      || workingText[readIndex] == 'ϋ'
+      || workingText[readIndex] == 'ῒ'
+      || workingText[readIndex] == 'ΐ'
+      || workingText[readIndex] == 'ῗ'
+      || workingText[readIndex] == 'ῢ'
+      || workingText[readIndex] == 'ΰ'
+      || workingText[readIndex] == 'ῧ')
+   {
+      unicodeToAdvancedBetaCodeLowerDieresis(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   /* Uppercase Letters **************************************************/
+   // Plain Uppercase Letters
+   else if (
+      workingText[readIndex] >= 'Α'
+         && workingText[readIndex] <= 'Ω')
+   {
+      unicodeToAdvancedBetaCodePlainUppercase(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Uppercase Letters with Only Acutes and Graves
+   else if (
+      workingText[readIndex] == 'Ὰ'
+      || workingText[readIndex] == 'Ά'
+      || workingText[readIndex] >= 'Ὲ'
+         && workingText[readIndex] <= 'Ή'
+      || workingText[readIndex] == 'Ὶ'
+      || workingText[readIndex] == 'Ί'
+      || workingText[readIndex] == 'Ὺ'
+      || workingText[readIndex] == 'Ύ'
+      || workingText[readIndex] >= 'Ὸ'
+         && workingText[readIndex] <= 'Ώ')
+   {
+      unicodeToAdvancedBetaCodeUpperAcuteGrave(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Uppercase Letters Specifically with Breathing Marks and Circumflexes
+   else if (
+      workingText[readIndex] >= 'Ἀ'
+         && workingText[readIndex] <= 'Ἇ'
+      || workingText[readIndex] >= 'Ἐ'
+         && workingText[readIndex] <= 'Ἕ'
+      || workingText[readIndex] >= 'Ἠ'
+         && workingText[readIndex] <= 'Ἧ'
+      || workingText[readIndex] >= 'Ἰ'
+         && workingText[readIndex] <= 'Ἷ'
+      || workingText[readIndex] >= 'Ὀ'
+         && workingText[readIndex] <= 'Ὅ'
+      || workingText[readIndex] >= 'Ὑ'
+         && workingText[readIndex] <= 'Ὗ'
+      || workingText[readIndex] >= 'Ὠ'
+         && workingText[readIndex] <= 'Ὧ'
+      || workingText[readIndex] == 'Ῥ')
+   {
+      unicodeToAdvancedBetaCodeUpperBreathersCircumflex(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Uppercase Letters Specifically with Iota-Adscript
+   else if (
+      workingText[readIndex] >= 'ᾈ'
+         && workingText[readIndex] <= 'ᾏ'
+      || workingText[readIndex] >= 'ᾘ'
+         && workingText[readIndex] <= 'ᾟ'
+      || workingText[readIndex] >= 'ᾨ'
+         && workingText[readIndex] <= 'ᾯ'
+      || workingText[readIndex] == 'ᾼ'
+      || workingText[readIndex] == 'ῌ'
+      || workingText[readIndex] == 'ῼ')
+   {
+      unicodeToAdvancedBetaCodeUpperAdscript(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Uppercase Letters Specifically with Diereses
+   else if (
+      workingText[readIndex] == 'Ϊ'
+      || workingText[readIndex] == 'Ϋ')
+   {
+      unicodeToAdvancedBetaCodeUpperDieresis(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR (CATEGORY)! COULD NOT PROCESS CHARACTER \"";
+      newText += betaCodeCharacter4C;
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCodePlainLowercase **********************
+ * Changes all plain lowercase unicode characters to beta code.
+ * 
+ * Letters are grouped as vowels or consonants, with vowels tested first,
+ * for a higher efficiency.
+ *************************************************************************/
+function unicodeToAdvancedBetaCodePlainLowercase(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Vowels
+   if (workingText[readIndex] == 'α')
+   {
+      newText += betaCodeLetters[0];
+   }
+   else if (workingText[readIndex] == 'ε')
+   {
+      newText += betaCodeLetters[4];
+   }
+   else if (workingText[readIndex] == 'η')
+   {
+      newText += betaCodeLetters[6];
+   }
+   else if (workingText[readIndex] == 'ι')
+   {
+      newText += betaCodeLetters[8];
+   }
+   else if (workingText[readIndex] == 'ο')
+   {
+      newText += betaCodeLetters[14];
+   }
+   else if (workingText[readIndex] == 'υ')
+   {
+      newText += betaCodeLetters[20];
+   }
+   else if (workingText[readIndex] == 'ω')
+   {
+      newText += betaCodeLetters[24];
+   }
+
+   // Consonants
+   else if (workingText[readIndex] == 'β')
+   {
+      newText += betaCodeLetters[1];
+   }
+   else if (workingText[readIndex] == 'γ')
+   {
+      newText += betaCodeLetters[2];
+   }
+   else if (workingText[readIndex] == 'δ')
+   {
+      newText += betaCodeLetters[3];
+   }
+   else if (workingText[readIndex] == 'ζ')
+   {
+      newText += betaCodeLetters[5];
+   }
+   else if (workingText[readIndex] == 'θ')
+   {
+      newText += betaCodeLetters[7];
+   }
+   else if (workingText[readIndex] == 'κ')
+   {
+      newText += betaCodeLetters[9];
+   }
+   else if (workingText[readIndex] == 'λ')
+   {
+      newText += betaCodeLetters[10];
+   }
+   else if (workingText[readIndex] == 'μ')
+   {
+      newText += betaCodeLetters[11];
+   }
+   else if (workingText[readIndex] == 'ν')
+   {
+      newText += betaCodeLetters[12];
+   }
+   else if (workingText[readIndex] == 'ξ')
+   {
+      newText += betaCodeLetters[13];
+   }
+   else if (workingText[readIndex] == 'π')
+   {
+      newText += betaCodeLetters[15];
+   }
+   else if (workingText[readIndex] == 'ρ')
+   {
+      newText += betaCodeLetters[16];
+   }
+   else if (workingText[readIndex] == 'σ')
+   {
+      newText += betaCodeLetters[17];
+   }
+   else if (workingText[readIndex] == 'ς')
+   {
+      newText += betaCodeLetters[18];
+   }
+   else if (workingText[readIndex] == 'τ')
+   {
+      newText += betaCodeLetters[19];
+   }
+   else if (workingText[readIndex] == 'φ')
+   {
+      newText += betaCodeLetters[21];
+   }
+   else if (workingText[readIndex] == 'χ')
+   {
+      newText += betaCodeLetters[22];
+   }
+   else if (workingText[readIndex] == 'ψ')
+   {
+      newText += betaCodeLetters[23];
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCodeLowerAcuteGrave *********************
+ * Changes all lowercase unicode characters which have acute and grave,
+ * but not breathers, circumflex, or iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToAdvancedBetaCodeLowerAcuteGrave(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Acute
+   if (workingText[readIndex] == 'ά')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'έ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ή')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ί')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ό')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ύ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'ώ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[2]);
+   }
+
+   // Grave
+   else if (workingText[readIndex] == 'ὰ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὲ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[23]);
+   }
+   else if (workingText[readIndex] == 'ὴ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὶ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὸ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὺ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'ὼ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[3]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCodeLowerBreathersCircumflex ************
+ * Changes all lowercase unicode characters which have breathers and
+ * circumflex, but not iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToAdvancedBetaCodeLowerBreathersCircumflex(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Smooth Breather (No Rho)
+   if (workingText[readIndex] == 'ἀ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ἐ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ἠ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ἰ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ὀ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ὐ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ὠ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[0]);
+   }
+
+   // Circumflex
+   else if (workingText[readIndex] == 'ᾶ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ῆ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ῖ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ῦ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[4]);
+   }
+   else if (workingText[readIndex] == 'ῶ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[4]);
+   }
+
+   // Rough Breather (No Rho)
+   else if (workingText[readIndex] == 'ἁ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ἑ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ἡ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ἱ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ὁ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ὑ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'ὡ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[1]);
+   }
+
+   // Smooth Breather, Acute
+   else if (workingText[readIndex] == 'ἄ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'ἔ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'ἤ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'ἴ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'ὄ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'ὔ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'ὤ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[7]);
+   }
+
+   // Rough Breather, Acute
+   else if (workingText[readIndex] == 'ἅ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'ἕ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'ἥ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'ἵ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'ὅ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'ὕ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'ὥ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[14]);
+   }
+
+   // Smooth Breather, Circumflex
+   else if (workingText[readIndex] == 'ἆ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[11]);
+   }
+   else if (workingText[readIndex] == 'ἦ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[11]);
+   }
+   else if (workingText[readIndex] == 'ἶ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[11]);
+   }
+   else if (workingText[readIndex] == 'ὖ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[11]);
+   }
+   else if (workingText[readIndex] == 'ὦ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[11]);
+   }
+
+   // Smooth Breather, Grave
+   else if (workingText[readIndex] == 'ἂ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'ἒ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'ἢ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'ἲ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'ὂ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'ὒ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'ὢ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[9]);
+   }
+
+   // Rough Breather, Circumflex
+   else if (workingText[readIndex] == 'ἇ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[18]);
+   }
+   else if (workingText[readIndex] == 'ἧ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[18]);
+   }
+   else if (workingText[readIndex] == 'ἷ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[18]);
+   }
+   else if (workingText[readIndex] == 'ὗ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[18]);
+   }
+   else if (workingText[readIndex] == 'ὧ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[18]);
+   }
+
+   // Rough Breather, Grave
+   else if (workingText[readIndex] == 'ἃ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'ἓ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'ἣ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'ἳ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'ὃ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'ὓ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'ὣ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[16]);
+   }
+
+   // Rho's (Smooth and Rough Breathers)
+   else if (workingText[readIndex] == 'ῤ')
+   {
+      newText += (betaCodeLetters[16] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'ῥ')
+   {
+      newText += (betaCodeLetters[16] + betaCodeAccents[1]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCodeLowerSubscript **********************
+ * Changes all lowercase unicode characters which have iota subscript to
+ * beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToAdvancedBetaCodeLowerSubscript(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Circumflex, Iota Subscript
+   if (workingText[readIndex] == 'ᾷ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[23]);
+   }
+   else if (workingText[readIndex] == 'ῇ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[23]);
+   }
+   else if (workingText[readIndex] == 'ῷ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[23]);
+   }
+
+   // Iota Subscript
+   else if (workingText[readIndex] == 'ᾳ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῃ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῳ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[5]);
+   }
+
+   // Acute, Iota Subscript
+   else if (workingText[readIndex] == 'ᾴ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[21]);
+   }
+   else if (workingText[readIndex] == 'ῄ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[21]);
+   }
+   else if (workingText[readIndex] == 'ῴ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[21]);
+   }
+   
+   // Smooth Breather, Circumflex, Iota Subscript
+   else if (workingText[readIndex] == 'ᾆ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[12]);
+   }
+   else if (workingText[readIndex] == 'ᾖ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[12]);
+   }
+   else if (workingText[readIndex] == 'ᾦ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[12]);
+   }
+
+   // Rough Breather, Circumflex, Iota Subscript
+   else if (workingText[readIndex] == 'ᾇ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[19]);
+   }
+   else if (workingText[readIndex] == 'ᾗ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[19]);
+   }
+   else if (workingText[readIndex] == 'ᾧ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[19]);
+   }
+
+   // Smooth Breather, Iota Subscript
+   else if (workingText[readIndex] == 'ᾀ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[13]);
+   }
+   else if (workingText[readIndex] == 'ᾐ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[13]);
+   }
+   else if (workingText[readIndex] == 'ᾠ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[13]);
+   }
+
+   // Smooth Breather, Acute, Iota Subscript
+   else if (workingText[readIndex] == 'ᾄ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[8]);
+   }
+   else if (workingText[readIndex] == 'ᾔ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[8]);
+   }
+   else if (workingText[readIndex] == 'ᾤ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[8]);
+   }
+
+   // Rough Breather, Acute, Iota Subscript
+   else if (workingText[readIndex] == 'ᾅ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[15]);
+   }
+   else if (workingText[readIndex] == 'ᾕ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[15]);
+   }
+   else if (workingText[readIndex] == 'ᾥ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[15]);
+   }
+
+   // Rough Breather, Iota Subscript
+   else if (workingText[readIndex] == 'ᾁ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[20]);
+   }
+   else if (workingText[readIndex] == 'ᾑ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[20]);
+   }
+   else if (workingText[readIndex] == 'ᾡ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[20]);
+   }
+
+   // Grave, Iota Subscript
+   else if (workingText[readIndex] == 'ᾲ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[22]);
+   }
+   else if (workingText[readIndex] == 'ῂ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[22]);
+   }
+   else if (workingText[readIndex] == 'ῲ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[22]);
+   }
+
+   // Smooth Breather, Grave, Iota Subscript
+   else if (workingText[readIndex] == 'ᾂ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[10]);
+   }
+   else if (workingText[readIndex] == 'ᾒ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[10]);
+   }
+   else if (workingText[readIndex] == 'ᾢ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[10]);
+   }
+
+   // Rough Breather, Grave, Iota Subscript
+   else if (workingText[readIndex] == 'ᾃ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[17]);
+   }
+   else if (workingText[readIndex] == 'ᾓ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[17]);
+   }
+   else if (workingText[readIndex] == 'ᾣ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[17]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCodeLowerDieresis ***********************
+ * Changes all lowercase unicode characters which have diereses to beta
+ * code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToAdvancedBetaCodeLowerDieresis(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Dieresis
+   if (workingText[readIndex] == 'ϊ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[6]);
+   }
+   else if (workingText[readIndex] == 'ϋ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[6]);
+   }
+
+   // Dieresis, Acute
+   else if (workingText[readIndex] == 'ΐ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[24]);
+   }
+   else if (workingText[readIndex] == 'ΰ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[24]);
+   }
+
+   // Dieresis, Grave
+   else if (workingText[readIndex] == 'ῒ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[25]);
+   }
+   else if (workingText[readIndex] == 'ῢ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[25]);
+   }
+
+   // Dieresis, Circumflex
+   else if (workingText[readIndex] == 'ῗ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[26]);
+   }
+   else if (workingText[readIndex] == 'ῧ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[26]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCodePlainUppercase **********************
+ * Changes all plain uppercase unicode characters to beta code.
+ * 
+ * Letters are grouped as vowels or consonants, with vowels tested first,
+ * for a higher efficiency.
+ *************************************************************************/
+function unicodeToAdvancedBetaCodePlainUppercase(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Vowels
+   if (workingText[readIndex] == 'Α')
+   {
+      newText += betaCodeLetters[25];
+   }
+   else if (workingText[readIndex] == 'Ε')
+   {
+      newText += betaCodeLetters[29];
+   }
+   else if (workingText[readIndex] == 'Η')
+   {
+      newText += betaCodeLetters[31];
+   }
+   else if (workingText[readIndex] == 'Ι')
+   {
+      newText += betaCodeLetters[33];
+   }
+   else if (workingText[readIndex] == 'Ο')
+   {
+      newText += betaCodeLetters[39];
+   }
+   else if (workingText[readIndex] == 'Υ')
+   {
+      newText += betaCodeLetters[44];
+   }
+   else if (workingText[readIndex] == 'Ω')
+   {
+      newText += betaCodeLetters[48];
+   }
+
+   // Consonants
+   else if (workingText[readIndex] == 'Β')
+   {
+      newText += betaCodeLetters[26];
+   }
+   else if (workingText[readIndex] == 'Γ')
+   {
+      newText += betaCodeLetters[27];
+   }
+   else if (workingText[readIndex] == 'Δ')
+   {
+      newText += betaCodeLetters[28];
+   }
+   else if (workingText[readIndex] == 'Ζ')
+   {
+      newText += betaCodeLetters[30];
+   }
+   else if (workingText[readIndex] == 'Θ')
+   {
+      newText += betaCodeLetters[32];
+   }
+   else if (workingText[readIndex] == 'Κ')
+   {
+      newText += betaCodeLetters[34];
+   }
+   else if (workingText[readIndex] == 'Λ')
+   {
+      newText += betaCodeLetters[35];
+   }
+   else if (workingText[readIndex] == 'Μ')
+   {
+      newText += betaCodeLetters[36];
+   }
+   else if (workingText[readIndex] == 'Ν')
+   {
+      newText += betaCodeLetters[37];
+   }
+   else if (workingText[readIndex] == 'Ξ')
+   {
+      newText += betaCodeLetters[38];
+   }
+   else if (workingText[readIndex] == 'Π')
+   {
+      newText += betaCodeLetters[40];
+   }
+   else if (workingText[readIndex] == 'Ρ')
+   {
+      newText += betaCodeLetters[41];
+   }
+   else if (workingText[readIndex] == 'Σ')
+   {
+      newText += betaCodeLetters[42];
+   }
+   else if (workingText[readIndex] == 'Τ')
+   {
+      newText += betaCodeLetters[43];
+   }
+   else if (workingText[readIndex] == 'Φ')
+   {
+      newText += betaCodeLetters[45];
+   }
+   else if (workingText[readIndex] == 'Χ')
+   {
+      newText += betaCodeLetters[46];
+   }
+   else if (workingText[readIndex] == 'Ψ')
+   {
+      newText += betaCodeLetters[47];
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCodeUpperAcuteGrave *********************
+ * Changes all uppercase unicode characters which have acute and grave,
+ * but not breathers, circumflex, or iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToAdvancedBetaCodeUpperAcuteGrave(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Acute
+   if (workingText[readIndex] == 'Ά')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Έ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ή')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ί')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ό')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ύ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[2]);
+   }
+   else if (workingText[readIndex] == 'Ώ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[2]);
+   }
+
+   // Grave
+   else if (workingText[readIndex] == 'Ὰ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὲ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[23]);
+   }
+   else if (workingText[readIndex] == 'Ὴ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὶ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὸ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὺ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[3]);
+   }
+   else if (workingText[readIndex] == 'Ὼ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[3]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCodeUpperBreathersCircumflex ************
+ * Changes all uppercase unicode characters which have breathers and
+ * circumflex, but not iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToAdvancedBetaCodeUpperBreathersCircumflex(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Smooth Breather (No Rho)
+   if (workingText[readIndex] == 'Ἀ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'Ἐ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'Ἠ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'Ἰ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'Ὀ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[0]);
+   }
+   else if (workingText[readIndex] == 'Ὠ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[0]);
+   }
+
+   // Rough Breather (No Rho)
+   else if (workingText[readIndex] == 'Ἁ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ἑ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ἡ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ἱ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ὁ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ὑ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[1]);
+   }
+   else if (workingText[readIndex] == 'Ὡ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[1]);
+   }
+
+   // Smooth Breather, Acute
+   else if (workingText[readIndex] == 'Ἄ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'Ἔ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'Ἤ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'Ἴ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'Ὄ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[7]);
+   }
+   else if (workingText[readIndex] == 'Ὤ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[7]);
+   }
+
+   // Rough Breather, Acute
+   else if (workingText[readIndex] == 'Ἅ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'Ἕ')
+   {
+      newText += (etaCodeLetters4C8[29] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'Ἥ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'Ἵ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'Ὅ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'Ὕ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[14]);
+   }
+   else if (workingText[readIndex] == 'Ὥ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[14]);
+   }
+
+   // Smooth Breather, Circumflex
+   else if (workingText[readIndex] == 'Ἆ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[11]);
+   }
+   else if (workingText[readIndex] == 'Ἦ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[11]);
+   }
+   else if (workingText[readIndex] == 'Ἶ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[11]);
+   }
+   else if (workingText[readIndex] == 'Ὦ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[11]);
+   }
+
+   // Smooth Breather, Grave
+   else if (workingText[readIndex] == 'Ἂ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'Ἒ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'Ἢ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'Ἲ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'Ὂ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[9]);
+   }
+   else if (workingText[readIndex] == 'Ὢ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[9]);
+   }
+
+   // Rough Breather, Circumflex
+   else if (workingText[readIndex] == 'Ἇ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[18]);
+   }
+   else if (workingText[readIndex] == 'Ἧ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[18]);
+   }
+   else if (workingText[readIndex] == 'Ἷ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[18]);
+   }
+   else if (workingText[readIndex] == 'Ὗ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[18]);
+   }
+   else if (workingText[readIndex] == 'Ὧ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[18]);
+   }
+
+   // Rough Breather, Grave
+   else if (workingText[readIndex] == 'Ἃ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'Ἓ')
+   {
+      newText += (etaCodeLetters4C8[29] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'Ἣ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'Ἳ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'Ὃ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'Ὓ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[16]);
+   }
+   else if (workingText[readIndex] == 'Ὣ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[16]);
+   }
+
+   // Rho's (Smooth and Rough Breathers)
+   else if (workingText[readIndex] == 'Ῥ')
+   {
+      newText += (betaCodeLetters[16] + betaCodeAccents[1]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCodeUpperSubscript **********************
+ * Changes all uppercase unicode characters which have iota subscript to
+ * beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function unicodeToAdvancedBetaCodeUpperSubscript(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   // Iota Subscript
+   if (workingText[readIndex] == 'ᾼ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῌ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[5]);
+   }
+   else if (workingText[readIndex] == 'ῼ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Circumflex, Iota Subscript
+   else if (workingText[readIndex] == 'ᾎ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[12]);
+   }
+   else if (workingText[readIndex] == 'ᾞ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[12]);
+   }
+   else if (workingText[readIndex] == 'ᾮ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[12]);
+   }
+
+   // Rough Breather, Circumflex, Iota Subscript
+   else if (workingText[readIndex] == 'ᾏ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[19]);
+   }
+   else if (workingText[readIndex] == 'ᾟ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[19]);
+   }
+   else if (workingText[readIndex] == 'ᾯ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[19]);
+   }
+
+   // Smooth Breather, Iota Subscript
+   else if (workingText[readIndex] == 'ᾈ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[13]);
+   }
+   else if (workingText[readIndex] == 'ᾘ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[13]);
+   }
+   else if (workingText[readIndex] == 'ᾨ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[13]);
+   }
+
+   // Smooth Breather, Acute, Iota Subscript
+   else if (workingText[readIndex] == 'ᾌ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[8]);
+   }
+   else if (workingText[readIndex] == 'ᾜ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[8]);
+   }
+   else if (workingText[readIndex] == 'ᾬ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[8]);
+   }
+
+   // Rough Breather, Acute, Iota Subscript
+   else if (workingText[readIndex] == 'ᾍ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[15]);
+   }
+   else if (workingText[readIndex] == 'ᾝ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[15]);
+   }
+   else if (workingText[readIndex] == 'ᾭ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[15]);
+   }
+
+   // Rough Breather, Iota Subscript
+   else if (workingText[readIndex] == 'ᾉ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[20]);
+   }
+   else if (workingText[readIndex] == 'ᾙ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[20]);
+   }
+   else if (workingText[readIndex] == 'ᾩ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[20]);
+   }
+
+   // Smooth Breather, Grave, Iota Subscript
+   else if (workingText[readIndex] == 'ᾊ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[10]);
+   }
+   else if (workingText[readIndex] == 'ᾚ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[10]);
+   }
+   else if (workingText[readIndex] == 'ᾪ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[10]);
+   }
+
+   // Rough Breather, Grave, Iota Subscript
+   else if (workingText[readIndex] == 'ᾋ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[17]);
+   }
+   else if (workingText[readIndex] == 'ᾛ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[17]);
+   }
+   else if (workingText[readIndex] == 'ᾫ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[17]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToAdvancedBetaCodeUpperDieresis ***********************
+ * Changes all uppercase unicode characters which have diereses to beta
+ * code.
+ *************************************************************************/
+function unicodeToAdvancedBetaCodeUpperDieresis(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   if (workingText[readIndex] == 'Ϊ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[6]);
+   }
+   else if (workingText[readIndex] == 'Ϋ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[6]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += workingText[readIndex];
+      newText += "\".<<";
+   }
+}
+
+/* Function: betaCodeToUnicode ********************************************
+ * Handles the conversion from beta code Greek to unicode. It determines
+ * which category of character is being converted this iteration, and
+ * passes the work off to a function which will do the conversion for that
+ * category.
+ * 
+ * Character categories are organized according to likely-hood of
+ * encountering them, for efficiency.
+ * 
+ * Note that the requirements for fitting into a character category are
+ * less strict in this function than in the unicodeToBetaCode and
+ * unicodeToAdvancedBetaCode functions. Namely, imaginary characters such
+ * as "t/" will slip into a character category (in this case the
+ * acute/grave category), and then triger an unkown character error from
+ * there. (While the unicodeTo- functions would catch the error before
+ * passing it to a character group, triggering an unknown character
+ * category error instead.)
+ * 
+ * Character Categories: 5 Lowercase -- 5 Uppercase
+ * 1. Plain letters
+ * 2. Letters with only acutes and graves
+ * 3. Letters specifically with breathing marks and circumflexes
+ * 4. Letters specifically with iota subscript
+ * 5. Letters specifically with diereses
+ *************************************************************************/
+function betaCodeToUnicode(
+   readIndex,
+   betaCodeType,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   /* Initialization *****************************************************/
+   // Numerals
+   var betaCodeCharacterLength = 0;
+   var addedIndex = 0;
+
+   // Characters
+   var betaCodeCharacter = 0;
+   
+   /* Processing *********************************************************/
+   /* Extract Next Character Combination from Input String---------------*/
+   betaCodeCharacterLength = testBetaCodeCharacterLength(
+      readIndex,
+      betaCodeType,
+      betaCodeLetters,
+      betaCodeAccents);
+
+   while (addedIndex < betaCodeCharacterLength)
+   {
+      if (addedIndex == 0)
+      {
+         betaCodeCharacter = workingText[readIndex];
+      }
+      else if (addedIndex > 0)
+      {
+         betaCodeCharacter += workingText[readIndex + addedIndex];
+      }
+
+      addedIndex++;
+   }
+
+   /* Process Stored Character Combination-------------------------------*/
+   /* Lowercase Letters */
+   // Plain Lowercase Letters
+   if (
+      betaCodeCharacter[0] >= betaCodeLetters[0]
+      && betaCodeCharacter[0] <= betaCodeLetters[24]
+      && betaCodeCharacter[1] == undefined)
+   {
+      betaCodeToUnicodePlainLowercase(
+         readIndex,
+         betaCodeLetters,
+         betaCodeAccents,
+         betaCodeCharacter);
+   }
+
+   // Lowercase Letters with Only Acutes and Graves
+   else if (
+      betaCodeCharacter[1] == betaCodeAccents[2]
+         && betaCodeCharacter[2] == undefined
+         && betaCodeCharacter[0] >= betaCodeLetters[0]
+         && betaCodeCharacter[0] <= betaCodeLetters[24]
+      || betaCodeCharacter[1] == betaCodeAccents[3]
+         && betaCodeCharacter[2] == undefined
+         && betaCodeCharacter[0] >= betaCodeLetters[0]
+         && betaCodeCharacter[0] <= betaCodeLetters[24])
+   {
+      betaCodeToUnicodeLowerAcuteGrave(
+         betaCodeLetters,
+         betaCodeAccents,
+         betaCodeCharacter);
+   }
+
+   // Lowercase Letters Specifically with Breathing Marks and Circumflexes
+   else if (
+      betaCodeCharacter[1] == betaCodeAccents[0]
+         && betaCodeCharacter[2] != betaCodeAccents[5]
+         && betaCodeCharacter[3] == undefined
+         && betaCodeCharacter[0] >= betaCodeLetters[0]
+         && betaCodeCharacter[0] <= betaCodeLetters[24]
+      || betaCodeCharacter[1] == betaCodeAccents[1]
+         && betaCodeCharacter[2] != betaCodeAccents[5]
+         && betaCodeCharacter[3] == undefined
+         && betaCodeCharacter[0] >= betaCodeLetters[0]
+         && betaCodeCharacter[0] <= betaCodeLetters[24]
+      || betaCodeCharacter[1] == betaCodeAccents[4]
+         && betaCodeCharacter[2] == undefined
+         && betaCodeCharacter[0] >= betaCodeLetters[0]
+         && betaCodeCharacter[0] <= betaCodeLetters[24])
+   {
+      betaCodeToUnicodeLowerBreathersCircumflex(
+         betaCodeLetters,
+         betaCodeAccents,
+         betaCodeCharacter);
+   }
+
+   // Lowercase Letters Specifically with Iota-Subcript
+   else if (
+      betaCodeCharacter[1] == betaCodeAccents[5]
+         && betaCodeCharacter[0] >= betaCodeLetters[0]
+         && betaCodeCharacter[0] <= betaCodeLetters[24]
+      || betaCodeCharacter[2] == betaCodeAccents[5]
+         && betaCodeCharacter[0] >= betaCodeLetters[0]
+         && betaCodeCharacter[0] <= betaCodeLetters[24]
+      || betaCodeCharacter[3] == betaCodeAccents[5]
+         && betaCodeCharacter[0] >= betaCodeLetters[0]
+         && betaCodeCharacter[0] <= betaCodeLetters[24])
+   {
+      betaCodeToUnicodeLowerSubscript(
+         betaCodeLetters,
+         betaCodeAccents,
+         betaCodeCharacter);
+   }
+   
+   // Lowercase Letters Specifically with Diereses
+   else if (
+      betaCodeCharacter[1] == betaCodeAccents[6]
+      && betaCodeCharacter[0] >= betaCodeLetters[0]
+      && betaCodeCharacter[0] <= betaCodeLetters[24])
+   {
+      betaCodeToUnicodeLowerDieresis(
+         betaCodeLetters,
+         betaCodeAccents,
+         betaCodeCharacter);
+   }
+
+   /* Uppercase Letters */
+   // Plain Uppercase Letters
+   else if (
+      betaCodeCharacter[0] >= betaCodeLetters[25]
+      && betaCodeCharacter[0] <= betaCodeLetters[48]
+      && betaCodeCharacter[1] == undefined)
+   {
+      betaCodeToUnicodePlainUppercase(
+         betaCodeLetters,
+         betaCodeAccents,
+         betaCodeCharacter);
+   }
+
+   // Uppercase Letters with Only Acutes and Graves
+   else if (
+      betaCodeCharacter[0] == betaCodeAccents[2]
+         && betaCodeCharacter[2] == undefined
+         && betaCodeCharacter[1] >= betaCodeLetters[25]
+         && betaCodeCharacter[1] <= betaCodeLetters[48]
+      || betaCodeCharacter[0] == betaCodeAccents[3]
+         && betaCodeCharacter[2] == undefined
+         && betaCodeCharacter[1] >= betaCodeLetters[25]
+         && betaCodeCharacter[1] <= betaCodeLetters[48])
+   {
+      betaCodeToUnicodeUpperAcuteGrave(
+         betaCodeLetters,
+         betaCodeAccents,
+         betaCodeCharacter);
+   }
+
+   // Uppercase Letters Specifically with Breathing Marks and Circumflexes
+   else if (
+      betaCodeCharacter[0] == betaCodeAccents[0]
+         && betaCodeCharacter[1] != betaCodeAccents[5]
+         && betaCodeCharacter[3] == undefined
+         && betaCodeCharacter[2] >= betaCodeLetters[25]
+         && betaCodeCharacter[2] <= betaCodeLetters[48]
+      || betaCodeCharacter[0] == betaCodeAccents[1]
+         && betaCodeCharacter[1] != betaCodeAccents[5]
+         && betaCodeCharacter[3] == undefined
+         && betaCodeCharacter[2] >= betaCodeLetters[25]
+         && betaCodeCharacter[2] <= betaCodeLetters[48]
+      || betaCodeCharacter[0] == betaCodeAccents[4]
+         && betaCodeCharacter[2] == undefined
+         && betaCodeCharacter[1] >= betaCodeLetters[25]
+         && betaCodeCharacter[1] <= betaCodeLetters[48])
+   {
+      betaCodeToUnicodeUpperBreathersCircumflex(
+         betaCodeLetters,
+         betaCodeAccents,
+         betaCodeCharacter);
+   }
+
+   // Uppercase Letters Specifically with Iota-Adscript
+   else if (
+      betaCodeCharacter[0] == betaCodeAccents[5]
+         && betaCodeCharacter[1] >= betaCodeLetters[25]
+         && betaCodeCharacter[1] <= betaCodeLetters[48]
+      || betaCodeCharacter[1] == betaCodeAccents[5]
+         && betaCodeCharacter[2] >= betaCodeLetters[25]
+         && betaCodeCharacter[2] <= betaCodeLetters[48]
+      || betaCodeCharacter[2] == betaCodeAccents[5]
+         && betaCodeCharacter[3] >= betaCodeLetters[25]
+         && betaCodeCharacter[3] <= betaCodeLetters[48])
+   {
+      betaCodeToUnicodeUpperAdscript(
+         betaCodeLetters,
+         betaCodeAccents,
+         betaCodeCharacter);
+   }
+
+   // Uppercase Letters Specifically with Diereses
+   else if (
+      betaCodeCharacter[0] == betaCodeAccents[6]
+      && betaCodeCharacter[1] >= betaCodeLetters[25]
+      && betaCodeCharacter[1] <= betaCodeLetters[48])
+   {
+      betaCodeToUnicodeUpperDieresis(
+         betaCodeLetters,
+         betaCodeAccents,
+         betaCodeCharacter);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR (CATEGORY)! COULD NOT PROCESS CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+
+   /* Return *************************************************************/
+   readIndex += (betaCodeCharacterLength - 1);
+
+   return readIndex;
+}
+
+/* Function: testBetaCodeCharacterLength **********************************
+ * Takes the next character group (the next vowel and any associated
+ * accents/breathing marks) and puts them into a string all by themselves
+ * for later processing.
+ *************************************************************************/
+function testBetaCodeCharacterLength(
+   readIndex,
+   betaCodeType,
+   betaCodeLetters,
+   betaCodeAccents)
+{
+   /* Initialization *****************************************************/
+   var characterLengthTestFlag = false;
+   var characterLengthIteration = 0;
+
+   /* Processing *********************************************************/
+   if (betaCodeType == "normal")
+   {
+      // Test for Normal Lowercase Letters (The Letter Comes First)
+      if (
+         workingText[readIndex] == betaCodeLetters[0]
+         || workingText[readIndex] == betaCodeLetters[4]
+         || workingText[readIndex] == betaCodeLetters[6]
+         || workingText[readIndex] == betaCodeLetters[8]
+         || workingText[readIndex] == betaCodeLetters[14]
+         || workingText[readIndex] == betaCodeLetters[16]
+         || workingText[readIndex] == betaCodeLetters[20]
+         || workingText[readIndex] == betaCodeLetters[24])
+      {
+         while (characterLengthTestFlag != true)
+         {
+            characterLengthIteration++;
+
+            if (
+               (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[0])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[1])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[2])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[3])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[4])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[5])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[6]))
+            {
+               characterLengthTestFlag = true;
+            }
+         }
+      }
+
+      // Test for Normal Capital Letters (Accents Come First)
+      else if (
+         workingText[readIndex] == betaCodeAccents[0]
+         || workingText[readIndex] == betaCodeAccents[1]
+         || workingText[readIndex] == betaCodeAccents[2]
+         || workingText[readIndex] == betaCodeAccents[3]
+         || workingText[readIndex] == betaCodeAccents[4]
+         || workingText[readIndex] == betaCodeAccents[5]
+         || workingText[readIndex] == betaCodeAccents[6])
+      {
+         while (characterLengthTestFlag != true)
+         {
+            characterLengthIteration++;
+
+            if (
+               (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[0])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[1])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[2])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[3])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[4])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[5])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[6]))
+            {
+               characterLengthTestFlag = true;
+            }
+         }
+      }
+      else
+      {
+         characterLengthIteration++;
+      }
+   }
+
+   else if (betaCodeType == "advanced")
+   {
+      // Test for Advanced Capital Letters (Accents Come First)
+      if (
+         workingText[readIndex] == betaCodeAccents[0]
+         || workingText[readIndex] == betaCodeAccents[1]
+         || workingText[readIndex] == betaCodeAccents[2]
+         || workingText[readIndex] == betaCodeAccents[3]
+         || workingText[readIndex] == betaCodeAccents[4]
+         || workingText[readIndex] == betaCodeAccents[5]
+         || workingText[readIndex] == betaCodeAccents[6]
+         || workingText[readIndex] == betaCodeAccents[7]
+         || workingText[readIndex] == betaCodeAccents[8]
+         || workingText[readIndex] == betaCodeAccents[9]
+         || workingText[readIndex] == betaCodeAccents[10]
+         || workingText[readIndex] == betaCodeAccents[11]
+         || workingText[readIndex] == betaCodeAccents[12]
+         || workingText[readIndex] == betaCodeAccents[13]
+         || workingText[readIndex] == betaCodeAccents[14]
+         || workingText[readIndex] == betaCodeAccents[15]
+         || workingText[readIndex] == betaCodeAccents[16]
+         || workingText[readIndex] == betaCodeAccents[17]
+         || workingText[readIndex] == betaCodeAccents[18]
+         || workingText[readIndex] == betaCodeAccents[19]
+         || workingText[readIndex] == betaCodeAccents[20]
+         || workingText[readIndex] == betaCodeAccents[21]
+         || workingText[readIndex] == betaCodeAccents[22]
+         || workingText[readIndex] == betaCodeAccents[23]
+         || workingText[readIndex] == betaCodeAccents[24]
+         || workingText[readIndex] == betaCodeAccents[25]
+         || workingText[readIndex] == betaCodeAccents[26])
+      {
+         while (characterLengthTestFlag != true)
+         {
+            characterLengthIteration++;
+
+            if (
+               (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[0])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[1])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[2])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[3])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[4])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[5])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[6])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[7])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[8])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[9])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[10])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[11])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[12])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[13])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[14])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[15])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[16])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[17])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[18])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[19])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[20])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[21])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[22])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[23])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[24])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[25])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[26]))
+            {
+               characterLengthTestFlag = true;
+            }
+         }
+      }
+
+      // Test for Advanced Lowercase Letters (The Letter Comes First)
+      else if (
+         workingText[readIndex] == betaCodeLetters[0]
+         || workingText[readIndex] == betaCodeLetters[4]
+         || workingText[readIndex] == betaCodeLetters[6]
+         || workingText[readIndex] == betaCodeLetters[8]
+         || workingText[readIndex] == betaCodeLetters[14]
+         || workingText[readIndex] == betaCodeLetters[16]
+         || workingText[readIndex] == betaCodeLetters[20]
+         || workingText[readIndex] == betaCodeLetters[24])
+      {
+         while (characterLengthTestFlag != true)
+         {
+            characterLengthIteration++;
+
+            if (
+               (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[0])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[1])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[2])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[3])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[4])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[5])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[6])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[7])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[8])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[9])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[10])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[11])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[12])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[13])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[14])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[15])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[16])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[17])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[18])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[19])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[20])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[21])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[22])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[23])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[24])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[25])
+               && (workingText[readIndex + characterLengthIteration] !=
+                  betaCodeAccents[26]))
+            {
+               characterLengthTestFlag = true;
+            }
+         }
+      }
+      else
+      {
+         characterLengthIteration++;
+      }
+   }
+
+   /* Return *************************************************************/
+   return characterLengthIteration;
+}
+
+/* Function: betaCodeToUnicodePlainLowercase ******************************
+ * Changes all plain lowercase beta code characters to unicode.
+ * 
+ * Letters are grouped as vowels or consonants, with vowels tested first,
+ * for a higher efficiency.
+ *************************************************************************/
+function betaCodeToUnicodePlainLowercase(
+   readIndex,
+   betaCodeLetters,
+   betaCodeAccents,
+   betaCodeCharacter)
+{
+   // Vowels
+   if (betaCodeCharacter == betaCodeLetters[0])
+   {
+      newText += 'α';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[4])
+   {
+      newText += 'ε';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[6])
+   {
+      newText += 'η';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[8])
+   {
+      newText += 'ι';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[14])
+   {
+      newText += 'ο';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[20])
+   {
+      newText += 'υ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[24])
+   {
+      newText += 'ω';
+   }
+
+   // Consonants
+   else if (betaCodeCharacter == betaCodeLetters[1])
+   {
+      newText += 'β';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[2])
+   {
+      newText += 'γ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[3])
+   {
+      newText += 'δ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[5])
+   {
+      newText += 'ζ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[7])
+   {
+      newText += 'θ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[9])
+   {
+      newText += 'κ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[10])
+   {
+      newText += 'λ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[11])
+   {
+      newText += 'μ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[12])
+   {
+      newText += 'ν';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[13])
+   {
+      newText += 'ξ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[15])
+   {
+      newText += 'π';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[16])
+   {
+      newText += 'ρ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[17])
+   {
+      // (Manually verify not final sigma)
+      if (workingText[readIndex + 1] == ' ')
+      {
+         newText += 'ς';
+      }
+
+      else if (workingText[readIndex + 1] != ' ')
+      {
+         newText += 'σ';
+      }
+   }
+   else if (betaCodeCharacter == betaCodeLetters[18])
+   {
+      newText += 'ς';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[19])
+   {
+      newText += 'τ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[21])
+   {
+      newText += 'φ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[22])
+   {
+      newText += 'χ';
+   }
+   else if (betaCodeCharacter == betaCodeLetters[23])
+   {
+      newText += 'ψ';
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+}
+
+/* Function: betaCodeToUnicodeLowerAcuteGrave *****************************
+ * Changes all lowercase beta code characters which have acute and grave,
+ * but not breathers, circumflex, or iota subscript to unicode.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function betaCodeToUnicodeLowerAcuteGrave(
+   betaCodeLetters,
+   betaCodeAccents,
+   betaCodeCharacter)
+{
+   // Acute
+   if (betaCodeCharacter == 'ά')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'έ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ή')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ί')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ό')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ύ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ώ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[2]);
+   }
+
+   // Grave
+   else if (betaCodeCharacter == 'ὰ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὲ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[23]);
+   }
+   else if (betaCodeCharacter == 'ὴ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὶ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὸ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὺ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὼ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[3]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+}
+
+/* Function: UnicodeToBetaCodeLowerBreathersCircumflex ********************
+ * Changes all lowercase Unicode characters which have breathers and
+ * circumflex, but not iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function betaCodeToUnicodeLowerBreathersCircumflex(
+   betaCodeLetters,
+   betaCodeAccents,
+   betaCodeCharacter)
+{
+   // Smooth Breather (No Rho)
+   if (betaCodeCharacter == 'ἀ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'ἐ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'ἠ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'ἰ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'ὀ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'ὐ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'ὠ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[0]);
+   }
+
+   // Circumflex
+   else if (betaCodeCharacter == 'ᾶ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ῆ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ῖ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ῦ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ῶ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[4]);
+   }
+
+   // Rough Breather (No Rho)
+   else if (betaCodeCharacter == 'ἁ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'ἑ')
+   {
+      newText += (betaCodeLetters[4] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'ἡ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'ἱ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'ὁ')
+   {
+      newText += (betaCodeLetters[14] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'ὑ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'ὡ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[1]);
+   }
+
+   // Smooth Breather, Acute
+   else if (betaCodeCharacter == 'ἄ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ἔ')
+   {
+      newText += (
+         betaCodeLetters[4]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ἤ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ἴ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ὄ')
+   {
+      newText += (
+         betaCodeLetters[14]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ὔ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ὤ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+
+   // Rough Breather, Acute
+   else if (betaCodeCharacter == 'ἅ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ἕ')
+   {
+      newText += (
+         betaCodeLetters[4]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ἥ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ἵ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ὅ')
+   {
+      newText += (
+         betaCodeLetters[14]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ὕ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ὥ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+
+   // Smooth Breather, Circumflex
+   else if (betaCodeCharacter == 'ἆ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ἦ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ἶ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ὖ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ὦ')
+   {
+      newText += (
+      betaCodeLetters[24]
+      + betaCodeAccents[0]
+      + betaCodeAccents[4]);
+   }
+
+   // Smooth Breather, Grave
+   else if (betaCodeCharacter == 'ἂ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ἒ')
+   {
+      newText += (
+         betaCodeLetters[4]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ἢ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ἲ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὂ')
+   {
+      newText += (
+         betaCodeLetters[14]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὒ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὢ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+
+   // Rough Breather, Circumflex
+   else if (betaCodeCharacter == 'ἇ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ἧ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ἷ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ὗ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ὧ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+
+   // Rough Breather, Grave
+   else if (betaCodeCharacter == 'ἃ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ἓ')
+   {
+      newText += (
+         betaCodeLetters[4]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ἣ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ἳ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὃ')
+   {
+      newText += (
+         betaCodeLetters[14]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὓ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ὣ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+
+   // Rho's (Smooth and Rough Breathers)
+   else if (betaCodeCharacter == 'ῤ')
+   {
+      newText += (betaCodeLetters[16] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'ῥ')
+   {
+      newText += (betaCodeLetters[16] + betaCodeAccents[1]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+}
+
+/* Function: UnicodeToBetaCodeLowerSubscript ******************************
+ * Changes all lowercase Unicode characters which have iota subscript to
+ * beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function betaCodeToUnicodeLowerSubscript(
+   betaCodeLetters,
+   betaCodeAccents,
+   betaCodeCharacter)
+{
+   // Circumflex, Iota Subscript
+   if (betaCodeCharacter == 'ᾷ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ῇ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ῷ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+
+   // Iota Subscript
+   else if (betaCodeCharacter == 'ᾳ')
+   {
+      newText += (betaCodeLetters[0] + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ῃ')
+   {
+      newText += (betaCodeLetters[6] + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ῳ')
+   {
+      newText += (betaCodeLetters[24] + betaCodeAccents[5]);
+   }
+
+   // Acute, Iota Subscript
+   else if (betaCodeCharacter == 'ᾴ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ῄ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ῴ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   
+   // Smooth Breather, Circumflex, Iota Subscript
+   else if (betaCodeCharacter == 'ᾆ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾖ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾦ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Circumflex, Iota Subscript
+   else if (betaCodeCharacter == 'ᾇ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾗ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾧ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Iota Subscript
+   else if (betaCodeCharacter == 'ᾀ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾐ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾠ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Acute, Iota Subscript
+   else if (betaCodeCharacter == 'ᾄ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾔ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾤ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Acute, Iota Subscript
+   else if (betaCodeCharacter == 'ᾅ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾕ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾥ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Iota Subscript
+   else if (betaCodeCharacter == 'ᾁ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾑ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾡ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+
+   // Grave, Iota Subscript
+   else if (betaCodeCharacter == 'ᾲ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ῂ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ῲ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Grave, Iota Subscript
+   else if (betaCodeCharacter == 'ᾂ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾒ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾢ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Grave, Iota Subscript
+   else if (betaCodeCharacter == 'ᾃ')
+   {
+      newText += (
+         betaCodeLetters[0]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾓ')
+   {
+      newText += (
+         betaCodeLetters[6]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾣ')
+   {
+      newText += (
+         betaCodeLetters[24]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+}
+
+/* Function: UnicodeToBetaCodeLowerDieresis *******************************
+ * Changes all lowercase Unicode characters which have diereses to beta
+ * code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function betaCodeToUnicodeLowerDieresis(
+   betaCodeLetters,
+   betaCodeAccents,
+   betaCodeCharacter)
+{
+   // Dieresis
+   if (betaCodeCharacter == 'ϊ')
+   {
+      newText += (betaCodeLetters[8] + betaCodeAccents[6]);
+   }
+   else if (betaCodeCharacter == 'ϋ')
+   {
+      newText += (betaCodeLetters[20] + betaCodeAccents[6]);
+   }
+
+   // Dieresis, Acute
+   else if (betaCodeCharacter == 'ΐ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[6]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'ΰ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[6]
+         + betaCodeAccents[2]);
+   }
+
+   // Dieresis, Grave
+   else if (betaCodeCharacter == 'ῒ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[6]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'ῢ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[6]
+         + betaCodeAccents[3]);
+   }
+
+   // Dieresis, Circumflex
+   else if (betaCodeCharacter == 'ῗ')
+   {
+      newText += (
+         betaCodeLetters[8]
+         + betaCodeAccents[6]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'ῧ')
+   {
+      newText += (
+         betaCodeLetters[20]
+         + betaCodeAccents[6]
+         + betaCodeAccents[4]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+}
+
+/* Function: UnicodeToBetaCodePlainUppercase ******************************
+ * Changes all plain uppercase Unicode characters to beta code.
+ * 
+ * Letters are grouped as vowels or consonants, with vowels tested first,
+ * for a higher efficiency.
+ *************************************************************************/
+function betaCodeToUnicodePlainUppercase(
+   betaCodeLetters,
+   betaCodeAccents,
+   betaCodeCharacter)
+{
+   // Vowels
+   if (betaCodeCharacter == 'Α')
+   {
+      newText += betaCodeLetters[25];
+   }
+   else if (betaCodeCharacter == 'Ε')
+   {
+      newText += betaCodeLetters[29];
+   }
+   else if (betaCodeCharacter == 'Η')
+   {
+      newText += betaCodeLetters[31];
+   }
+   else if (betaCodeCharacter == 'Ι')
+   {
+      newText += betaCodeLetters[33];
+   }
+   else if (betaCodeCharacter == 'Ο')
+   {
+      newText += betaCodeLetters[39];
+   }
+   else if (betaCodeCharacter == 'Υ')
+   {
+      newText += betaCodeLetters[44];
+   }
+   else if (betaCodeCharacter == 'Ω')
+   {
+      newText += betaCodeLetters[48];
+   }
+
+   // Consonants
+   else if (betaCodeCharacter == 'Β')
+   {
+      newText += betaCodeLetters[26];
+   }
+   else if (betaCodeCharacter == 'Γ')
+   {
+      newText += betaCodeLetters[27];
+   }
+   else if (betaCodeCharacter == 'Δ')
+   {
+      newText += betaCodeLetters[28];
+   }
+   else if (betaCodeCharacter == 'Ζ')
+   {
+      newText += betaCodeLetters[30];
+   }
+   else if (betaCodeCharacter == 'Θ')
+   {
+      newText += betaCodeLetters[32];
+   }
+   else if (betaCodeCharacter == 'Κ')
+   {
+      newText += betaCodeLetters[34];
+   }
+   else if (betaCodeCharacter == 'Λ')
+   {
+      newText += betaCodeLetters[35];
+   }
+   else if (betaCodeCharacter == 'Μ')
+   {
+      newText += betaCodeLetters[36];
+   }
+   else if (betaCodeCharacter == 'Ν')
+   {
+      newText += betaCodeLetters[37];
+   }
+   else if (betaCodeCharacter == 'Ξ')
+   {
+      newText += betaCodeLetters[38];
+   }
+   else if (betaCodeCharacter == 'Π')
+   {
+      newText += betaCodeLetters[40];
+   }
+   else if (betaCodeCharacter == 'Ρ')
+   {
+      newText += betaCodeLetters[41];
+   }
+   else if (betaCodeCharacter == 'Σ')
+   {
+      newText += betaCodeLetters[42];
+   }
+   else if (betaCodeCharacter == 'Τ')
+   {
+      newText += betaCodeLetters[43];
+   }
+   else if (betaCodeCharacter == 'Φ')
+   {
+      newText += betaCodeLetters[45];
+   }
+   else if (betaCodeCharacter == 'Χ')
+   {
+      newText += betaCodeLetters[46];
+   }
+   else if (betaCodeCharacter == 'Ψ')
+   {
+      newText += betaCodeLetters[47];
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+}
+
+/* Function: UnicodeToBetaCodeUpperAcuteGrave *****************************
+ * Changes all uppercase Unicode characters which have acute and grave,
+ * but not breathers, circumflex, or iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function betaCodeToUnicodeUpperAcuteGrave(
+   betaCodeLetters,
+   betaCodeAccents,
+   betaCodeCharacter)
+{
+   // Acute
+   if (betaCodeCharacter == 'Ά')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Έ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ή')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ί')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ό')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ύ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ώ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[2]);
+   }
+
+   // Grave
+   else if (betaCodeCharacter == 'Ὰ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ὲ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[23]);
+   }
+   else if (betaCodeCharacter == 'Ὴ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ὶ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ὸ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ὺ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ὼ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[3]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+}
+
+/* Function: UnicodeToBetaCodeUpperBreathersCircumflex ********************
+ * Changes all uppercase unicode characters which have breathers and
+ * circumflex, but not iota subscript to beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function betaCodeToUnicodeUpperBreathersCircumflex(
+   betaCodeLetters,
+   betaCodeAccents,
+   betaCodeCharacter)
+{
+   // Smooth Breather (No Rho)
+   if (betaCodeCharacter == 'Ἀ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'Ἐ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'Ἠ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'Ἰ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'Ὀ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[0]);
+   }
+   else if (betaCodeCharacter == 'Ὠ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[0]);
+   }
+
+   // Rough Breather (No Rho)
+   else if (betaCodeCharacter == 'Ἁ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'Ἑ')
+   {
+      newText += (betaCodeLetters[29] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'Ἡ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'Ἱ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'Ὁ')
+   {
+      newText += (betaCodeLetters[39] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'Ὑ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[1]);
+   }
+   else if (betaCodeCharacter == 'Ὡ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[1]);
+   }
+
+   // Smooth Breather, Acute
+   else if (betaCodeCharacter == 'Ἄ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ἔ')
+   {
+      newText += (
+         betaCodeLetters[29]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ἤ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ἴ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ὄ')
+   {
+      newText += (
+         betaCodeLetters[39]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ὤ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]);
+   }
+
+   // Rough Breather, Acute
+   else if (betaCodeCharacter == 'Ἅ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ἕ')
+   {
+      newText += (
+         betaCodeLetters[29]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ἥ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ἵ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ὅ')
+   {
+      newText += (
+         betaCodeLetters[39]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ὕ')
+   {
+      newText += (
+         betaCodeLetters[44]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+   else if (betaCodeCharacter == 'Ὥ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]);
+   }
+
+   // Smooth Breather, Circumflex
+   else if (betaCodeCharacter == 'Ἆ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'Ἦ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'Ἶ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'Ὦ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]);
+   }
+
+   // Smooth Breather, Grave
+   else if (betaCodeCharacter == 'Ἂ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ἒ')
+   {
+      newText += (
+         betaCodeLetters[29]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ἢ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ἲ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ὂ')
+   {
+      newText += (
+         betaCodeLetters[39]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ὢ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]);
+   }
+
+   // Rough Breather, Circumflex
+   else if (betaCodeCharacter == 'Ἇ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'Ἧ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'Ἷ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'Ὗ')
+   {
+      newText += (
+         betaCodeLetters[44]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+   else if (betaCodeCharacter == 'Ὧ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]);
+   }
+
+   // Rough Breather, Grave
+   else if (betaCodeCharacter == 'Ἃ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ἓ')
+   {
+      newText += (
+         betaCodeLetters[29]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ἣ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ἳ')
+   {
+      newText += (
+         betaCodeLetters[33]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ὃ')
+   {
+      newText += (
+         betaCodeLetters[39]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ὓ')
+   {
+      newText += (
+         betaCodeLetters[44]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+   else if (betaCodeCharacter == 'Ὣ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]);
+   }
+
+   // Rho's (Smooth and Rough Breathers)
+   else if (betaCodeCharacter == 'Ῥ')
+   {
+      newText += (betaCodeLetters[16] + betaCodeAccents[1]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodeUpperSubscript ******************************
+ * Changes all uppercase unicode characters which have iota subscript to
+ * beta code.
+ * 
+ * Symbol groups are arranged according to likely-hood of encountering
+ * them, for execution efficiency.
+ *************************************************************************/
+function betaCodeToUnicodeUpperSubscript(
+   betaCodeLetters,
+   betaCodeAccents,
+   betaCodeCharacter)
+{
+   // Iota Subscript
+   if (betaCodeCharacter == 'ᾼ')
+   {
+      newText += (betaCodeLetters[25] + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ῌ')
+   {
+      newText += (betaCodeLetters[31] + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ῼ')
+   {
+      newText += (betaCodeLetters[48] + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Circumflex, Iota Subscript
+   else if (betaCodeCharacter == 'ᾎ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾞ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾮ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Circumflex, Iota Subscript
+   else if (betaCodeCharacter == 'ᾏ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾟ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾯ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[4]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Iota Subscript
+   else if (betaCodeCharacter == 'ᾈ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾘ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾨ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Acute, Iota Subscript
+   else if (betaCodeCharacter == 'ᾌ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾜ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾬ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Acute, Iota Subscript
+   else if (betaCodeCharacter == 'ᾍ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾝ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾭ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[2]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Iota Subscript
+   else if (betaCodeCharacter == 'ᾉ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾙ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾩ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[5]);
+   }
+
+   // Smooth Breather, Grave, Iota Subscript
+   else if (betaCodeCharacter == 'ᾊ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾚ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾪ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[0]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+
+   // Rough Breather, Grave, Iota Subscript
+   else if (betaCodeCharacter == 'ᾋ')
+   {
+      newText += (
+         betaCodeLetters[25]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾛ')
+   {
+      newText += (
+         betaCodeLetters[31]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+   else if (betaCodeCharacter == 'ᾫ')
+   {
+      newText += (
+         betaCodeLetters[48]
+         + betaCodeAccents[1]
+         + betaCodeAccents[3]
+         + betaCodeAccents[5]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+}
+
+/* Function: unicodeToBetaCodeUpperDieresis *******************************
+ * Changes all uppercase unicode characters which have diereses to beta
+ * code.
+ *************************************************************************/
+function betaCodeToUnicodeUpperDieresis(
+   betaCodeLetters,
+   betaCodeAccents,
+   betaCodeCharacter)
+{
+   if (betaCodeCharacter == 'Ϊ')
+   {
+      newText += (betaCodeLetters[33] + betaCodeAccents[6]);
+   }
+   else if (betaCodeCharacter == 'Ϋ')
+   {
+      newText += (betaCodeLetters[44] + betaCodeAccents[6]);
+   }
+
+   // Error Handling
+   else
+   {
+      newText += ">>ERROR! COULD NOT READ CHARACTER \"";
+      newText += betaCodeCharacter;
+      newText += "\".<<";
+   }
+}
+
+function advancedBetaCodeToUnicode(readIndex, betaCodeType, betaCodeLetters, betaCodeAccents)
+{
+   var betaCCharacterLength = testbetaCodeCharacterLength(readIndex, betaCodeType, betaCodeLetters, betaCodeAccents);
+   var betaCCharacter = betaCodeCharacter;
+   var addedIndexAdvanced = 1;
+   while (addedIndexAdvanced < betaCCharacterLength)
+   {
+      betaCCharacter += workingText[readIndex + addedIndexAdvanced];
+      addedIndexAdvanced++;
+   }
+   if (betaCCharacter == 's')
+   {
+      if (workingText[readIndex + 1] == ' ')
+      {
+         newText += "ς";
+      } else {
+         newText += "σ";
+      }
+   } else {
+      newText += "--";
+
+      /*
+      switch (betaCCharacter)
+      {
+         case betaCodeLetters[0]: newText += "α";
+      }
+         case betaCodeLetters[1]: newText += "β";
+      }
+         case betaCodeLetters[2]: newText += "γ";
+      }
+         case betaCodeLetters[3]: newText += "δ";
+      }
+         case betaCodeLetters[4]: newText += "ε";
+      }
+         case betaCodeLetters[5]: newText += "ζ";
+      }
+         case betaCodeLetters[6]: newText += "η";
+      }
+         case betaCodeLetters[7]: newText += "θ";
+      }
+         case betaCodeLetters[8]: newText += "ι";
+      }
+         case betaCodeLetters[9]: newText += "κ";
+      }
+         case betaCodeLetters[10]: newText += "λ";
+      }
+         case betaCodeLetters[11]: newText += "μ";
+      }
+         case betaCodeLetters[12]: newText += "ν";
+      }
+         case betaCodeLetters[13]: newText += "ξ";
+      }
+         case betaCodeLetters[14]: newText += "ο";
+      }
+         case betaCodeLetters[15]: newText += "π";
+      }
+         case betaCodeLetters[16]: newText += "ρ";
+      }
+         case betaCodeLetters[19]: newText += "τ";
+      }
+         case betaCodeLetters[20]: newText += "υ";
+      }
+         case betaCodeLetters[21]: newText += "φ";
+      }
+         case betaCodeLetters[22]: newText += "χ";
+      }
+         case betaCodeLetters[23]: newText += "ψ";
+      }
+         case betaCodeLetters[24]: newText += "ω";
+      }
+         case betaCodeLetters[25]: newText += "Α";
+      }
+         case betaCodeLetters[26]: newText += "Β";
+      }
+         case betaCodeLetters[27]: newText += "Γ";
+      }
+         case betaCodeLetters[28]: newText += "Δ";
+      }
+         case betaCodeLetters[29]: newText += "Ε";
+      }
+         case betaCodeLetters[30]: newText += "Ζ";
+      }
+         case betaCodeLetters[31]: newText += "Η";
+      }
+         case betaCodeLetters[32]: newText += "Θ";
+      }
+         case betaCodeLetters[33]: newText += "Ι";
+      }
+         case betaCodeLetters[34]: newText += "Κ";
+      }
+         case betaCodeLetters[35]: newText += "Λ";
+      }
+         case betaCodeLetters[36]: newText += "Μ";
+      }
+         case betaCodeLetters[37]: newText += "Ν";
+      }
+         case betaCodeLetters[38]: newText += "Ξ";
+      }
+         case betaCodeLetters[39]: newText += "Ο";
+      }
+         case betaCodeLetters[40]: newText += "Π";
+      }
+         case betaCodeLetters[41]: newText += "Ρ";
+      }
+         case betaCodeLetters[42]: newText += "Σ";
+      }
+         case betaCodeLetters[43]: newText += "Τ";
+      }
+         case betaCodeLetters[44]: newText += "Υ";
+      }
+         case betaCodeLetters[45]: newText += "Φ";
+      }
+         case betaCodeLetters[46]: newText += "Χ";
+      }
+         case betaCodeLetters[47]: newText += "Ψ";
+      }
+         case betaCodeLetters[48]: newText += "Ω";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[0]: newText += "ἀ";
+      }
+         case betaCodeLetters[4] + betaCodeAccents[0]: newText += "ἐ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[0]: newText += "ἠ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[0]: newText += "ἰ";
+      }
+         case betaCodeLetters[14] + betaCodeAccents[0]: newText += "ὀ";
+      }
+         case betaCodeLetters[16] + betaCodeAccents[0]: newText += "ῤ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[0]: newText += "ὐ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[0]: newText += "ὠ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[7]: newText += "ἄ";
+      }
+         case betaCodeLetters[4] + betaCodeAccents[7]: newText += "ἔ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[7]: newText += "ἤ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[7]: newText += "ἴ";
+      }
+         case betaCodeLetters[14] + betaCodeAccents[7]: newText += "ὄ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[7]: newText += "ὔ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[7]: newText += "ὤ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[8]: newText += "ᾄ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[8]: newText += "ᾔ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[8]: newText += "ᾤ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[9]: newText += "ἂ";
+      }
+         case betaCodeLetters[4] + betaCodeAccents[9]: newText += "ἒ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[9]: newText += "ἢ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[9]: newText += "ἲ";
+      }
+         case betaCodeLetters[14] + betaCodeAccents[9]: newText += "ὂ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[9]: newText += "ὒ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[9]: newText += "ὢ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[10]: newText += "ᾂ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[10]: newText += "ᾒ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[10]: newText += "ᾢ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[11]: newText += "ἆ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[11]: newText += "ἦ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[11]: newText += "ἶ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[11]: newText += "ὖ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[11]: newText += "ὦ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[12]: newText += "ᾆ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[12]: newText += "ᾖ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[12]: newText += "ᾦ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[13]: newText += "ᾀ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[13]: newText += "ᾐ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[13]: newText += "ᾠ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[1]: newText += "ἁ";
+      }
+         case betaCodeLetters[4] + betaCodeAccents[1]: newText += "ἑ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[1]: newText += "ἡ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[1]: newText += "ἱ";
+      }
+         case betaCodeLetters[14] + betaCodeAccents[1]: newText += "ὁ";
+      }
+         case betaCodeLetters[16] + betaCodeAccents[1]: newText += "ῥ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[1]: newText += "ὑ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[1]: newText += "ὡ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[14]: newText += "ἅ";
+      }
+         case betaCodeLetters[4] + betaCodeAccents[14]: newText += "ἕ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[14]: newText += "ἥ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[14]: newText += "ἵ";
+      }
+         case betaCodeLetters[14] + betaCodeAccents[14]: newText += "ὅ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[14]: newText += "ὕ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[14]: newText += "ὥ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[15]: newText += "ᾅ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[15]: newText += "ᾕ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[15]: newText += "ᾥ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[16]: newText += "ἃ";
+      }
+         case betaCodeLetters[4] + betaCodeAccents[16]: newText += "ἓ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[16]: newText += "ἣ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[16]: newText += "ἳ";
+      }
+         case betaCodeLetters[14] + betaCodeAccents[16]: newText += "ὃ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[16]: newText += "ὓ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[16]: newText += "ὣ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[17]: newText += "ᾃ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[17]: newText += "ᾓ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[17]: newText += "ᾣ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[18]: newText += "ἇ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[18]: newText += "ἧ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[18]: newText += "ἷ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[18]: newText += "ὗ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[18]: newText += "ὧ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[19]: newText += "ᾇ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[19]: newText += "ᾗ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[19]: newText += "ᾧ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[20]: newText += "ᾁ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[20]: newText += "ᾑ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[20]: newText += "ᾡ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[2]: newText += "ά";
+      }
+         case betaCodeLetters[4] + betaCodeAccents[2]: newText += "έ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[2]: newText += "ή";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[2]: newText += "ί";
+      }
+         case betaCodeLetters[14] + betaCodeAccents[2]: newText += "ό";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[2]: newText += "ύ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[2]: newText += "ώ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[21]: newText += "ᾴ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[21]: newText += "ῄ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[21]: newText += "ῴ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[3]: newText += "ὰ";
+      }
+         case betaCodeLetters[4] + betaCodeAccents[3]: newText += "ὲ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[3]: newText += "ὴ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[3]: newText += "ὶ";
+      }
+         case betaCodeLetters[14] + betaCodeAccents[3]: newText += "ὸ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[3]: newText += "ὺ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[3]: newText += "ὼ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[22]: newText += "ᾲ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[22]: newText += "ῂ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[22]: newText += "ῲ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[4]: newText += "ᾶ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[4]: newText += "ῆ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[4]: newText += "ῖ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[4]: newText += "ῦ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[4]: newText += "ῶ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[23]: newText += "ᾷ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[23]: newText += "ῇ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[23]: newText += "ῷ";
+      }
+         case betaCodeLetters[0] + betaCodeAccents[5]: newText += "ᾳ";
+      }
+         case betaCodeLetters[6] + betaCodeAccents[5]: newText += "ῃ";
+      }
+         case betaCodeLetters[24] + betaCodeAccents[5]: newText += "ῳ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[6]: newText += "ϊ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[6]: newText += "ϋ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[24]: newText += "ΐ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[24]: newText += "ΰ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[25]: newText += "ῒ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[25]: newText += "ῢ";
+      }
+         case betaCodeLetters[8] + betaCodeAccents[26]: newText += "ῗ";
+      }
+         case betaCodeLetters[20] + betaCodeAccents[26]: newText += "ῧ";
+      }
+         case betaCodeAccents[0] + betaCodeLetters[25]: newText += "Ἀ";
+      }
+         case betaCodeAccents[0] + betaCodeLetters[29]: newText += "Ἐ";
+      }
+         case betaCodeAccents[0] + betaCodeLetters[31]: newText += "Ἠ";
+      }
+         case betaCodeAccents[0] + betaCodeLetters[33]: newText += "Ἰ";
+      }
+         case betaCodeAccents[0] + betaCodeLetters[39]: newText += "Ὀ";
+      }
+         case betaCodeAccents[0] + betaCodeLetters[48]: newText += "Ὠ";
+      }
+         case betaCodeAccents[7] + betaCodeLetters[25]: newText += "Ἄ";
+      }
+         case betaCodeAccents[7] + betaCodeLetters[29]: newText += "Ἔ";
+      }
+         case betaCodeAccents[7] + betaCodeLetters[31]: newText += "Ἤ";
+      }
+         case betaCodeAccents[7] + betaCodeLetters[33]: newText += "Ἴ";
+      }
+         case betaCodeAccents[7] + betaCodeLetters[39]: newText += "Ὄ";
+      }
+         case betaCodeAccents[7] + betaCodeLetters[48]: newText += "Ὤ";
+      }
+         case betaCodeAccents[8] + betaCodeLetters[25]: newText += "ᾌ";
+      }
+         case betaCodeAccents[8] + betaCodeLetters[31]: newText += "ᾜ";
+      }
+         case betaCodeAccents[8] + betaCodeLetters[48]: newText += "ᾬ";
+      }
+         case betaCodeAccents[9] + betaCodeLetters[25]: newText += "Ἂ";
+      }
+         case betaCodeAccents[9] + betaCodeLetters[29]: newText += "Ἒ";
+      }
+         case betaCodeAccents[9] + betaCodeLetters[31]: newText += "Ἢ";
+      }
+         case betaCodeAccents[9] + betaCodeLetters[33]: newText += "Ἲ";
+      }
+         case betaCodeAccents[9] + betaCodeLetters[39]: newText += "Ὂ";
+      }
+         case betaCodeAccents[9] + betaCodeLetters[48]: newText += "Ὢ";
+      }
+         case betaCodeAccents[10] + betaCodeLetters[25]: newText += "ᾊ";
+      }
+         case betaCodeAccents[10] + betaCodeLetters[31]: newText += "ᾚ";
+      }
+         case betaCodeAccents[10] + betaCodeLetters[48]: newText += "ᾪ";
+      }
+         case betaCodeAccents[11] + betaCodeLetters[25]: newText += "Ἆ";
+      }
+         case betaCodeAccents[11] + betaCodeLetters[31]: newText += "Ἦ";
+      }
+         case betaCodeAccents[11] + betaCodeLetters[33]: newText += "Ἶ";
+      }
+         case betaCodeAccents[11] + betaCodeLetters[48]: newText += "Ὦ";
+      }
+         case betaCodeAccents[12] + betaCodeLetters[25]: newText += "ᾎ";
+      }
+         case betaCodeAccents[12] + betaCodeLetters[31]: newText += "ᾞ";
+      }
+         case betaCodeAccents[12] + betaCodeLetters[48]: newText += "ᾮ";
+      }
+         case betaCodeAccents[13] + betaCodeLetters[25]: newText += "ᾈ";
+      }
+         case betaCodeAccents[13] + betaCodeLetters[31]: newText += "ᾘ";
+      }
+         case betaCodeAccents[13] + betaCodeLetters[48]: newText += "ᾨ";
+      }
+         case betaCodeAccents[1] + betaCodeLetters[25]: newText += "Ἁ";
+      }
+         case betaCodeAccents[1] + betaCodeLetters[29]: newText += "Ἑ";
+      }
+         case betaCodeAccents[1] + betaCodeLetters[31]: newText += "Ἡ";
+      }
+         case betaCodeAccents[1] + betaCodeLetters[33]: newText += "Ἱ";
+      }
+         case betaCodeAccents[1] + betaCodeLetters[39]: newText += "Ὁ";
+      }
+         case betaCodeAccents[1] + betaCodeLetters[41]: newText += "Ῥ";
+      }
+         case betaCodeAccents[1] + betaCodeLetters[44]: newText += "Ὑ";
+      }
+         case betaCodeAccents[1] + betaCodeLetters[48]: newText += "Ὡ";
+      }
+         case betaCodeAccents[14] + betaCodeLetters[25]: newText += "Ἅ";
+      }
+         case betaCodeAccents[14] + betaCodeLetters[29]: newText += "Ἕ";
+      }
+         case betaCodeAccents[14] + betaCodeLetters[31]: newText += "Ἥ";
+      }
+         case betaCodeAccents[14] + betaCodeLetters[33]: newText += "Ἵ";
+      }
+         case betaCodeAccents[14] + betaCodeLetters[39]: newText += "Ὅ";
+      }
+         case betaCodeAccents[14] + betaCodeLetters[44]: newText += "Ὕ";
+      }
+         case betaCodeAccents[14] + betaCodeLetters[48]: newText += "Ὥ";
+      }
+         case betaCodeAccents[15] + betaCodeLetters[25]: newText += "ᾍ";
+      }
+         case betaCodeAccents[15] + betaCodeLetters[31]: newText += "ᾝ";
+      }
+         case betaCodeAccents[15] + betaCodeLetters[48]: newText += "ᾭ";
+      }
+         case betaCodeAccents[16] + betaCodeLetters[25]: newText += "Ἃ";
+      }
+         case betaCodeAccents[16] + betaCodeLetters[29]: newText += "Ἓ";
+      }
+         case betaCodeAccents[16] + betaCodeLetters[31]: newText += "Ἣ";
+      }
+         case betaCodeAccents[16] + betaCodeLetters[33]: newText += "Ἳ";
+      }
+         case betaCodeAccents[16] + betaCodeLetters[39]: newText += "Ὃ";
+      }
+         case betaCodeAccents[16] + betaCodeLetters[44]: newText += "Ὓ";
+      }
+         case betaCodeAccents[16] + betaCodeLetters[48]: newText += "Ὣ";
+      }
+         case betaCodeAccents[17] + betaCodeLetters[25]: newText += "ᾋ";
+      }
+         case betaCodeAccents[17] + betaCodeLetters[31]: newText += "ᾛ";
+      }
+         case betaCodeAccents[17] + betaCodeLetters[48]: newText += "ᾫ";
+      }
+         case betaCodeAccents[18] + betaCodeLetters[25]: newText += "Ἇ";
+      }
+         case betaCodeAccents[18] + betaCodeLetters[31]: newText += "Ἧ";
+      }
+         case betaCodeAccents[18] + betaCodeLetters[33]: newText += "Ἷ";
+      }
+         case betaCodeAccents[18] + betaCodeLetters[44]: newText += "Ὗ";
+      }
+         case betaCodeAccents[18] + betaCodeLetters[48]: newText += "Ὧ";
+      }
+         case betaCodeAccents[19] + betaCodeLetters[25]: newText += "ᾏ";
+      }
+         case betaCodeAccents[19] + betaCodeLetters[31]: newText += "ᾟ";
+      }
+         case betaCodeAccents[19] + betaCodeLetters[48]: newText += "ᾯ";
+      }
+         case betaCodeAccents[20] + betaCodeLetters[25]: newText += "ᾉ";
+      }
+         case betaCodeAccents[20] + betaCodeLetters[31]: newText += "ᾙ";
+      }
+         case betaCodeAccents[20] + betaCodeLetters[48]: newText += "ᾩ";
+      }
+         case betaCodeAccents[2] + betaCodeLetters[25]: newText += "Ά";
+      }
+         case betaCodeAccents[2] + betaCodeLetters[29]: newText += "Έ";
+      }
+         case betaCodeAccents[2] + betaCodeLetters[31]: newText += "Ή";
+      }
+         case betaCodeAccents[2] + betaCodeLetters[33]: newText += "Ί";
+      }
+         case betaCodeAccents[2] + betaCodeLetters[39]: newText += "Ό";
+      }
+         case betaCodeAccents[2] + betaCodeLetters[44]: newText += "Ύ";
+      }
+         case betaCodeAccents[2] + betaCodeLetters[48]: newText += "Ώ";
+      }
+         case betaCodeAccents[3] + betaCodeLetters[25]: newText += "Ὰ";
+      }
+         case betaCodeAccents[3] + betaCodeLetters[29]: newText += "Ὲ";
+      }
+         case betaCodeAccents[3] + betaCodeLetters[31]: newText += "Ὴ";
+      }
+         case betaCodeAccents[3] + betaCodeLetters[33]: newText += "Ὶ";
+      }
+         case betaCodeAccents[3] + betaCodeLetters[39]: newText += "Ὸ";
+      }
+         case betaCodeAccents[3] + betaCodeLetters[44]: newText += "Ὺ";
+      }
+         case betaCodeAccents[3] + betaCodeLetters[48]: newText += "Ὼ";
+      }
+         case betaCodeAccents[5] + betaCodeLetters[25]: newText += "ᾼ";
+      }
+         case betaCodeAccents[5] + betaCodeLetters[31]: newText += "ῌ";
+      }
+         case betaCodeAccents[5] + betaCodeLetters[48]: newText += "ῼ";
+      }
+         case betaCodeAccents[6] + betaCodeLetters[33]: newText += "Ϊ";
+      }
+         case betaCodeAccents[6] + betaCodeLetters[44]: newText += "Ϋ";
+      }*/
+   }
+   readIndex += (betaCCharacterLength - 1);
+   return readIndex;
+}

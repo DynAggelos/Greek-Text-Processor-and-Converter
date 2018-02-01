@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+</head>
+
+<body>
+    <!-- /home/greek-help/gcp -->
+
+    <hr />
+
+    [four_fifth]
+
+    <strong>Version .02</strong>
+
+    <h1>Introduction</h1>
+    This Greek Character Processor is a JavaScript web document (HTML page) which can take different formats of Greek text, and output them uniformly. There are two purposes for its use: first, to make Greek text from certain formats readable (such as changing CCT Greek text {yuxh/} and STV Greek text {quch/} into Unicode Greek text {ψυχή}), second, to prepare two Greek texts for electronic comparison. Of these two options, the second is more exactly what this GCP script was written for, and you will find it has a number of features which make this task much easier.
+
+    <em>(Please Note: This script is essentially a Beta script. It may be updated from time-to-time. Please note its limitations.)</em>
+
+    <h2>Copyright</h2>
+    This script is public domain, so please use it, update it, and alter it however you like (although a mention of "DynAggelos" and "dynaggelos.com" would be nice). (Coders: if you can make this script better, please do. If you are willing to resubmit your updates to the public domain, please get a hold of me; I would be pleased to include your updated version for download here.)
+
+    <h2>Features</h2>
+    <ul>
+            <li>Allows the processing of Greek characters from <em>CCT</em>, <em>accented</em> (Unicode), and <em>STV</em> formats, into the accented (Unicode) format.</li>
+            <li>Allows different paragraph outputs, being "original" (based on line-breaks), "markings" (based on paragraph markers {"{P}"}), and "space" (which creates a newline for each new word).</li>
+            <li>Allows the turning on and turning off of chapter/verse numbers.</li>
+            <li>Allows the turning on and turning off of punctuation.</li>
+            <li>Allows the turning on and turning off of capital letters.</li>
+            <li>Allows the turning on and turning off of every accent and breathing mark.</li>
+            <li>Allows the turning on and turning off of grave accents (replacing them with acutes).</li>
+            <li>Allows the turning on and turning off of curly-bracketed text (in the Robinson-Pierpont text, curly-bracketed text is for textual variant notes, which may not be desired in the text).</li>
+            <li>Allows the turning on and turning off of asterisks.</li>
+            <li>Allows the prepending of chapter and verse numbers at the beginning of each new line (although only available when paragraphs are set to "space").</li>
+            
+    </ul>
+
+    <h2>Limitations/Instructions</h2>
+    <span style="text-decoration: underline;">There are limitations and issues with this script.</span> Bottom line, it's not perfect. However, if you're willing to try out something new, it may very well be what you need, and if it works for your needs, it can save hours of work. For non-technical users, the important limitations are as follows.
+
+    <ul>
+            <li><strong>Preformatting</strong>: Greek text <em>must</em> be formatted a certain way before this script can process it. Specifically, backslashes (\) need to be replaced with double-backslashes (\\), new lines (\n or \n\t) need to be replaced with curly-bracketed B and R ({br}), and double quotes (" and ") need to be replaced by single quotes (' and '). Furthermore, paragraph characters (¶ or §) (if any) need to be replaced with a curly-bracketed capital P ({P}). Currently, the paragraph characters must come just <span style="text-decoration: underline;">after</span> the verse number(s), but paragraph breaks will be created <span style="text-decoration: underline;">before</span> the verse number(s) in the output text. (Note: all of this preformatting should be able to be done in bulk with a word-processor, like notepad. For larger texts, processing these changes may take a long time in certain programs, so feel free to experiment with different word processors to see which ones work best. {Note that some programs, when saving the text, will automatically break huge paragraphs into smaller paragraphs. This will need to be corrected before the text is placed into this script by replacing these paragraph breaks with "{br}", as already mentioned above.})</li>
+            <li><strong>Input</strong>: Greek text (once formatted correctly) must be put into the source-code of the script, and the options need to be adjusted within the source-code as well. (Note: the source-code is well documented, and the section that needs user input is at the beginning for easier use. Where you shouldn't mess with the script unless you know what you're doing, the script comments will tell you.)</li>
+            <li><strong>Speed</strong>: This script can work rather slow. For larger texts (such as the gospels, Acts, Hebrews, and Revelation) it works best to process one half of the text at a time. Once the first half has been processed and saved in a text file, the second half can be processed. Breaking large texts into halves like this seems to keep the browser from bogging down.</li>
+    </ul>
+
+    <h1>Examples</h1>
+    <h2>CCT Greek Text (Robinson-Pierpont, Matthew 1:1-3)</h2>
+
+    <strong>1. Original Text</strong>
+    <pre>     01:01 Bi/blos gene/sews )Ihsou^ xristou^, ui(ou^ Daui/d, ui(ou^ )Abraa/m.
+        01:02 {P} )Abraa\m e)ge/nnhsen to\n )Isaa/k: )Isaa\k de\ e)ge/nnhsen to\n )Iakw/b: )Iakw\b de\ e)ge/nnhsen to\n )Iou/dan kai\ tou\s a)delfou\s au)tou^:
+        01:03 )Iou/das de\ e)ge/nnhsen to\n Fare\s kai\ to\n Zara\ e)k th^s Qa/mar: Fare\s de\ e)ge/nnhsen to\n (Esrw/m: (Esrw\m de\ e)ge/nnhsen to\n )Ara/m:</pre>
+
+    <strong>2. Preformated Text</strong>
+    <pre>     01:01 Bi/blos gene/sews )Ihsou^ xristou^, ui(ou^ Daui/d, ui(ou^ )Abraa/m.{br}     01:02 {P} )Abraa\\m e)ge/nnhsen to\\n )Isaa/k: )Isaa\\k de\\ e)ge/nnhsen to\\n )Iakw/b: )Iakw\\b de\\ e)ge/nnhsen to\\n )Iou/dan kai\\ tou\\s a)delfou\\s au)tou^:{br}     01:03 )Iou/das de\\ e)ge/nnhsen to\\n Fare\\s kai\\ to\\n Zara\\ e)k th^s Qa/mar: Fare\\s de\\ e)ge/nnhsen to\\n (Esrw/m: (Esrw\\m de\\ e)ge/nnhsen to\\n )Ara/m:</pre>
+
+    <strong>3. - Processed Text 1</strong>
+    <em>(Paragraphs == "markings", Verse Numbers == "yes", Punctuation == "yes", Capitals == "yes", Accents/Breathing Marks == "yes", Grave Accents == "yes", Prepend Chapter/Verse to Line == "no")</em>
+    <pre>1:1 Βίβλος γενέσεως Ἰησοῦ χριστοῦ, υἱοῦ Δαυίδ, υἱοῦ Ἀβραάμ. 
+    1:2 Ἀβραὰμ ἐγέννησεν τὸν Ἰσαάκ· Ἰσαὰκ δὲ ἐγέννησεν τὸν Ἰακώβ· Ἰακὼβ δὲ ἐγέννησεν τὸν Ἰούδαν καὶ τοὺς ἀδελφοὺς αὐτοῦ· 1:3 Ἰούδας δὲ ἐγέννησεν τὸν Φαρὲς καὶ τὸν Ζαρὰ ἐκ τῆς Θάμαρ· Φαρὲς δὲ ἐγέννησεν τὸν Ἑσρώμ· Ἑσρὼμ δὲ ἐγέννησεν τὸν Ἀράμ·</pre>
+
+    <strong>3. - Processed Text 2</strong>
+    <em>(Paragraphs == "markings", Verse Numbers == "yes", Punctuation == "no", Capitals == "yes", Accents/Breathing Marks == "no", Grave Accents == "no", Prepend Chapter/Verse to Line == "no")</em>
+    <pre>1:1 Βιβλος γενεσεως Ιησου χριστου υιου Δαυιδ υιου Αβρααμ 
+    1:2 Αβρααμ εγεννησεν τον Ισαακ Ισαακ δε εγεννησεν τον Ιακωβ Ιακωβ δε εγεννησεν τον Ιουδαν και τους αδελφους αυτου 1:3 Ιουδας δε εγεννησεν τον Φαρες και τον Ζαρα εκ της Θαμαρ Φαρες δε εγεννησεν τον Εσρωμ Εσρωμ δε εγεννησεν τον Αραμ</pre>
+
+    <strong>3. - Processed Text 3</strong>
+    <em>(Paragraphs == "space", Verse Numbers == "yes", Punctuation == "no", Capitals == "no", Accents/Breathing Marks == "yes", Grave Accents == "no", Prepend Chapter/Verse to Line == "yes")</em>
+
+    <pre>1:1 βίβλος
+    1:1 γενέσεως
+    1:1 ἰησοῦ
+    1:1 χριστοῦ
+    1:1 υἱοῦ
+    1:1 δαυίδ
+    1:1 υἱοῦ
+    1:1 ἀβραάμ
+    1:2 ἀβραάμ
+    1:2 ἐγέννησεν
+    1:2 τόν
+    1:2 ἰσαάκ
+    1:2 ἰσαάκ
+    1:2 δέ
+    1:2 ἐγέννησεν
+    1:2 τόν
+    1:2 ἰακώβ
+    1:2 ἰακώβ
+    1:2 δέ
+    1:2 ἐγέννησεν
+    1:2 τόν
+    1:2 ἰούδαν
+    1:2 καί
+    1:2 τούς
+    1:2 ἀδελφούς
+    1:2 αὐτοῦ
+    1:3 ἰούδας
+    1:3 δέ
+    1:3 ἐγέννησεν
+    1:3 τόν
+    1:3 φαρές
+    1:3 καί
+    1:3 τόν
+    1:3 ζαρά
+    1:3 ἐκ
+    1:3 τῆς
+    1:3 θάμαρ
+    1:3 φαρές
+    1:3 δέ
+    1:3 ἐγέννησεν
+    1:3 τόν
+    1:3 ἑσρώμ
+    1:3 ἑσρώμ
+    1:3 δέ
+    1:3 ἐγέννησεν
+    1:3 τόν
+    1:3 ἀράμ</pre>
+
+    <h1>Limitation of Liability</h1>
+    This script is provided free-of-charge in the hopes that it will be of use to you, but without any warranties of any kind. The creator offers no warranties, stated or implied, whether it be that the script is fit for any use, that it will work as expected, or even that it is virus free. Please use discretion when downloading and using this script, as you do so solely at your own risk.
+
+    <h1>The Code</h1>
+    <h2>Usage</h2>
+    To use this script: 1) download it, 2) open it up with a word-processor, 3) update the options according to your preferences and input your text (see limitations/instructions above), 4) save it (as an HTML document, if prompted to save it as something else), and then 5) load the page with your web browser to get to your processed text.
+
+    <h2>Script</h2>
+    [ddownload id="2856"] 373 KB (Version .02)
+
+    <a href="//www.dynaggelos.com/greek-help/" title="Go Back"><button type="button">&lt; Back</button></a>
+
+    [/four_fifth]
+
+    [one_fifth_last]
+
+    [ad-g-resp-1]
+
+    [/one_fifth_last]
+
+    <hr width="50%" />
+
+    [add]
+    
+</body>
+
+</html>

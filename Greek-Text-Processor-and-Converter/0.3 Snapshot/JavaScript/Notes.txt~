@@ -1,0 +1,105 @@
+To Do:
+- Make verifyFields changes the same inputs preTextProcessing does so that if users find a strange version of a character in the original text and input it, it will still do what they expect. (For " and ', " and ' are each always treated as “ and ’, respectively, since beta code shouldn't be using “ and ’ anyways, although the preTextProcessor would change " and ' to “ and ’. For the skip array, when " is  proceeded by a space or // it becomes “, else if it's followed by a space or // it becomes ”, and when ' is proceeded by a space or // it becomes ‘, else if it's followed by a space or // it becomes ’ {with the // conditions being checked after the space conditions are checked, to give them less priority}.) 
+- Make sure user webpage tells the user to use characters from the keyboard whenever possible, and which characters to use for certain character types which aren't on the keyboard (middle dot, Greek characters with only an oxia or perhaps also a dialytica).
+- Add option to have capitals have accents after them instead of before (for Perseus text usage)
+- Force uppercase beta code letters to be represented by uppercase letters, and lowercase by lowercase. This is because testing for letters requires explicit testing from the first upper/lowercase letter to the last. (>= 'A' && <= 'Z')
+- One day add feature where the program assumes certain, more certain, letter values in beta code, and looks for variations of often-used words to determine the beta code values of letters which are most likely to vary (σςΣ, ν, ω, ψ, υ, η, ξ, θ, χ). This would automate the selection of input beta-code values. Then we could focus on the values of these specific letters for output, perhaps giving users a list of options (one being previous usage)?
+
+Notes:
+- betaCodeLetterArray
+
+0 = α
+1 = β
+2 = γ
+3 = δ
+4 = ε
+5 = ζ
+6 = η
+7 = θ
+8 = ι
+9 = κ
+10 = λ
+11 = μ
+12 = ν
+13 = ξ
+14 = ο
+15 = π
+16 = ρ
+17 = σ
+18 = ς
+19 = τ
+20 = υ
+21 = φ
+22 = χ
+23 = ψ
+24 = ω
+
+25 = Α
+26 = Β
+27 = Γ
+28 = Δ
+29 = Ε
+30 = Ζ
+31 = Η
+32 = Θ
+33 = Ι
+34 = Κ
+35 = Λ
+36 = Μ
+37 = Ν
+38 = Ξ
+39 = Ο
+40 = Π
+41 = Ρ
+42 = Σ
+43 = Τ
+44 = Υ
+45 = Φ
+46 = Χ
+47 = Ψ
+48 = Ω
+
+- betaCodeAccents (you may find it useful to write the following down on a separate piece of paper):
+
+0 = ) -- (rough breather)
+1 = ( -- (smooth breather)
+2 = / -- (acute)
+3 = \ -- (grave)
+4 = ^ -- (circumflex)
+5 = | -- (iota subscript)
+6 = + -- (dieresis)
+
+(Values from here on show multiple characters for easier comprehension, but are really a single character in the text.)
+7 = )/
+8 = )/|
+9 = )\
+10 = )\|
+11 = )^
+12 = )^|
+13 = )|
+14 = (/
+15 = (/|
+16 = (\
+17 = (\|
+18 = (^
+19 = (^|
+20 = (|
+21 = /|
+22 = \|
+23 = ^|
+24 = +/
+25 = +\
+26 = +^
+
+- symbols
+
+0 = ,
+1 = .
+2 = ; // separation of connected thoughts, as in English
+3 = : // Introduction of connected thought, as in English
+4 = ? // Question, as in English
+5 = !
+6 = —
+7 = * // Note mark?
+8 = {P} // Written paragraph break
+9 = : // Chapter/Verse spacer (Not included in duplicate fields check)
