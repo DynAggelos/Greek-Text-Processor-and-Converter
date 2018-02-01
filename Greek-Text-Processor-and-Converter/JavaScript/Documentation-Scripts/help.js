@@ -24,13 +24,13 @@ function help()
    
    newText += (
       "To start using this program, simply place some Greek text into the "
-      + "input box, select the input and output text types on the "
-      + "left-hand side of the page, and press \"Process\". The text will "
-      + "be processed, and then output to the output box at the top right "
-      + "of the page. From the output box, you can copy-past the text "
-      + "anywhere you need it. (Note: You should always survey the output "
-      + "text to make sure it matches how you intended it to look, before "
-      + "copy-pasting it into another program or file.)");
+      + "input box, select the input and output text types from the "
+      + "Options section, and press \"Process\". The text will be "
+      + "processed, and then output to the output box. From the output "
+      + "box, you can copy-past the text anywhere you need it. (Note: You "
+      + "should always survey the output text to make sure it matches how "
+      + "you intended it to look, before copy-pasting it into another "
+      + "program or file.)");
    newText += "\n\n";
 
    newText += "Features Explanation";
