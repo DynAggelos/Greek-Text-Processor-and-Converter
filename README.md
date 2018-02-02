@@ -1,12 +1,12 @@
 # The Textual Toolbox
 ## A Public Domain Suite for Textual Work
-_The Textual Toolbox_ is meant to be a suite of unique, small-but-powerful, text-processing programs for authors and scholars. Each program is meant to fulfill a need which is either completely unfulfilled or largely unaddressed anywhere else. To start with, the Textual Toolbox is being developed in JavaScript for its wide usability on any device, both locally and on the web.
+_The Textual Toolbox_ is meant to be a suite of specialized text-processing programs for authors and scholars. Each program is meant to fulfill a need which is either completely unfulfilled or largely unaddressed anywhere else. To start with, the Textual Toolbox is being developed in JavaScript for its wide usability on any device, both locally and on the web.
 
-Note that at the moment only the Greek Text Processor and Converter program is being developed, although more text-editing programs are planned.
+Note that at the moment only the _Greek Text Processor and Converter_ program is being developed, although more text-editing programs are planned.
 
 ## Greek Text Processor and Converter
 ### Processing and Converting Unicode and Beta Code Greek Text
-Note: For the moment, there is no working live preview of this program.
+*Live Preview*: [Greek Text Processor and Converter (3.0 Snapshot Version)](https://dynaggelos.github.io/The-Textual-Toolbox/Greek-Text-Processor-and-Converter/Snapshots/0.3%20(Saved%20for%20Reference)/JavaScript/Greek%20Text%20Processor%20and%20Converter.html)
 
 The _Greek Text Processor and Converter_ is a program which processes Greek text into a more preferable format, and can convert between Unicode and beta code text. The program is ideal for anyone who needs to put a large amount of Greek text into some other format before copy-pasting it into a file, or posting it Online.
 
@@ -28,7 +28,7 @@ _Output Paragraph Type_: This should be the paragraph type you want the output t
       
 _Verse Display Option_: ---
 
-_Input Amount_: You can enter as much or as little Greek text into the input box as you like, even as much as would fit into multiple New Testament books, or the whole New Testament for that matter. The only consideration for how much is entered should be how much memory your computer has, how fast your computer is, and how long you want the process to take each time you press "Process". Because this will vary from computer to computer and person to person, you may want to try processing text which is approximately the length of a New Testament book before you try anything longer. All in all, this program runs relatively fast, processing the entire book of Matthew in under 20 seconds on most modern laptops and desktops.");
+_Input Amount_: You can enter as much or as little Greek text into the input box as you like, even as much as would fit into multiple New Testament books, or the whole New Testament for that matter. The only consideration for how much is entered should be how much memory your computer has, how fast your computer is, and how long you want the process to take each time you press "Process". Because this will vary from computer to computer and person to person, you may want to try processing text which is approximately the length of a New Testament book before you try anything longer. All in all, this program runs relatively fast, processing the entire book of Matthew in under 20 seconds on most modern laptops and desktops."
 
 *License*
 
