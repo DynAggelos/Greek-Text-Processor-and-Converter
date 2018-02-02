@@ -299,7 +299,7 @@ function unicodeToBetaCode(
    else
    {
       newText += ">>ERROR (CATEGORY)! COULD NOT PROCESS CHARACTER \"";
-      newText += betaCodeCharacter4B;
+      newText += workingText[readIndex];
       newText += "\".<<";
    }
 }
