@@ -7,7 +7,7 @@
 /* General Styles */
 body
 {
-    background-color: #AAAAAA;
+    background-color: rgb(228, 223, 194);
     font-family: Sans, sans-serif;
 }
 #wrapper
@@ -16,6 +16,7 @@ body
     margin-left: auto;
     margin-right: auto;
     padding: 0.25em;
+    border: 1px solid #000000;
     background-color: #FFFFFF;
 }
 header
@@ -24,7 +25,8 @@ header
     margin-left: 7%;
     margin-bottom: 12pt;
     border: 3px solid #000000;
-    background-color: #EFEFEF;
+    border-radius: 1em;
+    background-color: rgb(255, 251, 251);
 }
 h1, h2
 {
@@ -166,6 +168,10 @@ textarea
     float: left;
     width: 33.33%;
     min-width: 15em;
+    margin-bottom: 1em;
+    border-top: 1px solid #AAAAAA;
+    border-bottom: 1px solid #AAAAAA;
+    border-radius: 3em;
 }
 #letters-column
 {
@@ -175,13 +181,53 @@ textarea
 {
     background-color: #F0F0F0;
 }
+.advanced-options-header-title
+{
+    min-height: 2.5em;
+    font-size: 110%;
+    font-weight: bold;
+}
+.advanced-options-header-information
+{
+    min-height: 5em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+}
+#letters-column li, #accents-breathers-column li, #symbols-column li
+{
+    display: inline-block;
+    min-width: 10em;
+    padding-bottom: 0.5em;
+}
+#letters-column li, #accents-breathers-column li
+{
+    width: 48%;
+    text-align: center;
+}
+#symbols-column li
+{
+    width: 95%;
+    text-align: left;
+}
+#letters-column .two-column-width,
+#accents-breathers-column .two-column-width
+{
+    width: 58%;
+}
+#accents-breathers-column .two-column-width
+{
+    margin-bottom: 2em;
+}
 #letters-column div, #accents-breathers-column div, #symbols-column div
 {
     display: inline-block;
-    width: 8em;
     padding-bottom: 0.5em;
 }
-#letters-column div, #symbols-column div
+#letters-column div, #accents-breathers-column div
+{
+    width: 8em;
+}
+#letters-column div
 {
     border-bottom: 1px dashed #999999;
 }
@@ -189,13 +235,9 @@ textarea
 {
     border-bottom: 1px dashed #777777;
 }
-#letters-column li, #accents-breathers-column li, #symbols-column li
+#symbols-column div
 {
-    display: inline-block;
-    width: 48%;
-    min-width: 10em;
-    padding-bottom: 0.5em;
-    text-align: center;
+    width: 98%;
 }
 
 footer
@@ -204,6 +246,11 @@ footer
     font-family: "Liberation Serif";
     font-style: italic;
     text-align: center;
+}
+footer p
+{
+    margin-top: 0.2em;
+    margin-bottom: 0.4em;
 }
 
 div .column { display: inline-box}; /* Necessary? */
