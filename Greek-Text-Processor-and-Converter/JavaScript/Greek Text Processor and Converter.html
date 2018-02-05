@@ -12,7 +12,7 @@
     <script src="./Text-Processing-Scripts/processText.js"></script>
     <script src="./Documentation-Scripts/help.js"></script>
     <script src="./Text-Processing-Scripts/verifyFields.js"></script>
-    <script src="../../../Libraries/Text-Pre-Processor/JavaScript/0.1/textPreProcessing.js"></script>
+    <script src="../../Libraries/Text-Pre-Processor/JavaScript/textPreProcessing.js"></script>
     <script src="./Text-Processing-Scripts/produceSkipArray.js"></script>
     <script src="./Text-Processing-Scripts/produceInputOutputLettersArray.js"></script>
     <script src="./Text-Processing-Scripts/skipCharacters.js"></script>
@@ -22,7 +22,8 @@
     <script src="./Text-Processing-Scripts/convertSymbolCharacter.js"></script>
     <script src="./Text-Processing-Scripts/convertLetter.js"></script>
     <script src="./Text-Processing-Scripts/copyMiscellaneousCharacter.js"></script>
-    <script src="./GUI-Scripts/replaceBetaCodeTypeOption.js"></script>
+    <script src="./GUI-Scripts/replaceInputBetaCodeTypeOption.js"></script>
+    <script src="./GUI-Scripts/replaceOutputBetaCodeTypeOption.js"></script>
 
 </head>
 
@@ -64,7 +65,7 @@
             <li id="input-text-type">
                 <div>
                     <em>Input Text Type</em><br>
-                    <select id="inputTextType" onchange="replaceBetaCodeTypeOption();">
+                    <select id="inputTextType" onchange="replaceInputBetaCodeTypeOption();">
                         <option value="Unicode">Unicode</option>
                         <option value="beta code">Beta Code</option>
                     </select>
@@ -73,7 +74,7 @@
             <li id="output-text-type">
                 <div>
                     <em>Output Text Type</em><br>
-                    <select id="outputTextType" onchange="replaceBetaCodeTypeOption();">
+                    <select id="outputTextType" onchange="replaceOutputBetaCodeTypeOption();">
                         <option value="Unicode">Unicode</option>
                         <option value="beta code">Beta Code</option>
                     </select>
@@ -193,15 +194,15 @@
         </select>
     </template>
     
-    <template id="betaCodeTypeOption2_0">
-        <select id="outputBetaCodeType">
+    <template id="betaCodeTypeOption1_1">
+        <select id="inputBetaCodeType" disabled="disabled">
             <option value="normal">Normal Accents</option>
             <option value="advanced">Advanced Accents</option>
         </select>
     </template>
-    
-    <template id="betaCodeTypeOption1_1">
-        <select id="inputBetaCodeType" disabled="disabled">
+
+    <template id="betaCodeTypeOption2_0">
+        <select id="outputBetaCodeType">
             <option value="normal">Normal Accents</option>
             <option value="advanced">Advanced Accents</option>
         </select>
@@ -213,82 +214,8 @@
             <option value="advanced">Advanced Accents</option>
         </select>
     </template>
-    
-<script>
-   /* Initialization *****************************************************/
-   /* Global Input/Output Strings */
-   var workingText = ""; // A global variable
-   var newText = "a"; // A global variable
-   
-   /* Generic HTML Table Tags */
-   var tableHTMLTags = ["<table width=\"100%\">\n", "</table>\n"];
-   var tableHeadHTMLTags = ["<thead>\n", "</thead>\n"];
-   var tableBodyHTMLTags = ["<tbody>\n", "</tbody>\n"];
-   var tableRowHTMLTags = ["<tr>\n", "</tr>\n"];
-   
-   /* Draw Advanced Options Section -------------------------------------*/
-   // Section Begin
-   document.write(
-      "<section>"
-      + "\n");
-   
-   // Header
-   document.write(
-      "<header>"
-      + "\n"
-      + "<h3 style=\"text-align: center\">Advanced Options</h3>"
-      + "\n"
-      + "</header>"
-      + "\n");
-   
-   /* Draw Beta Code Letters Table */
-   // Section Div Begin
-   document.write(
-      "<section width=\"32.33%;\">"
-      + "\n");
-   
-   // Beta Code Letters Table
-   document.write(
-      tableHTMLTags[0]
-      
-      + tableBodyHTMLTags[0]
-      + tableRowHTMLTags[0]
-      + "<td></td>"
-      + "\n"
-      + tableRowHTMLTags[1]
-      + tableBodyHTMLTags[1]
-      
-      + tableHTMLTags[1]);
-   
-   // Section Div End
-   document.write(
-      "</section>"
-      + "\n");
-   
-   /* Draw Beta Code Accents/Breathers Table */
-   // Div Begin
-   document.write(
-      "<section width=\"32.33%;\">"
-      + "\n");
-   
-   // Beta Code Letters Table
-   document.write(
-      tableHTMLTags[0]
-      
-      + tableBodyHTMLTags[0]
-      + tableRowHTMLTags[0]
-      + "<td>α <input type=\"text\" id=\"betaCodeLetter0\" size=\"1\" maxlength=\"1\" value=\"a\"></td>"
-      + "\n"
-      + tableRowHTMLTags[1]
-      + tableBodyHTMLTags[1]
-      
-      + tableHTMLTags[1]);
-   
-   // Div End
-   document.write(
-      "</section>"
-      + "\n");
-</script>
+
+
 
 <table width="100%">
 <tbody>

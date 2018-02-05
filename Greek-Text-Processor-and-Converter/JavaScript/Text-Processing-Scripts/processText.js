@@ -78,6 +78,9 @@ function processText()
    /* Input-Reading Indeces ---------------------------------------------*/
    var readIndex = 0;
    var tempReadIndex = 0;
+
+   /* Define Global Ouput Text String -----------------------------------*/
+   newText = new String("");
    
    /* Processing *********************************************************/
    // Verify Fields
