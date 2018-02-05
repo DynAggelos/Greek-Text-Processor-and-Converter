@@ -22,9 +22,8 @@
     <script src="./Text-Processing-Scripts/convertSymbolCharacter.js"></script>
     <script src="./Text-Processing-Scripts/convertLetter.js"></script>
     <script src="./Text-Processing-Scripts/copyMiscellaneousCharacter.js"></script>
-    <script src="./GUI-Scripts/replaceInputBetaCodeTypeOption.js"></script>
-    <script src="./GUI-Scripts/replaceOutputBetaCodeTypeOption.js"></script>
-    <script src="./GUI-Scripts/replaceAdvancedOptionsSection.js"></script>
+    <script src="./GUI-Scripts/updateBetaCodeTypeOptionAttribute.js"></script>
+    <script src="./GUI-Scripts/advancedOptionsSectionTab.js"></script>
 
 </head>
 
@@ -66,7 +65,7 @@
             <li id="input-text-type">
                 <div>
                     <em>Input Text Type</em><br>
-                    <select id="inputTextType" onchange="replaceInputBetaCodeTypeOption();">
+                    <select id="inputTextType" onchange="updateInputBetaCodeTypeOptionDisabled();">
                         <option value="Unicode">Unicode</option>
                         <option value="beta code">Beta Code</option>
                     </select>
@@ -75,7 +74,7 @@
             <li id="output-text-type">
                 <div>
                     <em>Output Text Type</em><br>
-                    <select id="outputTextType" onchange="replaceOutputBetaCodeTypeOption();">
+                    <select id="outputTextType" onchange="updateOutputBetaCodeTypeOptionDisabled();">
                         <option value="Unicode">Unicode</option>
                         <option value="beta code">Beta Code</option>
                     </select>
@@ -100,7 +99,7 @@
                 </div>
             </li>
             <li id="input-beta-code-type">
-                <div id="inputBetaCodeTypeParentElement">
+                <div>
                     <em>Input Beta Code Type</em><br>
                     <select id="inputBetaCodeType" disabled="disabled">
                         <option value="normal">Normal Accents</option>
@@ -109,7 +108,7 @@
                 </div>
             </li>
             <li id="output-beta-code-type">
-                <div id="outputBetaCodeTypeParentElement">
+                <div>
                     <em>Output Beta Code Type</em><br>
                     <select id="outputBetaCodeType" disabled="disabled">
                         <option value="normal">Normal Accents</option>
@@ -136,8 +135,470 @@
     
     <section id="advanced-options-section">
         <h2>Advanced Options</h2>
-        <div id="advancedOptions">
-            <button onclick="replaceAdvancedOptionsSection('open');">&#8693;</button>
+        <div id="buttons">
+            <button onclick="advancedOptionsSectionTab('open');">&#8609;</button>
+            <button onclick="advancedOptionsSectionTab('close');">&#8607;</button>
+        </div>
+        <div id="letters-column">
+            <p class="advanced-options-header-title">Beta Code Letters</p>
+            <p class="advanced-options-header-information">Each field may contain one letter (<em>a-z</em> or <em>A-Z</em>). (The lunate sigma field may be up to two characters in length, and contain any character.)</p>
+            <ul>
+                <li>
+                    <div>
+                        <strong>α</strong> &nbsp; <input type="text" id="betaCodeLetter0" size="1" maxlength="1" value="a">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Α</strong> &nbsp; <input type="text" id="betaCodeLetter25" size="1" maxlength="1" value="A">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>β</strong> &nbsp; <input type="text" id="betaCodeLetter1" size="1" maxlength="1" value="b">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Β</strong> &nbsp; <input type="text" id="betaCodeLetter26" size="1" maxlength="1" value="B">                        </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>γ</strong> &nbsp; <input type="text" id="betaCodeLetter2" size="1" maxlength="1" value="g">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Γ</strong> &nbsp; <input type="text" id="betaCodeLetter27" size="1" maxlength="1" value="G">                        </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>δ</strong> &nbsp; <input type="text" id="betaCodeLetter3" size="1" maxlength="1" value="d">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Δ</strong> &nbsp; <input type="text" id="betaCodeLetter28" size="1" maxlength="1" value="D">                        </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ε</strong> &nbsp; <input type="text" id="betaCodeLetter4" size="1" maxlength="1" value="e">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Ε</strong> &nbsp; <input type="text" id="betaCodeLetter29" size="1" maxlength="1" value="E">                        </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ζ</strong> &nbsp; <input type="text" id="betaCodeLetter5" size="1" maxlength="1" value="z">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Ζ</strong> &nbsp; <input type="text" id="betaCodeLetter30" size="1" maxlength="1" value="Z">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>η</strong> &nbsp; <input type="text" id="betaCodeLetter6" size="1" maxlength="1" value="h">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Η</strong> &nbsp; <input type="text" id="betaCodeLetter31" size="1" maxlength="1" value="H">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>θ</strong> &nbsp; <input type="text" id="betaCodeLetter7" size="1" maxlength="1" value="q">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Θ</strong> &nbsp; <input type="text" id="betaCodeLetter32" size="1" maxlength="1" value="Q">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ι</strong> &nbsp; <input type="text" id="betaCodeLetter8" size="1" maxlength="1" value="i">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Ι</strong> &nbsp; <input type="text" id="betaCodeLetter33" size="1" maxlength="1" value="I">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>κ</strong> &nbsp; <input type="text" id="betaCodeLetter9" size="1" maxlength="1" value="k">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Κ</strong> &nbsp; <input type="text" id="betaCodeLetter34" size="1" maxlength="1" value="K">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>λ</strong> &nbsp; <input type="text" id="betaCodeLetter10" size="1" maxlength="1" value="l">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Λ</strong> &nbsp; <input type="text" id="betaCodeLetter35" size="1" maxlength="1" value="L">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>μ</strong> &nbsp; <input type="text" id="betaCodeLetter11" size="1" maxlength="1" value="m">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Μ</strong> &nbsp; <input type="text" id="betaCodeLetter36" size="1" maxlength="1" value="M">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ν</strong> &nbsp; <input type="text" id="betaCodeLetter12" size="1" maxlength="1" value="n">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Ν</strong> &nbsp; <input type="text" id="betaCodeLetter37" size="1" maxlength="1" value="N">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ξ</strong> &nbsp; <input type="text" id="betaCodeLetter13" size="1" maxlength="1" value="c">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Ξ</strong> &nbsp; <input type="text" id="betaCodeLetter38" size="1" maxlength="1" value="C">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ο</strong> &nbsp; <input type="text" id="betaCodeLetter14" size="1" maxlength="1" value="o">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Ο</strong> &nbsp; <input type="text" id="betaCodeLetter39" size="1" maxlength="1" value="O">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>π</strong> &nbsp; <input type="text" id="betaCodeLetter15" size="1" maxlength="1" value="p">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Π</strong> &nbsp; <input type="text" id="betaCodeLetter40" size="1" maxlength="1" value="P">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ρ</strong> &nbsp; <input type="text" id="betaCodeLetter16" size="1" maxlength="1" value="r">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Ρ</strong> &nbsp; <input type="text" id="betaCodeLetter41" size="1" maxlength="1" value="R">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>σ</strong> &nbsp; <input type="text" id="betaCodeLetter17" size="1" maxlength="1" value="s">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ς</strong> &nbsp; <input type="text" id="betaCodeLetter18" size="1" maxlength="1" value="s">
+                    </div>
+                </li>
+                <li class="two-column-width">
+                    <div>
+                        <strong>Σ</strong> &nbsp; <input type="text" id="betaCodeLetter42" size="1" maxlength="1" value="S">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>τ</strong> &nbsp; <input type="text" id="betaCodeLetter19" size="1" maxlength="1" value="t">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Τ</strong> &nbsp; <input type="text" id="betaCodeLetter43" size="1" maxlength="1" value="T">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>υ</strong> &nbsp; <input type="text" id="betaCodeLetter20" size="1" maxlength="1" value="u">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Υ</strong> &nbsp; <input type="text" id="betaCodeLetter44" size="1" maxlength="1" value="U">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>φ</strong> &nbsp; <input type="text" id="betaCodeLetter21" size="1" maxlength="1" value="f">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Φ</strong> &nbsp; <input type="text" id="betaCodeLetter45" size="1" maxlength="1" value="F">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>χ</strong> &nbsp; <input type="text" id="betaCodeLetter22" size="1" maxlength="1" value="x">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Χ</strong> &nbsp; <input type="text" id="betaCodeLetter46" size="1" maxlength="1" value="X">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ψ</strong> &nbsp; <input type="text" id="betaCodeLetter23" size="1" maxlength="1" value="y">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Ψ</strong> &nbsp; <input type="text" id="betaCodeLetter47" size="1" maxlength="1" value="Y">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ω</strong> &nbsp; <input type="text" id="betaCodeLetter24" size="1" maxlength="1" value="w">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Ω</strong> &nbsp; <input type="text" id="betaCodeLetter48" size="1" maxlength="1" value="W">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ϲ</strong> &nbsp; <input type="text" id="betaCodeLetter49" size="1" maxlength="2" value="s3">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Ϲ</strong> &nbsp; <input type="text" id="betaCodeLetter50" size="1" maxlength="2" value="S3">
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="accents-breathers-column">
+            <p class="advanced-options-header-title">Beta Code Accents/Breathers</p>
+            <p class="advanced-options-header-information">Each field may contain any one of the following:<br>
+                <em>! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~ ¢ £ ¤ ¥ ¦ § © « ® ± ¶ »</em>).</p>
+            <ul>
+                <li>
+                    <div>
+                        <strong>ἀ</strong> &nbsp; <input type="text" id="betaCodeAccent0" size="1" maxlength="1" value=")">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ἁ</strong> &nbsp; <input type="text" id="betaCodeAccent1" size="1" maxlength="1" value="(">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ά</strong> &nbsp; <input type="text" id="betaCodeAccent2" size="1" maxlength="1" value="/">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ὰ</strong> &nbsp; <input type="text" id="betaCodeAccent3" size="1" maxlength="1" value="\">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ᾶ</strong> &nbsp; <input type="text" id="betaCodeAccent4" size="1" maxlength="1" value="^">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ῃ</strong> &nbsp; <input type="text" id="betaCodeAccent5" size="1" maxlength="1" value="|">
+                    </div>
+                </li>
+                <li class="two-column-width">
+                    <div>
+                        <strong>ϊ</strong> &nbsp; <input type="text" id="betaCodeAccent6" size="1" maxlength="1" value="+">
+                    </div>
+                </li>
+            </ul>
+
+            <p class="advanced-options-header-title">*Advanced Beta Code Accents/Breathers</p>
+            <ul>
+                <li>
+                    <div>
+                        <strong>ἄ</strong> &nbsp; <input type="text" id="betaCodeAccent7" size="1" maxlength="1" value="]">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ᾄ</strong> &nbsp; <input type="text" id="betaCodeAccent8" size="1" maxlength="1" value="%">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ἂ</strong> &nbsp; <input type="text" id="betaCodeAccent9" size="1" maxlength="1" value="}">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ᾂ</strong> &nbsp; <input type="text" id="betaCodeAccent10" size="1" maxlength="1" value="&">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ἆ</strong> &nbsp; <input type="text" id="betaCodeAccent11" size="1" maxlength="1" value="=">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ᾆ</strong> &nbsp; <input type="text" id="betaCodeAccent12" size="1" maxlength="1" value="#">
+                    </div>
+                </li>
+                <li class="two-column-width">
+                    <div>
+                        <strong>ᾀ</strong> &nbsp; <input type="text" id="betaCodeAccent13" size="1" maxlength="1" value="@">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ἅ</strong> &nbsp; <input type="text" id="betaCodeAccent14" size="1" maxlength="1" value="¢">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ᾅ</strong> &nbsp; <input type="text" id="betaCodeAccent14" size="1" maxlength="1" value="¢">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ἃ</strong> &nbsp; <input type="text" id="betaCodeAccent16" size="1" maxlength="1" value="{">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ᾃ</strong> &nbsp; <input type="text" id="betaCodeAccent17" size="1" maxlength="1" value="$">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ἇ</strong> &nbsp; <input type="text" id="betaCodeAccent18" size="1" maxlength="1" value="±">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ᾇ</strong> &nbsp; <input type="text" id="betaCodeAccent19" size="1" maxlength="1" value="~">
+                    </div>
+                </li>
+                <li class="two-column-width">
+                    <div>
+                        <strong>ᾁ</strong> &nbsp; <input type="text" id="betaCodeAccent20" size="1" maxlength="1" value="_">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ᾴ</strong> &nbsp; <input type="text" id="betaCodeAccent21" size="1" maxlength="1" value="<">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ᾲ</strong> &nbsp; <input type="text" id="betaCodeAccent22" size="1" maxlength="1" value=">">
+                    </div>
+                </li>
+                <li class="two-column-width">
+                    <div>
+                        <strong>ᾷ</strong> &nbsp; <input type="text" id="betaCodeAccent23" size="1" maxlength="1" value="`">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ΐ</strong> &nbsp; <input type="text" id="betaCodeAccent24" size="1" maxlength="1" value="«">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>ῒ</strong> &nbsp; <input type="text" id="betaCodeAccent25" size="1" maxlength="1" value="»">
+                    </div>
+                </li>
+                <li class="two-column-width">
+                    <div>
+                        <strong>ῗ</strong> &nbsp; <input type="text" id="betaCodeAccent26" size="1" maxlength="1" value="©">
+                    </div>
+                </li>
+            </ul>
+                
+        </div>
+        <div id="symbols-column">
+            <p class="advanced-options-header-title">Symbols</p>
+            <p class="advanced-options-header-information">Each field may any one of the following:<br>
+                <em>! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~</em></p>
+            <ul>
+                <li>
+                    <div>
+                        <strong>,</strong> &nbsp; <input type="text" id="symbol0" size="1" maxlength="1" value=","> (Character acting as an English comma)
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>.</strong> &nbsp; <input type="text" id="symbol1" size="1" maxlength="1" value="."> (Character acting as an English period)
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>;</strong> &nbsp; <input type="text" id="symbol2" size="1" maxlength="1" value=";"> (Character acting as an English semicolon)
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>:</strong> &nbsp; <input type="text" id="symbol3" size="1" maxlength="1" value=":"> (Character acting as an English colon)
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>?</strong> &nbsp; <input type="text" id="symbol4" size="1" maxlength="1" value="?"> (Character acting as an English question mark)
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>!</strong> &nbsp; <input type="text" id="symbol5" size="1" maxlength="1" value="!"> (Character acting as an English exclamation mark)
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>—</strong> &nbsp; <input type="text" id="symbol6" size="1" maxlength="1" value="—"> (Character acting as an English em-dash) (The value should be an em-dash if the input text uses any kind of dash as an em-dash)
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>*</strong> &nbsp; <input type="text" id="symbol7" size="1" maxlength="1" value="*"> (Character acting as a notemark)
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>¶</strong> &nbsp; <input type="text" id="symbol8" size="1" maxlength="3" value="{P}"> (Character acting as a written paragraph marker)
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>:</strong> &nbsp; <input type="text" id="symbol9" size="1" maxlength="1" value=":"> (Character acting as a chapter/verse separator)
+                    </div>
+                </li>
+            </ul>
         </div>
     </section>
     
@@ -173,479 +634,6 @@
             <option value="normal">Normal Accents</option>
             <option value="advanced">Advanced Accents</option>
         </select>
-    </template>
-
-    <template id="advancedOptions0">
-        <div id="advancedOptions">
-            <button onclick="replaceAdvancedOptionsSection('close');">&#8693;</button>
-            <div id="letters-column">
-                <p class="advanced-options-header-title">Beta Code Letters</p>
-                <p class="advanced-options-header-information">Each field may contain one letter (<em>a-z</em> or <em>A-Z</em>). (The lunate sigma field may be up to two characters in length, and contain any character.)</p>
-                <ul>
-                    <li>
-                        <div>
-                            <strong>α</strong> &nbsp; <input type="text" id="betaCodeLetter0" size="1" maxlength="1" value="a">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Α</strong> &nbsp; <input type="text" id="betaCodeLetter25" size="1" maxlength="1" value="A">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>β</strong> &nbsp; <input type="text" id="betaCodeLetter1" size="1" maxlength="1" value="b">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Β</strong> &nbsp; <input type="text" id="betaCodeLetter26" size="1" maxlength="1" value="B">                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>γ</strong> &nbsp; <input type="text" id="betaCodeLetter2" size="1" maxlength="1" value="g">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Γ</strong> &nbsp; <input type="text" id="betaCodeLetter27" size="1" maxlength="1" value="G">                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>δ</strong> &nbsp; <input type="text" id="betaCodeLetter3" size="1" maxlength="1" value="d">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Δ</strong> &nbsp; <input type="text" id="betaCodeLetter28" size="1" maxlength="1" value="D">                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ε</strong> &nbsp; <input type="text" id="betaCodeLetter4" size="1" maxlength="1" value="e">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Ε</strong> &nbsp; <input type="text" id="betaCodeLetter29" size="1" maxlength="1" value="E">                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ζ</strong> &nbsp; <input type="text" id="betaCodeLetter5" size="1" maxlength="1" value="z">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Ζ</strong> &nbsp; <input type="text" id="betaCodeLetter30" size="1" maxlength="1" value="Z">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>η</strong> &nbsp; <input type="text" id="betaCodeLetter6" size="1" maxlength="1" value="h">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Η</strong> &nbsp; <input type="text" id="betaCodeLetter31" size="1" maxlength="1" value="H">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>θ</strong> &nbsp; <input type="text" id="betaCodeLetter7" size="1" maxlength="1" value="q">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Θ</strong> &nbsp; <input type="text" id="betaCodeLetter32" size="1" maxlength="1" value="Q">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ι</strong> &nbsp; <input type="text" id="betaCodeLetter8" size="1" maxlength="1" value="i">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Ι</strong> &nbsp; <input type="text" id="betaCodeLetter33" size="1" maxlength="1" value="I">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>κ</strong> &nbsp; <input type="text" id="betaCodeLetter9" size="1" maxlength="1" value="k">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Κ</strong> &nbsp; <input type="text" id="betaCodeLetter34" size="1" maxlength="1" value="K">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>λ</strong> &nbsp; <input type="text" id="betaCodeLetter10" size="1" maxlength="1" value="l">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Λ</strong> &nbsp; <input type="text" id="betaCodeLetter35" size="1" maxlength="1" value="L">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>μ</strong> &nbsp; <input type="text" id="betaCodeLetter11" size="1" maxlength="1" value="m">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Μ</strong> &nbsp; <input type="text" id="betaCodeLetter36" size="1" maxlength="1" value="M">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ν</strong> &nbsp; <input type="text" id="betaCodeLetter12" size="1" maxlength="1" value="n">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Ν</strong> &nbsp; <input type="text" id="betaCodeLetter37" size="1" maxlength="1" value="N">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ξ</strong> &nbsp; <input type="text" id="betaCodeLetter13" size="1" maxlength="1" value="c">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Ξ</strong> &nbsp; <input type="text" id="betaCodeLetter38" size="1" maxlength="1" value="C">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ο</strong> &nbsp; <input type="text" id="betaCodeLetter14" size="1" maxlength="1" value="o">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Ο</strong> &nbsp; <input type="text" id="betaCodeLetter39" size="1" maxlength="1" value="O">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>π</strong> &nbsp; <input type="text" id="betaCodeLetter15" size="1" maxlength="1" value="p">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Π</strong> &nbsp; <input type="text" id="betaCodeLetter40" size="1" maxlength="1" value="P">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ρ</strong> &nbsp; <input type="text" id="betaCodeLetter16" size="1" maxlength="1" value="r">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Ρ</strong> &nbsp; <input type="text" id="betaCodeLetter41" size="1" maxlength="1" value="R">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>σ</strong> &nbsp; <input type="text" id="betaCodeLetter17" size="1" maxlength="1" value="s">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ς</strong> &nbsp; <input type="text" id="betaCodeLetter18" size="1" maxlength="1" value="s">
-                        </div>
-                    </li>
-                    <li class="two-column-width">
-                        <div>
-                            <strong>Σ</strong> &nbsp; <input type="text" id="betaCodeLetter42" size="1" maxlength="1" value="S">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>τ</strong> &nbsp; <input type="text" id="betaCodeLetter19" size="1" maxlength="1" value="t">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Τ</strong> &nbsp; <input type="text" id="betaCodeLetter43" size="1" maxlength="1" value="T">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>υ</strong> &nbsp; <input type="text" id="betaCodeLetter20" size="1" maxlength="1" value="u">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Υ</strong> &nbsp; <input type="text" id="betaCodeLetter44" size="1" maxlength="1" value="U">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>φ</strong> &nbsp; <input type="text" id="betaCodeLetter21" size="1" maxlength="1" value="f">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Φ</strong> &nbsp; <input type="text" id="betaCodeLetter45" size="1" maxlength="1" value="F">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>χ</strong> &nbsp; <input type="text" id="betaCodeLetter22" size="1" maxlength="1" value="x">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Χ</strong> &nbsp; <input type="text" id="betaCodeLetter46" size="1" maxlength="1" value="X">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ψ</strong> &nbsp; <input type="text" id="betaCodeLetter23" size="1" maxlength="1" value="y">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Ψ</strong> &nbsp; <input type="text" id="betaCodeLetter47" size="1" maxlength="1" value="Y">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ω</strong> &nbsp; <input type="text" id="betaCodeLetter24" size="1" maxlength="1" value="w">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Ω</strong> &nbsp; <input type="text" id="betaCodeLetter48" size="1" maxlength="1" value="W">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ϲ</strong> &nbsp; <input type="text" id="betaCodeLetter49" size="1" maxlength="2" value="s3">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>Ϲ</strong> &nbsp; <input type="text" id="betaCodeLetter50" size="1" maxlength="2" value="S3">
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div id="accents-breathers-column">
-                <p class="advanced-options-header-title">Beta Code Accents/Breathers</p>
-                <p class="advanced-options-header-information">Each field may contain any one of the following:<br>
-                    <em>! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~ ¢ £ ¤ ¥ ¦ § © « ® ± ¶ »</em>).</p>
-                <ul>
-                    <li>
-                        <div>
-                            <strong>ἀ</strong> &nbsp; <input type="text" id="betaCodeAccent0" size="1" maxlength="1" value=")">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ἁ</strong> &nbsp; <input type="text" id="betaCodeAccent1" size="1" maxlength="1" value="(">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ά</strong> &nbsp; <input type="text" id="betaCodeAccent2" size="1" maxlength="1" value="/">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ὰ</strong> &nbsp; <input type="text" id="betaCodeAccent3" size="1" maxlength="1" value="\">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ᾶ</strong> &nbsp; <input type="text" id="betaCodeAccent4" size="1" maxlength="1" value="^">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ῃ</strong> &nbsp; <input type="text" id="betaCodeAccent5" size="1" maxlength="1" value="|">
-                        </div>
-                    </li>
-                    <li class="two-column-width">
-                        <div>
-                            <strong>ϊ</strong> &nbsp; <input type="text" id="betaCodeAccent6" size="1" maxlength="1" value="+">
-                        </div>
-                    </li>
-                </ul>
-
-                <p class="advanced-options-header-title">*Advanced Beta Code Accents/Breathers</p>
-                <ul>
-                    <li>
-                        <div>
-                            <strong>ἄ</strong> &nbsp; <input type="text" id="betaCodeAccent7" size="1" maxlength="1" value="]">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ᾄ</strong> &nbsp; <input type="text" id="betaCodeAccent8" size="1" maxlength="1" value="%">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ἂ</strong> &nbsp; <input type="text" id="betaCodeAccent9" size="1" maxlength="1" value="}">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ᾂ</strong> &nbsp; <input type="text" id="betaCodeAccent10" size="1" maxlength="1" value="&">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ἆ</strong> &nbsp; <input type="text" id="betaCodeAccent11" size="1" maxlength="1" value="=">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ᾆ</strong> &nbsp; <input type="text" id="betaCodeAccent12" size="1" maxlength="1" value="#">
-                        </div>
-                    </li>
-                    <li class="two-column-width">
-                        <div>
-                            <strong>ᾀ</strong> &nbsp; <input type="text" id="betaCodeAccent13" size="1" maxlength="1" value="@">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ἅ</strong> &nbsp; <input type="text" id="betaCodeAccent14" size="1" maxlength="1" value="¢">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ᾅ</strong> &nbsp; <input type="text" id="betaCodeAccent14" size="1" maxlength="1" value="¢">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ἃ</strong> &nbsp; <input type="text" id="betaCodeAccent16" size="1" maxlength="1" value="{">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ᾃ</strong> &nbsp; <input type="text" id="betaCodeAccent17" size="1" maxlength="1" value="$">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ἇ</strong> &nbsp; <input type="text" id="betaCodeAccent18" size="1" maxlength="1" value="±">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ᾇ</strong> &nbsp; <input type="text" id="betaCodeAccent19" size="1" maxlength="1" value="~">
-                        </div>
-                    </li>
-                    <li class="two-column-width">
-                        <div>
-                            <strong>ᾁ</strong> &nbsp; <input type="text" id="betaCodeAccent20" size="1" maxlength="1" value="_">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ᾴ</strong> &nbsp; <input type="text" id="betaCodeAccent21" size="1" maxlength="1" value="<">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ᾲ</strong> &nbsp; <input type="text" id="betaCodeAccent22" size="1" maxlength="1" value=">">
-                        </div>
-                    </li>
-                    <li class="two-column-width">
-                        <div>
-                            <strong>ᾷ</strong> &nbsp; <input type="text" id="betaCodeAccent23" size="1" maxlength="1" value="`">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ΐ</strong> &nbsp; <input type="text" id="betaCodeAccent24" size="1" maxlength="1" value="«">
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>ῒ</strong> &nbsp; <input type="text" id="betaCodeAccent25" size="1" maxlength="1" value="»">
-                        </div>
-                    </li>
-                    <li class="two-column-width">
-                        <div>
-                            <strong>ῗ</strong> &nbsp; <input type="text" id="betaCodeAccent26" size="1" maxlength="1" value="©">
-                        </div>
-                    </li>
-                </ul>
-                    
-            </div>
-            <div id="symbols-column">
-                <p class="advanced-options-header-title">Symbols</p>
-                <p class="advanced-options-header-information">Each field may any one of the following:<br>
-                    <em>! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~</em></p>
-                <ul>
-                    <li>
-                        <div>
-                            <strong>,</strong> &nbsp; <input type="text" id="symbol0" size="1" maxlength="1" value=","> (Character acting as an English comma)
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>.</strong> &nbsp; <input type="text" id="symbol1" size="1" maxlength="1" value="."> (Character acting as an English period)
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>;</strong> &nbsp; <input type="text" id="symbol2" size="1" maxlength="1" value=";"> (Character acting as an English semicolon)
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>:</strong> &nbsp; <input type="text" id="symbol3" size="1" maxlength="1" value=":"> (Character acting as an English colon)
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>?</strong> &nbsp; <input type="text" id="symbol4" size="1" maxlength="1" value="?"> (Character acting as an English question mark)
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>!</strong> &nbsp; <input type="text" id="symbol5" size="1" maxlength="1" value="!"> (Character acting as an English exclamation mark)
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>—</strong> &nbsp; <input type="text" id="symbol6" size="1" maxlength="1" value="—"> (Character acting as an English em-dash) (The value should be an em-dash if the input text uses any kind of dash as an em-dash)
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>*</strong> &nbsp; <input type="text" id="symbol7" size="1" maxlength="1" value="*"> (Character acting as a notemark)
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>¶</strong> &nbsp; <input type="text" id="symbol8" size="1" maxlength="3" value="{P}"> (Character acting as a written paragraph marker)
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong>:</strong> &nbsp; <input type="text" id="symbol9" size="1" maxlength="1" value=":"> (Character acting as a chapter/verse separator)
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </template>
-
-    <template id="advancedOptions1">
-        <div id="advancedOptions">
-            <button onclick="replaceAdvancedOptionsSection('open');">&#8693;</button>
-        </div>
     </template>
 
 </body>
