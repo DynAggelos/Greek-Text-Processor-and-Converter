@@ -24,6 +24,7 @@
     <script src="./Text-Processing-Scripts/copyMiscellaneousCharacter.js"></script>
     <script src="./GUI-Scripts/replaceInputBetaCodeTypeOption.js"></script>
     <script src="./GUI-Scripts/replaceOutputBetaCodeTypeOption.js"></script>
+    <script src="./GUI-Scripts/replaceAdvancedOptionsSection.js"></script>
 
 </head>
 
@@ -135,55 +136,17 @@
     
     <section id="advanced-options-section">
         <h2>Advanced Options</h2>
-        <div id="letters-column">
-            <p>Beta Code Letters</p>
-            <ul>
-                <li>
-                    <div>
-                        <strong>α</strong> &nbsp; <input type="text" id="betaCodeLetter0" size="1" maxlength="1" value="a">
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <strong>Α</strong> &nbsp; <input type="text" id="betaCodeLetter25" size="1" maxlength="1" value="A">
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div id="accents-breathers-column">
-            <p>Beta Code Accents/Breathers</p>
-            <ul>
-                <li>
-                    <div>
-                        <strong>α</strong> &nbsp; <input type="text" id="betaCodeLetter0" size="1" maxlength="1" value="a">
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <strong>Α</strong> &nbsp; <input type="text" id="betaCodeLetter25" size="1" maxlength="1" value="A">
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div id="symbols-column">
-            <p>Symbols</p>
-            <ul>
-                <li>
-                    <div>
-                        <strong>α</strong> &nbsp; <input type="text" id="betaCodeLetter0" size="1" maxlength="1" value="a">
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <strong>Α</strong> &nbsp; <input type="text" id="betaCodeLetter25" size="1" maxlength="1" value="A">
-                    </div>
-                </li>
-            </ul>
+        <div id="advancedOptions">
+            <button onclick="replaceAdvancedOptionsSection('open');">&#8693;</button>
+            <div id="letters-column"></div>
+            <div id="accents-breathers-column"></div>
+            <div id="symbols-column"></div>
         </div>
     </section>
     
     <footer>
-        <p>A <a href="http://www.biblicalwiki.com">BiblicalWiki.com</a> Program. Public Domain.</p>
+        <p>A <a href="http://www.biblicalwiki.com">BiblicalWiki.com</a> Project.</p>
+        <p>Public Domain.</p>
     </foot>
     </div>
     
@@ -215,7 +178,65 @@
         </select>
     </template>
 
+    <template id="advancedOptions0">
+        <div id="advancedOptions">
+            <button onclick="replaceAdvancedOptionsSection('close');">&#8693;</button>
+            <div id="letters-column">
+                <p>Beta Code Letters</p>
+                <ul>
+                    <li>
+                        <div>
+                            <strong>α</strong> &nbsp; <input type="text" id="betaCodeLetter0" size="1" maxlength="1" value="a">
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <strong>Α</strong> &nbsp; <input type="text" id="betaCodeLetter25" size="1" maxlength="1" value="A">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="accents-breathers-column">
+                <p>Beta Code Accents/Breathers</p>
+                <ul>
+                    <li>
+                        <div>
+                            <strong>α</strong> &nbsp; <input type="text" id="betaCodeLetter0" size="1" maxlength="1" value="a">
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <strong>Α</strong> &nbsp; <input type="text" id="betaCodeLetter25" size="1" maxlength="1" value="A">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="symbols-column">
+                <p>Symbols</p>
+                <ul>
+                    <li>
+                        <div>
+                            <strong>α</strong> &nbsp; <input type="text" id="betaCodeLetter0" size="1" maxlength="1" value="a">
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <strong>Α</strong> &nbsp; <input type="text" id="betaCodeLetter25" size="1" maxlength="1" value="A">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </template>
 
+    <template id="advancedOptions1">
+        <div id="advancedOptions">
+            <button onclick="replaceAdvancedOptionsSection('open');">&#8693;</button>
+            <div id="letters-column"></div>
+            <div id="accents-breathers-column"></div>
+            <div id="symbols-column"></div>
+        </div>
+    </template>
 
 <table width="100%">
 <tbody>
