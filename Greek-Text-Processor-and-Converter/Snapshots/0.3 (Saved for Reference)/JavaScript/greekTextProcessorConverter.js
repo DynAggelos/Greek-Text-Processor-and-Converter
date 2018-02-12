@@ -38,7 +38,7 @@ function greekTextProcessorConverter()
    // Process
    if (clearFlag == true)
    {
-      textPreProcessing(); // Found in another folder
+      workingText = textPreProcessing(workingText); // Found in another folder
       gTPC(betaCodeTypeion, betaCodeLetters, betaCodeAccents, symbols, ignoreString, inputTextType, outputTextType, inputParagraphType, outputParagraphType, verseDisplayOption);
       //DELETE workingText; // ?? <<<<<<<<<<<<<<<<<<<<<
    }
