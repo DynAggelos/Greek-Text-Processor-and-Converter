@@ -8,6 +8,12 @@ Note that at the moment only the _Greek Text Processor and Converter_ program is
 ### Processing and Converting Unicode and Beta Code Greek Text
 *Live Preview*: [Greek Text Processor and Converter (3.0 Snapshot Version)](https://dynaggelos.github.io/The-Textual-Toolbox/Greek-Text-Processor-and-Converter/Snapshots/0.3%20(Saved%20for%20Reference)/JavaScript/Greek%20Text%20Processor%20and%20Converter.html)
 
+*Other Programs Like the GTPC*:
+- [Beta Code Converter](https://github.com/zfletch/beta-code-converter-js)
+- [Sublime BetaCode](https://github.com/andrekugland-oplen/Sublime-BetaCode)
+- [Encode::BetaCode](https://github.com/dgkontopoulos/Encode-BetaCode)
+- [Beta Code Translator](https://github.com/ubuntu-gr/beta-code-translator)
+
 The _Greek Text Processor and Converter_ is a program which processes Greek text into a more preferable format, and can convert between Unicode and beta code text. The program is ideal for anyone who needs to put a large amount of Greek text into some other format before copy-pasting it into a file, or posting it Online.
 
 *Basic Usage*
