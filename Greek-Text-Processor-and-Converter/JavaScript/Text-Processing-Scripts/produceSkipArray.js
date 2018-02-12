@@ -1,23 +1,23 @@
-function produceSkipArray(ignoreStr)
+function produceSkipArray(ignoreStringing, skipArray)
 {
-   var skipStringArray = new Array(30);
+   var skipArray = new Array(30);
    var rIndex = 0;
    var key = 0;
-   while (ignoreStr[rIndex] != null)
+   while (ignoreString[rIndex] != null)
    {
-      if (ignoreStr[rIndex] == '/'
-      && ignoreStr[rIndex + 1] == '/')
+      if (ignoreString[rIndex] == '/'
+      && ignoreString[rIndex + 1] == '/')
       {
          rIndex += 2;
          ignoreEndFlag = false;
          while (ignoreEndFlag != true)
          {
-            if (ignoreStr[rIndex] != '/'
-            && ignoreStr[rIndex + 1] != '/')
+            if (ignoreString[rIndex] != '/'
+            && ignoreString[rIndex + 1] != '/')
             {
-               if (ignoreStr[rIndex] != null)
+               if (ignoreString[rIndex] != null)
             {
-                  skipStringArray[key] += ignoreStr[rIndex];
+                  skipArray[key] += ignoreString[rIndex];
                   rIndex++;
                } else {
                   ignoreEndFlag = true;
@@ -32,5 +32,5 @@ function produceSkipArray(ignoreStr)
          rIndex++;
       }
    }
-   return skipStringArray;
+   return skipArray;
 }

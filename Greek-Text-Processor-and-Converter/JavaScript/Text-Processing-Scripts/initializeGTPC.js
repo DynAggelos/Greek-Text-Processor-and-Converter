@@ -1,7 +1,7 @@
 /* Function: initializeGTPC ***********************************************
- * This function initializes the primary identifiers in the GTPC program,
- * and tests user input fields. It then passes the task of text processing
- * to another function.
+ * This function initializes identifiers associated with the user
+ * interface, and tests user input fields. It then passes the task of text
+ * processing to processText().
  *-------------------------------------------------------------------------
  * Parameters: void
  * Returns: void
@@ -37,11 +37,12 @@ function initializeGTPC()
     var verseDisplayOption = new String(
         document.getElementById("verseDisplayOption").value);
 
-    /* Store String of Characters to Ignore in Variable ------------------*/
+    /* Optional String of Ignored Characters -----------------------------*/
     var ignoreString = new String(
         document.getElementById("ignoreString").value);
 
-    /* Store Custom Beta Code Letters in Array ---------------------------*/
+    /* Custom Option Arrays ----------------------------------------------*/
+    // Beta Code Letters
     var betaCodeLetters = new Array(51);
     for (i = 0; i < betaCodeLetters.length; i++)
     {
@@ -49,7 +50,7 @@ function initializeGTPC()
             document.getElementById("betaCodeLetter" + i).value);
     }
 
-    /* Store Custom Beta Code Accents in Array ---------------------------*/
+    // Beta Code Accents/Breathers
     var betaCodeAccents = new Array(27);
     for (i = 0; i < betaCodeAccents.length; i++)
     {
@@ -57,31 +58,13 @@ function initializeGTPC()
             document.getElementById("betaCodeAccent" + i).value);
     }
 
-    /* Store Custom Punctuation and Other Symbols in Array */
+    // Punctuation and Other Symbols
     var symbols = new Array(10)
     for (i = 0; i < symbols.length; i++)
     {
         symbols[i] = (
             document.getElementById("symbol" + i).value);
     }
-
-    /* inputOutputLetters Array (2D; String Array) -----------------------*/
-    // Define First Dimension of Array
-    var inputOutputLetters = new Array(260);
-
-    // Define Second Dimension of Array
-    for (i = 0; i < inputOutputLetters.length; i++)
-    {
-        inputOutputLetters[i] = new Array("", "");
-    }
-
-    /* Reference Variables -----------------------------------------------*/
-    var currentChapter = 0;    // 0 so 1:1 with unspecified chapt. = 1:1
-    var currentVerse = 1;
-
-    /* Input-Reading Indeces ---------------------------------------------*/
-    var readIndex = 0;
-    var tempReadIndex = 0;
     
     /* Processing *********************************************************/
     // Verify Fields
@@ -101,11 +84,6 @@ function initializeGTPC()
             ignoreString,
             betaCodeLetters,
             betaCodeAccents,
-            symbols,
-            inputOutputLetters,
-            currentChapter,
-            currentVerse,
-            readIndex,
-            tempReadIndex);
+            symbols);
     }
 }
