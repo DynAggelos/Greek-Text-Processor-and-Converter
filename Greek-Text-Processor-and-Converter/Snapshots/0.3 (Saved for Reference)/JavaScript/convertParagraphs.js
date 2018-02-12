@@ -2,7 +2,7 @@ function convertParagraphs(readIndex, betaCodeType, betaCodeAccents, symbol1, in
 {
    var paragraphReturnArray = testParagraphCharacters(readIndex, symbol1);
    readIndex++;
-   newText += "|>" + workingText[readIndex - 2] + workingText[readIndex - 1] + workingText[readIndex] + workingText[readIndex + 1] + workingText[readIndex + 2] + "<|";
+   // newText += "|>" + workingText[readIndex - 2] + workingText[readIndex - 1] + workingText[readIndex] + workingText[readIndex + 1] + workingText[readIndex + 2] + "<|";
    if (inputParagraphType == "paragraph")
    {
       if (outputParagraphType == "verse break")
