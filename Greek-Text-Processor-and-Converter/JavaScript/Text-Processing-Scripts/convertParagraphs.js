@@ -2,14 +2,14 @@ function convertParagraphs(readIndex, inputBetaCodeType, betaCodeAccents, symbol
 {
    var paragraphReturnArray = testParagraphCharacters(readIndex, symbol1);
    readIndex++;
-   newText += "|>" + workingText[readIndex - 2] + workingText[readIndex - 1] + workingText[readIndex] + workingText[readIndex + 1] + workingText[readIndex + 2] + "<|";
+   textOutput += "|>" + textInput[readIndex - 2] + textInput[readIndex - 1] + textInput[readIndex] + textInput[readIndex + 1] + textInput[readIndex + 2] + "<|";
    if (inputParagraphType == "paragraph")
    {
       if (outputParagraphType == "verse break")
       {
          if (paragraphReturnArray[1] == 1)
          { // if verse numbers somewhere
-            newText += "\n";
+            textOutput += "\n";
             var calledDirect = false;
             var indexesArray = convertChapterVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse); // Error? Due to declaration within condition?
             readIndex = indexesArray[0];
@@ -17,23 +17,23 @@ function convertParagraphs(readIndex, inputBetaCodeType, betaCodeAccents, symbol
             currentVerse = indexesArray[2];
             if (outputTextType == "Unicode")
             {
-               newText += "¶";
+               textOutput += "¶";
             } else {
-               newText += "{P}";
+               textOutput += "{P}";
             }
-            newText += " ";
+            textOutput += " ";
          } else { // if no verse
-            newText += " "; // No paragraph break, just a space from the rest of the content
+            textOutput += " "; // No paragraph break, just a space from the rest of the content
             if (outputTextType == "Unicode")
             {
-               newText += "¶";
+               textOutput += "¶";
             } else {
-               newText += "{P}";
+               textOutput += "{P}";
             }
-            newText += " ";
+            textOutput += " ";
          }
       } else { // if input/output both = "paragraph"
-         newText += "\n";
+         textOutput += "\n";
          if (paragraphReturnArray[1] == 1)
          { // if verse numbers somewhere
             calledDirect = false;
@@ -48,7 +48,7 @@ function convertParagraphs(readIndex, inputBetaCodeType, betaCodeAccents, symbol
       {
          if (paragraphReturnArray[0] == 1)
          { // if paragraph symbol somewhere
-            newText += "\n";
+            textOutput += "\n";
             if (paragraphReturnArray[1] == 1)
             { // if verse numbers somewhere
                calledDirect = false;
@@ -60,7 +60,7 @@ function convertParagraphs(readIndex, inputBetaCodeType, betaCodeAccents, symbol
          } else { // if no paragraph symbol
             if (paragraphReturnArray[1] == 1)
             { // if verse numbers somewhere
-               newText += " ";
+               textOutput += " ";
                calledDirect = false;
                indexesArray = convertChapterVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol1, inputTextType, outputTextType, inputParagraphType, outputParagraphType, calledDirect, currentChapter, currentVerse);
                readIndex = indexesArray[0]
@@ -69,7 +69,7 @@ function convertParagraphs(readIndex, inputBetaCodeType, betaCodeAccents, symbol
             }
          }
       } else { // if input/output both = "verse break"
-         newText += "\n";
+         textOutput += "\n";
          if (paragraphReturnArray[0] == 1)
          { // if paragraph symbol somewhere
             if (paragraphReturnArray[1] == 1)
@@ -82,11 +82,11 @@ function convertParagraphs(readIndex, inputBetaCodeType, betaCodeAccents, symbol
             }
             if (outputTextType == "Unicode")
             {
-               newText += "¶";
+               textOutput += "¶";
             } else {
-               newText += "{P}";
+               textOutput += "{P}";
             }
-            newText += " ";
+            textOutput += " ";
          } else { // if no paragraph symbol
             if (paragraphReturnArray[1] == 1)
             { // if verse numbers somewhere
@@ -110,7 +110,7 @@ function testParagraphCharacters(readIndex, symbol1A)
    var paraEndFlag = false;
    while (paraEndFlag != true)
    {
-      if (workingText[paraIteration] == "\n")
+      if (textInput[paraIteration] == "\n")
       {
          // Do nothing; simply add one iteration to paraIteration
       } else { // Test for paragraph symbol
@@ -118,7 +118,7 @@ function testParagraphCharacters(readIndex, symbol1A)
          var symInd = 0;
          while (symbol1A[8][symInd] != null)
          {
-            if (workingText[paraIteration + symInd] != symbol1A[8][symInd])
+            if (textInput[paraIteration + symInd] != symbol1A[8][symInd])
             {
                symFlag = false;
             }
@@ -129,24 +129,24 @@ function testParagraphCharacters(readIndex, symbol1A)
             paraTestArray[0] = 1;
             paraIteration += symInd - 1;
          } else {
-            if (workingText[paraIteration] == '0'
-            || workingText[paraIteration] == '1'
-            || workingText[paraIteration] == '2'
-            || workingText[paraIteration] == '3'
-            || workingText[paraIteration] == '4'
-            || workingText[paraIteration] == '5'
-            || workingText[paraIteration] == '6'
-            || workingText[paraIteration] == '7'
-            || workingText[paraIteration] == '8'
-            || workingText[paraIteration] == '9'
-            || workingText[paraIteration] == symbol1A[9])
+            if (textInput[paraIteration] == '0'
+            || textInput[paraIteration] == '1'
+            || textInput[paraIteration] == '2'
+            || textInput[paraIteration] == '3'
+            || textInput[paraIteration] == '4'
+            || textInput[paraIteration] == '5'
+            || textInput[paraIteration] == '6'
+            || textInput[paraIteration] == '7'
+            || textInput[paraIteration] == '8'
+            || textInput[paraIteration] == '9'
+            || textInput[paraIteration] == symbol1A[9])
             {
                if (paraTestArray[1] != 1)
                {
                   paraTestArray[1] = 1;
                }
             } else {
-               if (workingText[paraIteration] == ' ')
+               if (textInput[paraIteration] == ' ')
                {
                   // Do nothing; simply add one iteration to paraIteration
                } else {

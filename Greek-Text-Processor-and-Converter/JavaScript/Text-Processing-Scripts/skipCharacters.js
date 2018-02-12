@@ -7,7 +7,7 @@ function skipCharacters(readI, skipA)
    {
       if (skipA[skipKey] != null)
       {
-         if (workingText[readI] == skipA[skipKey][0])
+         if (textInput[readI] == skipA[skipKey][0])
          {
             skipIn++;
             skipEndFlag2 = false;
@@ -15,7 +15,7 @@ function skipCharacters(readI, skipA)
             {
                if (skipA[skipKey][skipIn] != null)
             {
-                  if (workingText[readI] == skipA[skipKey][skipIn])
+                  if (textInput[readI] == skipA[skipKey][skipIn])
                   {
                      readI++;
                      skipIn++;
@@ -23,7 +23,7 @@ function skipCharacters(readI, skipA)
                      skipKey++;
                      skipEndFlag2 = true;
                   }
-               } else { // if (full skipA string equal to this workingText portion
+               } else { // if (full skipA string equal to this textInput portion
                   skipEndFlag2 = true;
                   skipEndFlag1 = true;
                   return readI;

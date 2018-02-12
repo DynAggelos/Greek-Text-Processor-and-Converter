@@ -47,59 +47,59 @@ function convertLetter(
          {
             // If Really Final Sigma, Convert the Letter as Final Sigma
             if (
-               workingText[(readIndex + 1)] == ' '
-               || workingText[(readIndex + 1)] == symbols[0]
-               || workingText[(readIndex + 1)] == symbols[1]
-               || workingText[(readIndex + 1)] == symbols[2]
-               || workingText[(readIndex + 1)] == symbols[3]
-               || workingText[(readIndex + 1)] == symbols[4]
-               || workingText[(readIndex + 1)] == symbols[5]
-               || workingText[(readIndex + 1)] == symbols[6]
-               || workingText[(readIndex + 1)] == symbols[7]
-               || workingText[(readIndex + 1)] == symbols[8]
-               || workingText[(readIndex + 1)] == symbols[9]
-               || workingText[(readIndex + 1)] == '0'
-               || workingText[(readIndex + 1)] == '1'
-               || workingText[(readIndex + 1)] == '2'
-               || workingText[(readIndex + 1)] == '3'
-               || workingText[(readIndex + 1)] == '4'
-               || workingText[(readIndex + 1)] == '5'
-               || workingText[(readIndex + 1)] == '6'
-               || workingText[(readIndex + 1)] == '7'
-               || workingText[(readIndex + 1)] == '8'
-               || workingText[(readIndex + 1)] == '9'
-               || workingText[(readIndex + 1)] == undefined)
+               textInput[(readIndex + 1)] == ' '
+               || textInput[(readIndex + 1)] == symbols[0]
+               || textInput[(readIndex + 1)] == symbols[1]
+               || textInput[(readIndex + 1)] == symbols[2]
+               || textInput[(readIndex + 1)] == symbols[3]
+               || textInput[(readIndex + 1)] == symbols[4]
+               || textInput[(readIndex + 1)] == symbols[5]
+               || textInput[(readIndex + 1)] == symbols[6]
+               || textInput[(readIndex + 1)] == symbols[7]
+               || textInput[(readIndex + 1)] == symbols[8]
+               || textInput[(readIndex + 1)] == symbols[9]
+               || textInput[(readIndex + 1)] == '0'
+               || textInput[(readIndex + 1)] == '1'
+               || textInput[(readIndex + 1)] == '2'
+               || textInput[(readIndex + 1)] == '3'
+               || textInput[(readIndex + 1)] == '4'
+               || textInput[(readIndex + 1)] == '5'
+               || textInput[(readIndex + 1)] == '6'
+               || textInput[(readIndex + 1)] == '7'
+               || textInput[(readIndex + 1)] == '8'
+               || textInput[(readIndex + 1)] == '9'
+               || textInput[(readIndex + 1)] == undefined)
             {
-               newText += inputOutputLetters[(i + 1)][1];
+               textOutput += inputOutputLetters[(i + 1)][1];
                foundCharacter = true;
             }
 
             // If Not Really Final Sigma, Convert Normally
             else if (
-               workingText[(readIndex + 1)] != ' '
-               && workingText[(readIndex + 1)] != symbols[0]
-               && workingText[(readIndex + 1)] != symbols[1]
-               && workingText[(readIndex + 1)] != symbols[2]
-               && workingText[(readIndex + 1)] != symbols[3]
-               && workingText[(readIndex + 1)] != symbols[4]
-               && workingText[(readIndex + 1)] != symbols[5]
-               && workingText[(readIndex + 1)] != symbols[6]
-               && workingText[(readIndex + 1)] != symbols[7]
-               && workingText[(readIndex + 1)] != symbols[8]
-               && workingText[(readIndex + 1)] != symbols[9]
-               && workingText[(readIndex + 1)] != '0'
-               && workingText[(readIndex + 1)] != '1'
-               && workingText[(readIndex + 1)] != '2'
-               && workingText[(readIndex + 1)] != '3'
-               && workingText[(readIndex + 1)] != '4'
-               && workingText[(readIndex + 1)] != '5'
-               && workingText[(readIndex + 1)] != '6'
-               && workingText[(readIndex + 1)] != '7'
-               && workingText[(readIndex + 1)] != '8'
-               && workingText[(readIndex + 1)] != '9'
-               && workingText[(readIndex + 1)] != undefined)
+               textInput[(readIndex + 1)] != ' '
+               && textInput[(readIndex + 1)] != symbols[0]
+               && textInput[(readIndex + 1)] != symbols[1]
+               && textInput[(readIndex + 1)] != symbols[2]
+               && textInput[(readIndex + 1)] != symbols[3]
+               && textInput[(readIndex + 1)] != symbols[4]
+               && textInput[(readIndex + 1)] != symbols[5]
+               && textInput[(readIndex + 1)] != symbols[6]
+               && textInput[(readIndex + 1)] != symbols[7]
+               && textInput[(readIndex + 1)] != symbols[8]
+               && textInput[(readIndex + 1)] != symbols[9]
+               && textInput[(readIndex + 1)] != '0'
+               && textInput[(readIndex + 1)] != '1'
+               && textInput[(readIndex + 1)] != '2'
+               && textInput[(readIndex + 1)] != '3'
+               && textInput[(readIndex + 1)] != '4'
+               && textInput[(readIndex + 1)] != '5'
+               && textInput[(readIndex + 1)] != '6'
+               && textInput[(readIndex + 1)] != '7'
+               && textInput[(readIndex + 1)] != '8'
+               && textInput[(readIndex + 1)] != '9'
+               && textInput[(readIndex + 1)] != undefined)
             {
-               newText += inputOutputLetters[i][1];
+               textOutput += inputOutputLetters[i][1];
                foundCharacter = true;
             }
          }
@@ -107,7 +107,7 @@ function convertLetter(
          // Else If Letter Found is Not Middle Sigma, Convert Normally
          else if (tempLetter != betaCodeLetters[18])
          {
-            newText += inputOutputLetters[i][1];
+            textOutput += inputOutputLetters[i][1];
             foundCharacter = true;
          }
       }
@@ -116,7 +116,7 @@ function convertLetter(
    /* Error Handling If Character Not Found */
    if (foundCharacter != true)
    {
-      newText += (
+      textOutput += (
          ">>ERROR! CHARACTER \""
          + tempLetter
          + "\" NOT RECOGNIZED!<<");
@@ -130,7 +130,7 @@ function convertLetter(
 }
 
 /* Function: getCompleteLetterFromText ************************************
- * Determines how many characters following the current workingText index
+ * Determines how many characters following the current textInput index
  * are a part of the letter. For beta code this could be up to three
  * additional characters. For Unicode this would only be the current
  * character.
@@ -155,7 +155,7 @@ function getCompleteLetterFromText(
    /* Unicode Letters */
    if (inputTextType == "Unicode")
    {
-      tempLetter = workingText[readIndex];
+      tempLetter = textInput[readIndex];
    }
 
    /* Beta Code Letters */
@@ -163,21 +163,21 @@ function getCompleteLetterFromText(
    {
       // Test for Letters With Accents Following
       if (
-         workingText[readIndex] == betaCodeLetters[0]
-         || workingText[readIndex] == betaCodeLetters[4]
-         || workingText[readIndex] == betaCodeLetters[6]
-         || workingText[readIndex] == betaCodeLetters[8]
-         || workingText[readIndex] == betaCodeLetters[14]
-         || workingText[readIndex] == betaCodeLetters[16]
-         || workingText[readIndex] == betaCodeLetters[20]
-         || workingText[readIndex] == betaCodeLetters[24]
-         || workingText[readIndex] == betaCodeLetters[25]
-         || workingText[readIndex] == betaCodeLetters[29]
-         || workingText[readIndex] == betaCodeLetters[31]
-         || workingText[readIndex] == betaCodeLetters[33]
-         || workingText[readIndex] == betaCodeLetters[39]
-         || workingText[readIndex] == betaCodeLetters[44]
-         || workingText[readIndex] == betaCodeLetters[48])
+         textInput[readIndex] == betaCodeLetters[0]
+         || textInput[readIndex] == betaCodeLetters[4]
+         || textInput[readIndex] == betaCodeLetters[6]
+         || textInput[readIndex] == betaCodeLetters[8]
+         || textInput[readIndex] == betaCodeLetters[14]
+         || textInput[readIndex] == betaCodeLetters[16]
+         || textInput[readIndex] == betaCodeLetters[20]
+         || textInput[readIndex] == betaCodeLetters[24]
+         || textInput[readIndex] == betaCodeLetters[25]
+         || textInput[readIndex] == betaCodeLetters[29]
+         || textInput[readIndex] == betaCodeLetters[31]
+         || textInput[readIndex] == betaCodeLetters[33]
+         || textInput[readIndex] == betaCodeLetters[39]
+         || textInput[readIndex] == betaCodeLetters[44]
+         || textInput[readIndex] == betaCodeLetters[48])
       {
          characterLengthFound = false;
 
@@ -186,59 +186,59 @@ function getCompleteLetterFromText(
             characterLengthIterator++;
 
             if (
-               (workingText[readIndex + characterLengthIterator]
+               (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[0])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[1])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[2])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[3])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[4])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[5])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[6])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[7])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[8])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[9])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[10])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[11])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[12])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[13])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[14])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[15])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[16])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[17])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[18])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[19])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[20])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[21])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[22])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[23])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[24])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[25])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[26]))
             {
                characterLengthFound = true;
@@ -248,33 +248,33 @@ function getCompleteLetterFromText(
 
       // Test for Letters With Accents Prior
       else if (
-         workingText[readIndex] == betaCodeAccents[0]
-         || workingText[readIndex] == betaCodeAccents[1]
-         || workingText[readIndex] == betaCodeAccents[2]
-         || workingText[readIndex] == betaCodeAccents[3]
-         || workingText[readIndex] == betaCodeAccents[4]
-         || workingText[readIndex] == betaCodeAccents[5]
-         || workingText[readIndex] == betaCodeAccents[6]
-         || workingText[readIndex] == betaCodeAccents[7]
-         || workingText[readIndex] == betaCodeAccents[8]
-         || workingText[readIndex] == betaCodeAccents[9]
-         || workingText[readIndex] == betaCodeAccents[10]
-         || workingText[readIndex] == betaCodeAccents[11]
-         || workingText[readIndex] == betaCodeAccents[12]
-         || workingText[readIndex] == betaCodeAccents[13]
-         || workingText[readIndex] == betaCodeAccents[14]
-         || workingText[readIndex] == betaCodeAccents[15]
-         || workingText[readIndex] == betaCodeAccents[16]
-         || workingText[readIndex] == betaCodeAccents[17]
-         || workingText[readIndex] == betaCodeAccents[18]
-         || workingText[readIndex] == betaCodeAccents[19]
-         || workingText[readIndex] == betaCodeAccents[20]
-         || workingText[readIndex] == betaCodeAccents[21]
-         || workingText[readIndex] == betaCodeAccents[22]
-         || workingText[readIndex] == betaCodeAccents[23]
-         || workingText[readIndex] == betaCodeAccents[24]
-         || workingText[readIndex] == betaCodeAccents[25]
-         || workingText[readIndex] == betaCodeAccents[26])
+         textInput[readIndex] == betaCodeAccents[0]
+         || textInput[readIndex] == betaCodeAccents[1]
+         || textInput[readIndex] == betaCodeAccents[2]
+         || textInput[readIndex] == betaCodeAccents[3]
+         || textInput[readIndex] == betaCodeAccents[4]
+         || textInput[readIndex] == betaCodeAccents[5]
+         || textInput[readIndex] == betaCodeAccents[6]
+         || textInput[readIndex] == betaCodeAccents[7]
+         || textInput[readIndex] == betaCodeAccents[8]
+         || textInput[readIndex] == betaCodeAccents[9]
+         || textInput[readIndex] == betaCodeAccents[10]
+         || textInput[readIndex] == betaCodeAccents[11]
+         || textInput[readIndex] == betaCodeAccents[12]
+         || textInput[readIndex] == betaCodeAccents[13]
+         || textInput[readIndex] == betaCodeAccents[14]
+         || textInput[readIndex] == betaCodeAccents[15]
+         || textInput[readIndex] == betaCodeAccents[16]
+         || textInput[readIndex] == betaCodeAccents[17]
+         || textInput[readIndex] == betaCodeAccents[18]
+         || textInput[readIndex] == betaCodeAccents[19]
+         || textInput[readIndex] == betaCodeAccents[20]
+         || textInput[readIndex] == betaCodeAccents[21]
+         || textInput[readIndex] == betaCodeAccents[22]
+         || textInput[readIndex] == betaCodeAccents[23]
+         || textInput[readIndex] == betaCodeAccents[24]
+         || textInput[readIndex] == betaCodeAccents[25]
+         || textInput[readIndex] == betaCodeAccents[26])
       {
          characterLengthFound = false;
 
@@ -283,59 +283,59 @@ function getCompleteLetterFromText(
             characterLengthIterator++;
 
             if (
-               (workingText[readIndex + characterLengthIterator]
+               (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[0])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[1])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[2])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[3])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[4])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[5])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[6])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[7])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[8])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[9])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[10])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[11])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[12])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[13])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[14])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[15])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[16])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[17])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[18])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[19])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[20])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[21])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[22])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[23])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[24])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[25])
-               && (workingText[readIndex + characterLengthIterator]
+               && (textInput[readIndex + characterLengthIterator]
                   != betaCodeAccents[26]))
             {
                characterLengthIterator++;    // Includes letter in count
@@ -352,7 +352,7 @@ function getCompleteLetterFromText(
 
       for (i = 0; i < characterLengthIterator; i++)
       {
-         tempLetter += workingText[(readIndex + i)]
+         tempLetter += textInput[(readIndex + i)]
       }
    }
 

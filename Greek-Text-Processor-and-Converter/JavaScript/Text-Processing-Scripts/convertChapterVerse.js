@@ -12,7 +12,7 @@ function convertChapterVerse(readIndex, inputBetaCodeType, betaCodeAccents, symb
          var chapterVerseArray = transcodeChapterAndVerse(readIndex, symbol2, inputTextType, verseDisplayOption, currentChapter, currentVerse, referenceSymbolPosition, endOfChapterAndVerse, isSpaceAfterChapterAndVerse, isParagraphSymAfter);
          return chapterVerseArray;
       } else { // output = "verse break"
-         newText += "\n";
+         textOutput += "\n";
          testChapterVerseArray = testChapterAndVerse(readIndex, inputBetaCodeType, betaCodeAccents, symbol2);
          referenceSymbolPosition = testChapterVerseArray[0];
          endOfChapterAndVerse = testChapterVerseArray[1];
@@ -36,7 +36,7 @@ function testChapterAndVerse(readIndex, inputBetaCodeType, betaCodeAccents, symb
 {
    var separationCharPosition;
    var chVrseEnd;
-   if (workingText[readIndex + 1] == symbol2A[9])
+   if (textInput[readIndex + 1] == symbol2A[9])
    {
       separationCharPosition = readIndex + 1;
       var testForChVrse = testCurrentCharacterType(readIndex + 2, inputBetaCodeType, betaCodeAccents, symbol2A); // Error? Due to declaration within condition?
@@ -59,7 +59,7 @@ function testChapterAndVerse(readIndex, inputBetaCodeType, betaCodeAccents, symb
          }
       }
    } else {
-      if (workingText[readIndex + 2] == symbol2A[9])
+      if (textInput[readIndex + 2] == symbol2A[9])
       {
          separationCharPosition = readIndex + 2;
          testForChVrse = testCurrentCharacterType(readIndex + 3, inputBetaCodeType, betaCodeAccents, symbol2A);
@@ -113,7 +113,7 @@ function testChapterAndVerse(readIndex, inputBetaCodeType, betaCodeAccents, symb
 function testCharacterAfterChapterVerse(chVrseEndPosition)
 {
    var trailingSpaceFlag;
-   if (workingText[chVrseEndPosition + 1] == ' ')
+   if (textInput[chVrseEndPosition + 1] == ' ')
    {
       trailingSpaceFlag = true;
    } else {
@@ -136,7 +136,7 @@ function handleParagraphSymbol(symbol2C, inputTextType, outputTextType, inputPar
          var sInd = 0;
          do
          {
-            if (workingText[cVEnd + 2 + sInd] != symbol2C[8][sInd])
+            if (textInput[cVEnd + 2 + sInd] != symbol2C[8][sInd])
             {
                sFlag = false;
             }
@@ -144,7 +144,7 @@ function handleParagraphSymbol(symbol2C, inputTextType, outputTextType, inputPar
          } while (symbol2C[8][sInd] != null);
          if (sFlag == true)
          {
-            newText += "\n";
+            textOutput += "\n";
             return true;
          }
       } else { // output paragraph = "verse break"
@@ -152,7 +152,7 @@ function handleParagraphSymbol(symbol2C, inputTextType, outputTextType, inputPar
          sInd = 0;
          do
          {
-            if (workingText[cVEnd + 2 + sInd] != symbol2C[8][sInd])
+            if (textInput[cVEnd + 2 + sInd] != symbol2C[8][sInd])
             {
                sFlag = false;
             }
@@ -170,7 +170,7 @@ function handleParagraphSymbol(symbol2C, inputTextType, outputTextType, inputPar
       sInd = 0;
       do
       {
-         if (workingText[cVEnd + 2 + sInd] != symbol2C[8][sInd])
+         if (textInput[cVEnd + 2 + sInd] != symbol2C[8][sInd])
          {
             sFlag = false;
          }
@@ -190,7 +190,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
    if (refSymbolPosition == readIndex + 1)
    {
       // Current location is start of one digit chapter
-      switch (workingText[readIndex])
+      switch (textInput[readIndex])
       {
          case '0' : currentChapter = 0;
             break;
@@ -214,7 +214,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
       }
       if (chVrsEnd != readIndex + 1)
       {
-         switch (workingText[readIndex + 2])
+         switch (textInput[readIndex + 2])
          {
             case '0' : currentVerse = 0;
                break;
@@ -239,7 +239,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
          if (chVrsEnd != readIndex + 2)
          {
             currentVerse *= 10;
-            switch (workingText[readIndex + 3])
+            switch (textInput[readIndex + 3])
             {
                case '1' : currentVerse += 1;
                   break;
@@ -262,7 +262,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
             if (chVrsEnd != readIndex + 3)
             {
                currentVerse *= 10;
-               switch (workingText[readIndex + 4])
+               switch (textInput[readIndex + 4])
                {
                   case '1' : currentVerse += 1;
                      break;
@@ -289,7 +289,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
       if (refSymbolPosition == readIndex + 2)
       {
          // Current location is start of two digit chapter
-         switch (workingText[readIndex])
+         switch (textInput[readIndex])
          {
             case '0' : currentChapter = 0;
                break;
@@ -312,7 +312,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
             case '9' : currentChapter = 9;
          }
          currentChapter *= 10;
-         switch (workingText[readIndex + 1])
+         switch (textInput[readIndex + 1])
          {
             case '1' : currentChapter += 1;
                break;
@@ -334,7 +334,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
          }
          if (chVrsEnd != readIndex + 2)
          {
-            switch (workingText[readIndex + 3])
+            switch (textInput[readIndex + 3])
             {
                case '0' : currentVerse = 0;
                   break;
@@ -359,7 +359,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
             if (chVrsEnd != readIndex + 3)
             {
                currentVerse *= 10;
-               switch (workingText[readIndex + 4])
+               switch (textInput[readIndex + 4])
                {
                   case '1' : currentVerse += 1;
                      break;
@@ -382,7 +382,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
                if (chVrsEnd != readIndex + 4)
                {
                   currentVerse *= 10;
-                  switch (workingText[readIndex + 5])
+                  switch (textInput[readIndex + 5])
                   {
                      case '1' : currentVerse += 1;
                         break;
@@ -407,7 +407,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
          }
       } else {
          // Current location is start of verse with no chapter specified
-         switch (workingText[readIndex])
+         switch (textInput[readIndex])
          {
             case '0' : currentVerse = 0;
                break;
@@ -432,7 +432,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
          if (chVrsEnd != readIndex)
          {
             currentVerse *= 10;
-            switch (workingText[readIndex + 1])
+            switch (textInput[readIndex + 1])
             {
                case '1' : currentVerse += 1;
                   break;
@@ -455,7 +455,7 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
             if (chVrsEnd != readIndex + 1)
             {
                currentVerse *= 10;
-               switch (workingText[readIndex + 2])
+               switch (textInput[readIndex + 2])
                {
                   case '1' : currentVerse += 1;
                      break;
@@ -486,9 +486,9 @@ function transcodeChapterAndVerse(readIndex, symbol2D, inputTextType, verseDispl
    if (verseDisplayOption == 0
       && currentVerse != 1)
    {
-      newText += currentVerse + " ";
+      textOutput += currentVerse + " ";
    } else {
-      newText += currentChapter + symbol2D[9] + currentVerse + " ";
+      textOutput += currentChapter + symbol2D[9] + currentVerse + " ";
    }
    readIndex = chVrsEnd;
    if (isThereSpaceAfterChVrs == true)
