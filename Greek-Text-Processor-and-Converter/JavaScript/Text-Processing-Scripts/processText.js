@@ -39,24 +39,10 @@ function processText()
     
     /* Store Custom Beta Code Letters in Array ---------------------------*/
     var betaCodeLetters = new Array(51);
-
-    if (document.querySelector("#betaCodeLetter0").value === null)
-    {
-        alert("Is null");
-    }
-    else if (document.querySelector("#betaCodeLetter0").value === undefined)
-    {
-        alert("Is undefined");
-    }
-    else if (document.querySelector("#betaCodeLetter0").value == undefined)
-    {
-        alert("Is '==' undefined");
-    }
-
     for (i = 0; i < betaCodeLetters.length; i++)
     {
         betaCodeLetters[i] = (
-            document.querySelector("#betaCodeLetter" + i).value);
+            document.getElementById("betaCodeLetter" + i).value);
     }
     
     /* Store Custom Beta Code Accents in Array ---------------------------*/
@@ -64,7 +50,7 @@ function processText()
     for (i = 0; i < betaCodeAccents.length; i++)
     {
         betaCodeAccents[i] = (
-            document.querySelector("#betaCodeAccent" + i).value);
+            document.getElementById("betaCodeAccent" + i).value);
     }
     
     /* Store Custom Punctuation and Other Symbols in Array */
@@ -165,9 +151,7 @@ function processText()
         }
     }
 
-        //DELETE workingText; // ?? <<<<<<<<<<<<<<<<<<<<<
-
-    alert("Program finished");
+    //DELETE workingText; // ?? <<<<<<<<<<<<<<<<<<<<<
 
     document.getElementById("output").value = newText;
 }
