@@ -1,4 +1,0 @@
-function copyMiscellaneousCharacter(readIndex5)
-{
-   newText += workingText[readIndex5];
-}
