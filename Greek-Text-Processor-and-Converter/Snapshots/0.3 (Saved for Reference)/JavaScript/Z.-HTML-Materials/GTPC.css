@@ -1,0 +1,263 @@
+/* Imported Fonts */
+@font-face
+{
+    
+}
+
+/* General Styles */
+body
+{
+    background-color: rgb(228, 223, 194);
+    font-family: Sans, sans-serif;
+}
+#wrapper
+{
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.25em;
+    border: 1px solid #000000;
+    background-color: #FFFFFF;
+}
+header
+{
+    width: 86%;
+    margin-left: 7%;
+    margin-bottom: 12pt;
+    border: 3px solid #000000;
+    border-radius: 1em;
+    background-color: rgb(255, 251, 251);
+}
+h1, h2
+{
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-family: "Liberation Serif", serif;
+    text-align: center;
+}
+noscript
+{
+    text-align: center;
+}
+template
+{
+    display: none;
+}
+
+/* Main Section */
+main
+{
+    margin-bottom: 2em;
+    border-bottom: 1px solid #000000;
+}
+
+/* IO */
+#input-box
+{
+    float: left;
+    width: 48%;
+    margin-right: 2%;
+    margin-left: 0;
+    margin-bottom: 1em;
+    text-align: center;
+}
+#output-box
+{
+    float: left;
+    width: 48%;
+    margin-right: 0;
+    margin-left: 2%;
+    margin-bottom: 1em;
+    text-align: center;
+}
+textarea
+{
+    width: 99%;
+    max-width: 99%;
+    height: 150pt;
+}
+
+/* Processing Buttons (Primary Buttons) */
+#process-buttons
+{
+    clear: both;
+    text-align: center;
+}
+#process-buttons ul
+{
+    list-style-type: none;
+    padding: 0;
+}
+#process-buttons li
+{
+    display: inline-block;
+    width: 80pt;
+}
+#process-buttons button
+{
+    width: 85%;
+}
+
+/* Options Section */
+#options-section
+{
+    margin-bottom: 2em;
+    border-bottom: 1px solid #000000;
+    text-align: center;
+}
+#options-section ul
+{
+    list-style-type: none;
+    padding: 0;
+}
+#options-section li
+{
+    padding-bottom: 0.5em;
+}
+#options-section div
+{
+    display: inline-block;
+    width: 15em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px dashed #999999;
+    text-align: center;
+}
+#input-text-type, #input-paragraph-type, #input-beta-code-type
+{
+    display: inline-block;
+    width: 48%;
+    margin-right: 0.3em;
+    text-align: right;
+}
+#output-text-type, #output-paragraph-type, #output-beta-code-type
+{
+    display: inline-block;
+    width: 48%;
+    margin-left: 0.3em;
+    text-align: left;
+}
+
+/* Advanced Options Section */
+#advanced-options-section
+{
+    margin-bottom: 2em;
+    border-bottom: 1px solid #000000;
+    overflow: auto;
+    text-align: center;
+}
+#buttons
+{
+    display: block;
+    width: 6em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.5em;
+    text-align: center;
+}
+#buttons button
+{
+    display: inline;
+    border-left: 1px dashed #B6B6B6;
+    border-right: 1px dashed #B6B6B6;
+    border-top: none;
+    border-bottom: 2px solid #999999;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 1em;
+}
+#advanced-options-section ul
+{
+    list-style-type: none;
+    padding: 0;
+}
+#letters-column, #accents-breathers-column, #symbols-column
+{
+    display: none;
+    float: left;
+    width: 33.33%;
+    min-width: 15em;
+    margin-bottom: 1em;
+    border-top: 1px solid #AAAAAA;
+    border-bottom: 1px solid #AAAAAA;
+    border-radius: 3em;
+}
+#letters-column
+{
+    clear: both;
+}
+#accents-breathers-column
+{
+    background-color: #F0F0F0;
+}
+.advanced-options-header-title
+{
+    min-height: 2.5em;
+    font-size: 110%;
+    font-weight: bold;
+}
+.advanced-options-header-information
+{
+    min-height: 5em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+}
+#letters-column li, #accents-breathers-column li, #symbols-column li
+{
+    display: inline-block;
+    min-width: 10em;
+    padding-bottom: 0.5em;
+}
+#letters-column li, #accents-breathers-column li
+{
+    width: 48%;
+    text-align: center;
+}
+#symbols-column li
+{
+    width: 95%;
+    text-align: left;
+}
+#letters-column .two-column-width,
+#accents-breathers-column .two-column-width
+{
+    width: 58%;
+}
+#accents-breathers-column .two-column-width
+{
+    margin-bottom: 2em;
+}
+#letters-column div, #accents-breathers-column div, #symbols-column div
+{
+    display: inline-block;
+    padding-bottom: 0.5em;
+}
+#letters-column div, #accents-breathers-column div
+{
+    width: 8em;
+}
+#letters-column div
+{
+    border-bottom: 1px dashed #999999;
+}
+#accents-breathers-column div
+{
+    border-bottom: 1px dashed #777777;
+}
+#symbols-column div
+{
+    width: 98%;
+}
+
+footer
+{
+    clear: both;
+    font-family: "Liberation Serif";
+    font-style: italic;
+    text-align: center;
+}
+footer p
+{
+    margin-top: 0.2em;
+    margin-bottom: 0.4em;
+}
+
+div .column { display: inline-box}; /* Necessary? */

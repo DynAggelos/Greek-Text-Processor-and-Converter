@@ -1,4 +1,4 @@
 function copyMiscellaneousCharacter(readIndex)
 {
-   newText += workingText[readIndex];
+   textOutput += textInput[readIndex];
 }

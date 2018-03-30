@@ -244,27 +244,27 @@ function verifyFields(betaCodeLA, betaCodeAA, sA, iS)
    {
       if (errorCode == 0)
       {
-         newText = "Error: \"" + errorArea + ",\" field " + verifyFIter + " has no value entered into it.";
+         textOutput = "Error: \"" + errorArea + ",\" field " + verifyFIter + " has no value entered into it.";
       } else {
          if (errorCode == 1)
          {
-            newText = "Error: \"" + errorArea + ",\" field " + verifyFIter + " has an improper length. (Field values should be one character in length, unless otherwise specified.)";
+            textOutput = "Error: \"" + errorArea + ",\" field " + verifyFIter + " has an improper length. (Field values should be one character in length, unless otherwise specified.)";
          } else {
             if (errorCode == 2)
             {
-               newText = "Error: \"" + errorArea + ",\" field " + verifyFIter + " has an improper field value. (Each field value should obey the rules shown near that field.)";
+               textOutput = "Error: \"" + errorArea + ",\" field " + verifyFIter + " has an improper field value. (Each field value should obey the rules shown near that field.)";
             } else {
                if (errorCode == 3)
                {
-                  newText = "Error: A duplicate field value was found under \"" + errorArea + "\" " + "in field " + verifyFIter + ". (The chapter/verse spacing character is an exception. This field value can be the same as any other field value.)";
+                  textOutput = "Error: A duplicate field value was found under \"" + errorArea + "\" " + "in field " + verifyFIter + ". (The chapter/verse spacing character is an exception. This field value can be the same as any other field value.)";
                } else {
                   if (errorCode == 4)
                   {
-                     newText = "Error: Please make sure the \"" + errorArea + "\" contains an equal number of open/close symbols (double foreward slashes).";
+                     textOutput = "Error: Please make sure the \"" + errorArea + "\" contains an equal number of open/close symbols (double foreward slashes).";
                   } else {
                      if (errorCode == 5)
                      {
-                        newText = "Error: Please make sure the \"" + errorArea + "\" either contains no field value at all, or contains at least one pair of open/close symbols (double foreward slashes) around the phrase you want to be kept from the output text.";
+                        textOutput = "Error: Please make sure the \"" + errorArea + "\" either contains no field value at all, or contains at least one pair of open/close symbols (double foreward slashes) around the phrase you want to be kept from the output text.";
                      }
                   }
                }

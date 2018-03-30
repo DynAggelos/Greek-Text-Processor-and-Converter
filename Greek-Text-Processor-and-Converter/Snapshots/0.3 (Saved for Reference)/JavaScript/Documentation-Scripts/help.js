@@ -16,7 +16,7 @@ function help()
       + "preferable format, and can convert it between Unicode and beta "
       + "code. This program is ideal for anyone who needs to put a large "
       + "amount of Greek text into some other format before copy-pasting "
-      + "it into a file, or posting it online.");
+      + "it into a file, or posting it Online.");
    newText += "\n\n";
 
    newText += "Basic Usage";
@@ -24,13 +24,13 @@ function help()
    
    newText += (
       "To start using this program, simply place some Greek text into the "
-      + "input box, select the input and output text types on the "
-      + "left-hand side of the page, and press \"Process\". The text will "
-      + "be processed, and then output to the output box at the top right "
-      + "of the page. From the output box, you can copy-past the text "
-      + "anywhere you need it. (Note: You should always survey the output "
-      + "text to make sure it matches how you intended it to look, before "
-      + "copy-pasting it into another program or file.)");
+      + "input box, select the input and output text types from the "
+      + "Options section, and press \"Process\". The text will be "
+      + "processed, and then output to the output box. From the output "
+      + "box, you can copy-past the text anywhere you need it. (Note: You "
+      + "should always survey the output text to make sure it matches how "
+      + "you intended it to look, before copy-pasting it into another "
+      + "program or file.)");
    newText += "\n\n";
 
    newText += "Features Explanation";
@@ -46,8 +46,8 @@ function help()
    newText += "\n\n";
 
    newText += (
-      "Ouput Box: This is the box where processed text is output. You can "
-      + "highlight this text and copy it, but you cannot edit it "
+      "Output Box: This is the box where processed text is output. You "
+      + "can highlight this text and copy it, but you cannot edit it "
       + "directly. (Tip: A quick way to copy all of the text in this box "
       + "is to click in the box, use CTRL+A on the keyboard to highlight "
       + "the entire contents, and then CTRL+C to copy it all.)");
@@ -142,9 +142,9 @@ function help()
       "DISCLAIMER: AS THIS IS A FREE PROGRAM IN EVERY SENSE, NO "
       + "GUARANTEES ARE MADE CONCERNING ITS USE WHATSOEVER. ALL "
       + "WARRANTIES ARE HEREBY DISCLAIMED, WHETHER THEY BE EXPRESSED OR "
-      + "IMPLIED, SUCH AS FITNESS FOR A PARTICULAR PURPOSE, AND "
-      + "MERCHANTABILITY, TO THE EXTENT PERMITABLE BY LAW. YOU USE THIS "
-      + "PROGRAM AT YOUR OWN RISK.");
+      + "IMPLIED, SUCH AS FITNESS FOR A PARTICULAR PURPOSE, "
+      + "MERCHANTABILITY, AND NONINFRINGEMENT, TO THE EXTENT PERMISSIBLE "
+      + "BY LAW. YOU USE THIS PROGRAM AT YOUR OWN RISK.");
    
    // Output
    document.getElementById("output").value = newText;
