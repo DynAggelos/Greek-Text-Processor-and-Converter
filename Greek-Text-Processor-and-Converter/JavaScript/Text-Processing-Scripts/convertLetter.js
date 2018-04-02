@@ -3,14 +3,23 @@
  * each other. It determines whether the input and output text should be
  * Unicode or betacode, and then passes the work to a function which will
  * take the proper action.
+ *-------------------------------------------------------------------------
+ * Parameters:
+ *      readIndex -- the current index of the input string
+ *      inputTextType -- passed to child functions
+ *      betaCodeLetters -- used to define what a "beta code character" is
+ *      betaCodeAccents -- passed to child functions
+ *      symbols -- used to define what a "symbol" is
+ *      inputOutputLetters -- array of possible input and output characters
+ * Returns: readIndex -- updates index according to what was read
  *************************************************************************/
 function convertLetter(
    readIndex,
-   inputOutputLetters,
+   inputTextType,
    betaCodeLetters,
    betaCodeAccents,
    symbols,
-   inputTextType)
+   inputOutputLetters)
 {
    /* Initialization *****************************************************/
    /* Booleans */
@@ -36,11 +45,11 @@ function convertLetter(
          i = inputOutputLetters.length;
       }
 
-      // Else Search for Character
+      // Else Test Input Character for Possibile Match
       else if (tempLetter == inputOutputLetters[i][0])
       {
-         // If Middle Sigma Found and Middle Sigma is Same as Final Sigma,
-         // Test If Not Really Final Sigma
+         // If Beta Code Middle Sigma Found and Middle Sigma is Same as
+         // Final Sigma, Test If Not Really Final Sigma
          if (
             tempLetter == betaCodeLetters[17]
             && inputOutputLetters[i][0] == inputOutputLetters[(i + 1)][0])
@@ -134,6 +143,13 @@ function convertLetter(
  * are a part of the letter. For beta code this could be up to three
  * additional characters. For Unicode this would only be the current
  * character.
+ *-------------------------------------------------------------------------
+ * Parameters:
+ *      readIndex -- the current index of the input string
+ *      inputTextType -- passed to child functions
+ *      betaCodeLetters -- used to define what a "beta code character" is
+ *      betaCodeAccents -- passed to child functions
+ * Returns: tempLetter -- complete letter for comparison with poss. lettrs.
  *************************************************************************/
 function getCompleteLetterFromText(
    readIndex,

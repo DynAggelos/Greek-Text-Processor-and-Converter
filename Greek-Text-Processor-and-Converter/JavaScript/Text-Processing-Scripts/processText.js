@@ -172,11 +172,11 @@
             {
                 readIndex = convertLetter(
                     readIndex,
-                    inputOutputLetters,
+                    inputTextType,
                     betaCodeLetters,
                     betaCodeAccents,
                     symbols,
-                    inputTextType);
+                    inputOutputLetters);
             }
 
             // Otherwise Copy Miscellaneous to Output

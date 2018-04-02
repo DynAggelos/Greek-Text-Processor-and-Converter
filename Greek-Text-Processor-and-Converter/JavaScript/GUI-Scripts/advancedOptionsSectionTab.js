@@ -2,6 +2,11 @@
  * This function modifies the CSS display property of the advanced options
  * section of the web page, in order to make it appear and disappear at
  * the push of a button.
+ *-------------------------------------------------------------------------
+ * Parameters:
+ *      action -- string determining whether tabs should "open" or
+ *          "close"
+ * Returns: void
  *************************************************************************/
 function advancedOptionsSectionTab(action)
 {

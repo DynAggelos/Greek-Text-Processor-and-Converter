@@ -1,6 +1,9 @@
 /* Function: updateinputBetaCodeTypeOptionDisabled ************************
  * This function updates the input beta code type element's disabled
  * attribute, when a user makes a selection from a list.
+ *-------------------------------------------------------------------------
+ * Parameters: void
+ * Returns: void
  *************************************************************************/
 function updateInputBetaCodeTypeOptionDisabled()
 {
