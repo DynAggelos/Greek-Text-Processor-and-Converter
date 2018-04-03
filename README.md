@@ -16,10 +16,12 @@ Note that at the moment only the _Greek Text Processor and Converter_ program is
 
 The _Greek Text Processor and Converter_ is a program which processes Greek text into a more preferable format, and can convert between Unicode and beta code text. The program is ideal for anyone who needs to put a large amount of Greek text into some other format before copy-pasting it into a file, or posting it Online.
 
-*Basic Usage*
+**Basic Usage**
+
 To start using this program, simply place some Greek text into the input box, select the input and output text types from the Options section, and press "Process". The text will be processed, and then output to the output box. From the output box, you can copy-past the text anywhere you need it. (Note: You should always survey the output text to make sure it matches how you intended it to look, before copy-pasting it into another program or file.)
 
-*Features Explanation*
+**Features Explanation**
+
 _Input Box_: This is the box where the text that you want this program to process goes. (Tip: A quick way to paste text into this box is to click in the box, use CTRL+A on the keyboard to highlight anything already in the box, and then CTRL+V to paste previously copied text into the box. Doing this will overwrite any text previously in the box.)
 
 _Output Box_: This is the box where processed text is output. You can highlight this text and copy it, but you cannot edit it directly. (Tip: A quick way to copy all of the text in this box is to click in the box, use CTRL+A on the keyboard to highlight the entire contents, and then CTRL+C to copy it all.)
@@ -36,7 +38,8 @@ _Verse Display Option_: ---
 
 _Input Amount_: You can enter as much or as little Greek text into the input box as you like, even as much as would fit into multiple New Testament books, or the whole New Testament for that matter. The only consideration for how much is entered should be how much memory your computer has, how fast your computer is, and how long you want the process to take each time you press "Process". Because this will vary from computer to computer and person to person, you may want to try processing text which is approximately the length of a New Testament book before you try anything longer. All in all, this program runs relatively fast, processing the entire book of Matthew in under 20 seconds on most modern laptops and desktops."
 
-*Example Input*
+**Example Input**
+
     01:01 Bi/blos gene/sews )Ihsou^ xristou^, ui(ou^ Daui/d, ui(ou^ )Abraa/m.
     01:02 {P} )Abraa\m e)ge/nnhsen to\n )Isaa/k: )Isaa\k de\ e)ge/nnhsen to\n )Iakw/b: )Iakw\b de\ e)ge/nnhsen to\n )Iou/dan kai\ tou\s a)delfou\s au)tou^:
     01:03 )Iou/das de\ e)ge/nnhsen to\n Fare\s kai\ to\n Zara\ e)k th^s Qa/mar: Fare\s de\ e)ge/nnhsen to\n (Esrw/m: (Esrw\m de\ e)ge/nnhsen to\n )Ara/m:
@@ -57,7 +60,7 @@ _Input Amount_: You can enter as much or as little Greek text into the input box
     01:18 {P} Tou^ de\ )Ihsou^ xristou^ h( ge/nnhsis {N ge/nnhsis > ge/nesis } ou(/tws h)^n. Mnhsteuqei/shs ga\r {N ga\r > - } th^s mhtro\s au)tou^ Mari/as tw^| )Iwsh/f, pri\n h)\ sunelqei^n au)tou/s, eu(re/qh e)n gastri\ e)/xousa e)k pneu/matos a(gi/ou.
     01:19 )Iwsh\f de\ o( a)nh\r au)th^s, di/kaios w)/n, kai\ mh\ qe/lwn au)th\n paradeigmati/sai, {N paradeigmati/sai > deigmati/sai } e)boulh/qh la/qra| a)polu^sai au)th/n.
 
-*License*
+**License**
 
 This program is public domain. The original author(s) impose no legal restrictions on what you can do with it whatsoever. However, you are asked, as a professional courtesy, to leave room in any derivative works you may create and patents you may file for the original author(s) to continue to expand this program, as it is in its public domain state, for the common good.
 
