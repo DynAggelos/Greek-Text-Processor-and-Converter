@@ -1,3 +1,9 @@
+class ChapterVerseManager {
+    constructor() {
+        this.x = 5;
+    }
+}
+
 /* Function: convertChapterVerse ******************************************
  * TBA
  *-------------------------------------------------------------------------
@@ -220,180 +226,60 @@ if (inputParagraphType == "verse break")
 
 function transcodeChapterAndVerse(readIndex, symbolsD, inputTextType, verseDisplayOption, currentChapter, currentVerse, refSymbolPosition, chVrsEnd, isThereSpaceAfterChVrs, paraSymAfter)
 {
-if (refSymbolPosition == readIndex + 1)
-{
-    // Current location is start of one digit chapter
-    switch (textInput[readIndex])
+    if (refSymbolPosition == readIndex + 1)
     {
-        case '0' : currentChapter = 0;
-            break;
-        case '1' : currentChapter = 1;
-            break;
-        case '2' : currentChapter = 2;
-            break;
-        case '3' : currentChapter = 3;
-            break;
-        case '4' : currentChapter = 4;
-            break;
-        case '5' : currentChapter = 5;
-            break;
-        case '6' : currentChapter = 6;
-            break;
-        case '7' : currentChapter = 7;
-            break;
-        case '8' : currentChapter = 8;
-            break;
-        case '9' : currentChapter = 9;
-    }
-    if (chVrsEnd != readIndex + 1)
-    {
-        switch (textInput[readIndex + 2])
-        {
-            case '0' : currentVerse = 0;
-            break;
-            case '1' : currentVerse = 1;
-            break;
-            case '2' : currentVerse = 2;
-            break;
-            case '3' : currentVerse = 3;
-            break;
-            case '4' : currentVerse = 4;
-            break;
-            case '5' : currentVerse = 5;
-            break;
-            case '6' : currentVerse = 6;
-            break;
-            case '7' : currentVerse = 7;
-            break;
-            case '8' : currentVerse = 8;
-            break;
-            case '9' : currentVerse = 9;
-        }
-        if (chVrsEnd != readIndex + 2)
-        {
-            currentVerse *= 10;
-            switch (textInput[readIndex + 3])
-            {
-            case '1' : currentVerse += 1;
-                break;
-            case '2' : currentVerse += 2;
-                break;
-            case '3' : currentVerse += 3;
-                break;
-            case '4' : currentVerse += 4;
-                break;
-            case '5' : currentVerse += 5;
-                break;
-            case '6' : currentVerse += 6;
-                break;
-            case '7' : currentVerse += 7;
-                break;
-            case '8' : currentVerse += 8;
-                break;
-            case '9' : currentVerse += 9;
-            }
-            if (chVrsEnd != readIndex + 3)
-            {
-            currentVerse *= 10;
-            switch (textInput[readIndex + 4])
-            {
-                case '1' : currentVerse += 1;
-                    break;
-                case '2' : currentVerse += 2;
-                    break;
-                case '3' : currentVerse += 3;
-                    break;
-                case '4' : currentVerse += 4;
-                    break;
-                case '5' : currentVerse += 5;
-                    break;
-                case '6' : currentVerse += 6;
-                    break;
-                case '7' : currentVerse += 7;
-                    break;
-                case '8' : currentVerse += 8;
-                    break;
-                case '9' : currentVerse += 9;
-            }
-            }
-        }
-    }
-} else {
-    if (refSymbolPosition == readIndex + 2)
-    {
-        // Current location is start of two digit chapter
+        // Current location is start of one digit chapter
         switch (textInput[readIndex])
         {
             case '0' : currentChapter = 0;
-            break;
+                break;
             case '1' : currentChapter = 1;
-            break;
+                break;
             case '2' : currentChapter = 2;
-            break;
+                break;
             case '3' : currentChapter = 3;
-            break;
+                break;
             case '4' : currentChapter = 4;
-            break;
+                break;
             case '5' : currentChapter = 5;
-            break;
+                break;
             case '6' : currentChapter = 6;
-            break;
+                break;
             case '7' : currentChapter = 7;
-            break;
+                break;
             case '8' : currentChapter = 8;
-            break;
+                break;
             case '9' : currentChapter = 9;
         }
-        currentChapter *= 10;
-        switch (textInput[readIndex + 1])
+        if (chVrsEnd != readIndex + 1)
         {
-            case '1' : currentChapter += 1;
-            break;
-            case '2' : currentChapter += 2;
-            break;
-            case '3' : currentChapter += 3;
-            break;
-            case '4' : currentChapter += 4;
-            break;
-            case '5' : currentChapter += 5;
-            break;
-            case '6' : currentChapter += 6;
-            break;
-            case '7' : currentChapter += 7;
-            break;
-            case '8' : currentChapter += 8;
-            break;
-            case '9' : currentChapter += 9;
-        }
-        if (chVrsEnd != readIndex + 2)
-        {
-            switch (textInput[readIndex + 3])
+            switch (textInput[readIndex + 2])
             {
-            case '0' : currentVerse = 0;
+                case '0' : currentVerse = 0;
                 break;
-            case '1' : currentVerse = 1;
+                case '1' : currentVerse = 1;
                 break;
-            case '2' : currentVerse = 2;
+                case '2' : currentVerse = 2;
                 break;
-            case '3' : currentVerse = 3;
+                case '3' : currentVerse = 3;
                 break;
-            case '4' : currentVerse = 4;
+                case '4' : currentVerse = 4;
                 break;
-            case '5' : currentVerse = 5;
+                case '5' : currentVerse = 5;
                 break;
-            case '6' : currentVerse = 6;
+                case '6' : currentVerse = 6;
                 break;
-            case '7' : currentVerse = 7;
+                case '7' : currentVerse = 7;
                 break;
-            case '8' : currentVerse = 8;
+                case '8' : currentVerse = 8;
                 break;
-            case '9' : currentVerse = 9;
+                case '9' : currentVerse = 9;
             }
-            if (chVrsEnd != readIndex + 3)
+            if (chVrsEnd != readIndex + 2)
             {
-            currentVerse *= 10;
-            switch (textInput[readIndex + 4])
-            {
+                currentVerse *= 10;
+                switch (textInput[readIndex + 3])
+                {
                 case '1' : currentVerse += 1;
                     break;
                 case '2' : currentVerse += 2;
@@ -411,11 +297,11 @@ if (refSymbolPosition == readIndex + 1)
                 case '8' : currentVerse += 8;
                     break;
                 case '9' : currentVerse += 9;
-            }
-            if (chVrsEnd != readIndex + 4)
-            {
+                }
+                if (chVrsEnd != readIndex + 3)
+                {
                 currentVerse *= 10;
-                switch (textInput[readIndex + 5])
+                switch (textInput[readIndex + 4])
                 {
                     case '1' : currentVerse += 1;
                         break;
@@ -435,61 +321,158 @@ if (refSymbolPosition == readIndex + 1)
                         break;
                     case '9' : currentVerse += 9;
                 }
-            }
+                }
             }
         }
     } else {
-        // Current location is start of verse with no chapter specified
-        switch (textInput[readIndex])
+        if (refSymbolPosition == readIndex + 2)
         {
-            case '0' : currentVerse = 0;
-            break;
-            case '1' : currentVerse = 1;
-            break;
-            case '2' : currentVerse = 2;
-            break;
-            case '3' : currentVerse = 3;
-            break;
-            case '4' : currentVerse = 4;
-            break;
-            case '5' : currentVerse = 5;
-            break;
-            case '6' : currentVerse = 6;
-            break;
-            case '7' : currentVerse = 7;
-            break;
-            case '8' : currentVerse = 8;
-            break;
-            case '9' : currentVerse = 9;
-        }
-        if (chVrsEnd != readIndex)
-        {
-            currentVerse *= 10;
+            // Current location is start of two digit chapter
+            switch (textInput[readIndex])
+            {
+                case '0' : currentChapter = 0;
+                break;
+                case '1' : currentChapter = 1;
+                break;
+                case '2' : currentChapter = 2;
+                break;
+                case '3' : currentChapter = 3;
+                break;
+                case '4' : currentChapter = 4;
+                break;
+                case '5' : currentChapter = 5;
+                break;
+                case '6' : currentChapter = 6;
+                break;
+                case '7' : currentChapter = 7;
+                break;
+                case '8' : currentChapter = 8;
+                break;
+                case '9' : currentChapter = 9;
+            }
+            currentChapter *= 10;
             switch (textInput[readIndex + 1])
             {
-            case '1' : currentVerse += 1;
+                case '1' : currentChapter += 1;
                 break;
-            case '2' : currentVerse += 2;
+                case '2' : currentChapter += 2;
                 break;
-            case '3' : currentVerse += 3;
+                case '3' : currentChapter += 3;
                 break;
-            case '4' : currentVerse += 4;
+                case '4' : currentChapter += 4;
                 break;
-            case '5' : currentVerse += 5;
+                case '5' : currentChapter += 5;
                 break;
-            case '6' : currentVerse += 6;
+                case '6' : currentChapter += 6;
                 break;
-            case '7' : currentVerse += 7;
+                case '7' : currentChapter += 7;
                 break;
-            case '8' : currentVerse += 8;
+                case '8' : currentChapter += 8;
                 break;
-            case '9' : currentVerse += 9;
+                case '9' : currentChapter += 9;
             }
-            if (chVrsEnd != readIndex + 1)
+            if (chVrsEnd != readIndex + 2)
             {
-            currentVerse *= 10;
-            switch (textInput[readIndex + 2])
+                switch (textInput[readIndex + 3])
+                {
+                case '0' : currentVerse = 0;
+                    break;
+                case '1' : currentVerse = 1;
+                    break;
+                case '2' : currentVerse = 2;
+                    break;
+                case '3' : currentVerse = 3;
+                    break;
+                case '4' : currentVerse = 4;
+                    break;
+                case '5' : currentVerse = 5;
+                    break;
+                case '6' : currentVerse = 6;
+                    break;
+                case '7' : currentVerse = 7;
+                    break;
+                case '8' : currentVerse = 8;
+                    break;
+                case '9' : currentVerse = 9;
+                }
+                if (chVrsEnd != readIndex + 3)
+                {
+                currentVerse *= 10;
+                switch (textInput[readIndex + 4])
+                {
+                    case '1' : currentVerse += 1;
+                        break;
+                    case '2' : currentVerse += 2;
+                        break;
+                    case '3' : currentVerse += 3;
+                        break;
+                    case '4' : currentVerse += 4;
+                        break;
+                    case '5' : currentVerse += 5;
+                        break;
+                    case '6' : currentVerse += 6;
+                        break;
+                    case '7' : currentVerse += 7;
+                        break;
+                    case '8' : currentVerse += 8;
+                        break;
+                    case '9' : currentVerse += 9;
+                }
+                if (chVrsEnd != readIndex + 4)
+                {
+                    currentVerse *= 10;
+                    switch (textInput[readIndex + 5])
+                    {
+                        case '1' : currentVerse += 1;
+                            break;
+                        case '2' : currentVerse += 2;
+                            break;
+                        case '3' : currentVerse += 3;
+                            break;
+                        case '4' : currentVerse += 4;
+                            break;
+                        case '5' : currentVerse += 5;
+                            break;
+                        case '6' : currentVerse += 6;
+                            break;
+                        case '7' : currentVerse += 7;
+                            break;
+                        case '8' : currentVerse += 8;
+                            break;
+                        case '9' : currentVerse += 9;
+                    }
+                }
+                }
+            }
+        } else {
+            // Current location is start of verse with no chapter specified
+            switch (textInput[readIndex])
             {
+                case '0' : currentVerse = 0;
+                break;
+                case '1' : currentVerse = 1;
+                break;
+                case '2' : currentVerse = 2;
+                break;
+                case '3' : currentVerse = 3;
+                break;
+                case '4' : currentVerse = 4;
+                break;
+                case '5' : currentVerse = 5;
+                break;
+                case '6' : currentVerse = 6;
+                break;
+                case '7' : currentVerse = 7;
+                break;
+                case '8' : currentVerse = 8;
+                break;
+                case '9' : currentVerse = 9;
+            }
+            if (chVrsEnd != readIndex)
+            {
+                currentVerse *= 10;
+                switch (textInput[readIndex + 1])
+                {
                 case '1' : currentVerse += 1;
                     break;
                 case '2' : currentVerse += 2;
@@ -507,42 +490,69 @@ if (refSymbolPosition == readIndex + 1)
                 case '8' : currentVerse += 8;
                     break;
                 case '9' : currentVerse += 9;
+                }
+                if (chVrsEnd != readIndex + 1)
+                {
+                currentVerse *= 10;
+                switch (textInput[readIndex + 2])
+                {
+                    case '1' : currentVerse += 1;
+                        break;
+                    case '2' : currentVerse += 2;
+                        break;
+                    case '3' : currentVerse += 3;
+                        break;
+                    case '4' : currentVerse += 4;
+                        break;
+                    case '5' : currentVerse += 5;
+                        break;
+                    case '6' : currentVerse += 6;
+                        break;
+                    case '7' : currentVerse += 7;
+                        break;
+                    case '8' : currentVerse += 8;
+                        break;
+                    case '9' : currentVerse += 9;
+                }
+                }
             }
+            if (currentVerse == 1)
+            {
+                currentChapter++;
             }
         }
-        if (currentVerse == 1)
+    }
+
+    /* WHY DOES THIS ALWAYS GO TO THE ELSE? */
+    if (verseDisplayOption == "chapter start" && currentVerse != 1)
+    {
+        textOutput += currentVerse + " ";
+    }
+    else
+    {
+        textOutput += currentChapter + symbolsD[9] + currentVerse + " ";
+    }
+    textOutput += "\n4: " + currentVerse;
+    readIndex = chVrsEnd;
+    if (isThereSpaceAfterChVrs == true)
+    {
+        readIndex++;
+    }
+    if (paraSymAfter == true)
+    {
+        var sDoIndex = 0;
+        while (symbolsD[8][sDoIndex] != null)
         {
-            currentChapter++;
+            sDoIndex++;
+        }
+        if (sDoIndex > 0)
+        {
+            readIndex += sDoIndex + 1;
         }
     }
-}
-if (verseDisplayOption == 0
-    && currentVerse != 1)
-{
-    textOutput += currentVerse + " ";
-} else {
-    textOutput += currentChapter + symbolsD[9] + currentVerse + " ";
-}
-readIndex = chVrsEnd;
-if (isThereSpaceAfterChVrs == true)
-{
-    readIndex++;
-}
-if (paraSymAfter == true)
-{
-    var sDoIndex = 0;
-    while (symbolsD[8][sDoIndex] != null)
-    {
-        sDoIndex++;
-    }
-    if (sDoIndex > 0)
-    {
-        readIndex += sDoIndex + 1;
-    }
-}
-var chapterVerseReturnArray = new Array(3);
-chapterVerseReturnArray[0] = readIndex;
-chapterVerseReturnArray[1] = currentChapter;
-chapterVerseReturnArray[2] = currentVerse;
-return chapterVerseReturnArray;
+    var chapterVerseReturnArray = new Array(3);
+    chapterVerseReturnArray[0] = readIndex;
+    chapterVerseReturnArray[1] = currentChapter;
+    chapterVerseReturnArray[2] = currentVerse;
+    return chapterVerseReturnArray;
 }

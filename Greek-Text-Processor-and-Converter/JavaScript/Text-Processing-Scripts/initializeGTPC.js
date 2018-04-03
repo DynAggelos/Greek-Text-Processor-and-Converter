@@ -86,4 +86,6 @@ function initializeGTPC()
             betaCodeAccents,
             symbols);
     }
+
+    /* New Usage: Create all objects, run the primary program loop, and then delete all objects? */
 }
