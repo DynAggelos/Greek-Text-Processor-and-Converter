@@ -14,6 +14,8 @@ Note that at the moment only the _Greek Text Processor and Converter_ program is
 - [Encode::BetaCode](https://github.com/dgkontopoulos/Encode-BetaCode)
 - [Beta Code Translator](https://github.com/ubuntu-gr/beta-code-translator)
 
+<hr>
+
 The _Greek Text Processor and Converter_ is a program which processes Greek text into a more preferable format, and can convert between Unicode and beta code text. The program is ideal for anyone who needs to put a large amount of Greek text into some other format before copy-pasting it into a file, or posting it Online.
 
 **Basic Usage**
@@ -38,7 +40,7 @@ _Verse Display Option_: ---
 
 _Input Amount_: You can enter as much or as little Greek text into the input box as you like, even as much as would fit into multiple New Testament books, or the whole New Testament for that matter. The only consideration for how much is entered should be how much memory your computer has, how fast your computer is, and how long you want the process to take each time you press "Process". Because this will vary from computer to computer and person to person, you may want to try processing text which is approximately the length of a New Testament book before you try anything longer. All in all, this program runs relatively fast, processing the entire book of Matthew in under 20 seconds on most modern laptops and desktops."
 
-**Example Input**
+**Example (Test) Input**
 
     01:01 Bi/blos gene/sews )Ihsou^ xristou^, ui(ou^ Daui/d, ui(ou^ )Abraa/m.
     01:02 {P} )Abraa\m e)ge/nnhsen to\n )Isaa/k: )Isaa\k de\ e)ge/nnhsen to\n )Iakw/b: )Iakw\b de\ e)ge/nnhsen to\n )Iou/dan kai\ tou\s a)delfou\s au)tou^:
