@@ -6,9 +6,9 @@ Note that at the moment only the _Greek Text Processor and Converter_ program is
 
 ## Greek Text Processor and Converter
 ### Processing and Converting Unicode and Beta Code Greek Text
-*Live Preview*: [Greek Text Processor and Converter (3.0 Snapshot Version)](https://dynaggelos.github.io/The-Textual-Toolbox/Greek-Text-Processor-and-Converter/Snapshots/0.3%20(Saved%20for%20Reference)/JavaScript/Greek%20Text%20Processor%20and%20Converter.html)
+**Live Preview**: [Greek Text Processor and Converter (3.0 Snapshot Version)](https://dynaggelos.github.io/The-Textual-Toolbox/Greek-Text-Processor-and-Converter/Snapshots/0.3%20(Saved%20for%20Reference)/JavaScript/Greek%20Text%20Processor%20and%20Converter.html)
 
-*Other Programs Like the GTPC*:
+**Other Programs Like the GTPC**:
 - [Beta Code Converter](https://github.com/zfletch/beta-code-converter-js)
 - [Sublime BetaCode](https://github.com/andrekugland-oplen/Sublime-BetaCode)
 - [Encode::BetaCode](https://github.com/dgkontopoulos/Encode-BetaCode)
