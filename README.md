@@ -36,6 +36,27 @@ _Verse Display Option_: ---
 
 _Input Amount_: You can enter as much or as little Greek text into the input box as you like, even as much as would fit into multiple New Testament books, or the whole New Testament for that matter. The only consideration for how much is entered should be how much memory your computer has, how fast your computer is, and how long you want the process to take each time you press "Process". Because this will vary from computer to computer and person to person, you may want to try processing text which is approximately the length of a New Testament book before you try anything longer. All in all, this program runs relatively fast, processing the entire book of Matthew in under 20 seconds on most modern laptops and desktops."
 
+*Example Input*
+    01:01 Bi/blos gene/sews )Ihsou^ xristou^, ui(ou^ Daui/d, ui(ou^ )Abraa/m.
+    01:02 {P} )Abraa\m e)ge/nnhsen to\n )Isaa/k: )Isaa\k de\ e)ge/nnhsen to\n )Iakw/b: )Iakw\b de\ e)ge/nnhsen to\n )Iou/dan kai\ tou\s a)delfou\s au)tou^:
+    01:03 )Iou/das de\ e)ge/nnhsen to\n Fare\s kai\ to\n Zara\ e)k th^s Qa/mar: Fare\s de\ e)ge/nnhsen to\n (Esrw/m: (Esrw\m de\ e)ge/nnhsen to\n )Ara/m:
+    01:04 )Ara\m de\ e)ge/nnhsen to\n )Aminada/b: )Aminada\b de\ e)ge/nnhsen to\n Naassw/n: Naassw\n de\ e)ge/nnhsen to\n Salmw/n:
+    01:05 Salmw\n de\ e)ge/nnhsen to\n Boo\z {N Boo\z e)k > Bo/es e)k } e)k th^s (Raxa/b: Boo\z {N Boo\z de\ > Bo/es de\ } de\ e)ge/nnhsen to\n )Wbh\d {N )Wbh\d e)k > )Iwbh\d e)k } e)k th^s (Rou/q: )Wbh\d {N )Wbh\d de\ > )Iwbh\d de\ } de\ e)ge/nnhsen to\n )Iessai/:
+    01:06 )Iessai\ de\ e)ge/nnhsen to\n Daui\d to\n basile/a. {P} Daui\d de\ o( {N o( basileu\s > - } basileu\s e)ge/nnhsen to\n Solomw^na e)k th^s tou^ Ou)ri/ou:
+    01:07 Solomw\n de\ e)ge/nnhsen to\n (Roboa/m: (Roboa\m de\ e)ge/nnhsen to\n )Abia/: )Abia\ de\ e)ge/nnhsen to\n )Asa/: {N )Asa/ > )Asa/f }
+    01:08 )Asa\ {N )Asa\ > )Asa\f } de\ e)ge/nnhsen to\n )Iwsafa/t: )Iwsafa\t de\ e)ge/nnhsen to\n )Iwra/m: )Iwra\m de\ e)ge/nnhsen to\n )Ozi/an:
+    01:09 )Ozi/as de\ e)ge/nnhsen to\n )Iwa/qam: )Iwa/qam de\ e)ge/nnhsen to\n )/Axaz: )/Axaz de\ e)ge/nnhsen to\n (Ezeki/an:
+    01:10 (Ezeki/as de\ e)ge/nnhsen to\n Manassh^: Manassh^s de\ e)ge/nnhsen to\n )Amw/n: {N )Amw/n )Amw\n > )Amw/s )Amw\s } )Amw\n de\ e)ge/nnhsen to\n )Iwsi/an:
+    01:11 )Iwsi/as de\ e)ge/nnhsen to\n )Iexoni/an kai\ tou\s a)delfou\s au)tou^, e)pi\ th^s metoikesi/as Babulw^nos.
+    01:12 {P} Meta\ de\ th\n metoikesi/an Babulw^nos, )Iexoni/as e)ge/nnhsen to\n Salaqih/l: Salaqih\l de\ e)ge/nnhsen to\n Zoroba/bel:
+    01:13 Zoroba/bel de\ e)ge/nnhsen to\n )Abiou/d: )Abiou\d de\ e)ge/nnhsen to\n )Eliakei/m: {N )Eliakei/m )Eliakei\m > )Eliaki/m )Eliaki\m } )Eliakei\m de\ e)ge/nnhsen to\n )Azw/r:
+    01:14 )Azw\r de\ e)ge/nnhsen to\n Sadw/k: Sadw\k de\ e)ge/nnhsen to\n )Axei/m: {N )Axei/m )Axei\m > )Axi/m )Axi\m } )Axei\m de\ e)ge/nnhsen to\n )Eliou/d:
+    01:15 )Eliou\d de\ e)ge/nnhsen to\n )Elea/zar: )Elea/zar de\ e)ge/nnhsen to\n Matqa/n: Matqa\n de\ e)ge/nnhsen to\n )Iakw/b:
+    01:16 )Iakw\b de\ e)ge/nnhsen to\n )Iwsh\f to\n a)/ndra Mari/as, e)c h(^s e)gennh/qh )Ihsou^s, o( lego/menos xristo/s.
+    01:17 {P} Pa^sai ou)^n ai( geneai\ a)po\ )Abraa\m e(/ws Daui\d geneai\ dekate/ssares: kai\ a)po\ Daui\d e(/ws th^s metoikesi/as Babulw^nos, geneai\ dekate/ssares: kai\ a)po\ th^s metoikesi/as Babulw^nos e(/ws tou^ xristou^, geneai\ dekate/ssares.
+    01:18 {P} Tou^ de\ )Ihsou^ xristou^ h( ge/nnhsis {N ge/nnhsis > ge/nesis } ou(/tws h)^n. Mnhsteuqei/shs ga\r {N ga\r > - } th^s mhtro\s au)tou^ Mari/as tw^| )Iwsh/f, pri\n h)\ sunelqei^n au)tou/s, eu(re/qh e)n gastri\ e)/xousa e)k pneu/matos a(gi/ou.
+    01:19 )Iwsh\f de\ o( a)nh\r au)th^s, di/kaios w)/n, kai\ mh\ qe/lwn au)th\n paradeigmati/sai, {N paradeigmati/sai > deigmati/sai } e)boulh/qh la/qra| a)polu^sai au)th/n.
+
 *License*
 
 This program is public domain. The original author(s) impose no legal restrictions on what you can do with it whatsoever. However, you are asked, as a professional courtesy, to leave room in any derivative works you may create and patents you may file for the original author(s) to continue to expand this program, as it is in its public domain state, for the common good.
